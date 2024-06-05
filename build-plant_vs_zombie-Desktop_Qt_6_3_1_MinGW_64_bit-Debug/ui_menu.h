@@ -40,7 +40,7 @@ public:
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(0, 0, 1021, 671));
-        label->setPixmap(QPixmap(QString::fromUtf8("C:/Users/RSKALA/Desktop/\330\250\330\257\331\210\331\206 \330\271\331\206\331\210\330\247\331\206.png")));
+        label->setPixmap(QPixmap(QString::fromUtf8("../images/background_menu.png")));
         LoginButton = new QPushButton(centralwidget);
         LoginButton->setObjectName(QString::fromUtf8("LoginButton"));
         LoginButton->setGeometry(QRect(360, 440, 281, 61));
@@ -80,7 +80,7 @@ public:
         menu->setCentralWidget(centralwidget);
         menubar = new QMenuBar(menu);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1024, 26));
+        menubar->setGeometry(QRect(0, 0, 1024, 25));
         menu->setMenuBar(menubar);
         statusbar = new QStatusBar(menu);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
