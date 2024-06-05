@@ -106,10 +106,10 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QLineEdit" name="lineEdit_5"/>
+     <widget class="QLineEdit" name="line_edit_phone"/>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_6"/>
+     <widget class="QLineEdit" name="lineEdit_password"/>
     </item>
    </layout>
   </widget>

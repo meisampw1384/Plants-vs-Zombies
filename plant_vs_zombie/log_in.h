@@ -15,6 +15,13 @@ public:
     explicit log_in(QWidget *parent = nullptr);
     ~log_in();
 
+private slots:
+    void on_buttonBox_rejected();
+
+    void on_buttonBox_accepted();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::log_in *ui;
 };

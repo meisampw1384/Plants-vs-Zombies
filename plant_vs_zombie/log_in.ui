@@ -107,10 +107,10 @@ color: rgb(29, 255, 123);</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QLineEdit" name="lineEdit_5"/>
+     <widget class="QLineEdit" name="line_edit_name"/>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_6"/>
+     <widget class="QLineEdit" name="line_edit_password"/>
     </item>
    </layout>
   </widget>

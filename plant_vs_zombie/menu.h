@@ -14,7 +14,13 @@ class menu : public QMainWindow
 
 public:
     menu(QWidget *parent = nullptr);
+    void showMenu();
     ~menu();
+
+private slots:
+    void on_LoginButton_clicked();
+
+    void on_SignUp_button_clicked();
 
 private:
     Ui::menu *ui;

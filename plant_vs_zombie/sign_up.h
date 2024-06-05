@@ -15,6 +15,11 @@ public:
     explicit sign_up(QWidget *parent = nullptr);
     ~sign_up();
 
+private slots:
+    void on_buttonBox_rejected();
+
+    void on_buttonBox_accepted();
+
 private:
     Ui::sign_up *ui;
 };

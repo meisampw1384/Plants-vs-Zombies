@@ -15,6 +15,9 @@ public:
     explicit restore_pass(QWidget *parent = nullptr);
     ~restore_pass();
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::restore_pass *ui;
 };
