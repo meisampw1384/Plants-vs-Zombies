@@ -6,6 +6,7 @@ menu::menu(QWidget *parent)
     , ui(new Ui::menu)
 {
     ui->setupUi(this);
+    setFixedSize(1024,720);
 }
 
 menu::~menu()
