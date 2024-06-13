@@ -2,6 +2,7 @@
 #define LOG_IN_H
 
 #include <QDialog>
+#include <QTcpSocket>
 
 namespace Ui {
 class log_in;
@@ -22,8 +23,11 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void readResponse();
+
 private:
     Ui::log_in *ui;
+    QTcpSocket *socket;
 };
 
 #endif // LOG_IN_H
