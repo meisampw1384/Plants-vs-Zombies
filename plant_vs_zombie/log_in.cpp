@@ -55,10 +55,12 @@ void log_in::on_buttonBox_accepted()
         if (!socket->waitForReadyRead(5000)) {
             qDebug() << "No response from server";
             QMessageBox::warning(this, "Error", "No response from the server.");
+            reject();
         }
     } else {
         qDebug() << "Failed to connect to server";
         QMessageBox::warning(this, "Error", "Failed to connect to the server.");
+        reject();
     }
 }
 
