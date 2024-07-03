@@ -2,6 +2,7 @@
 #include "menu.h"
 #include "ui_sign_up.h"
 #include <QJsonObject>
+#include <QCryptographicHash>
 #include <QFile>
 #include <QJsonArray>
 #include <QMessageBox>
@@ -34,7 +35,7 @@ void sign_up::on_buttonBox_accepted()
     QString username = this->ui->line_edit_username_2->text();
     QString phoneNumber = this->ui->line_edit_phonenumber_2->text();
     QString email = this->ui->line_edit_email_2->text();
-    QString password = this->ui->line_edit_password_2->text();
+    QString raw_password = this->ui->line_edit_password_2->text();
 
     if(name.size() < 3)
     {
@@ -64,7 +65,7 @@ void sign_up::on_buttonBox_accepted()
         return;
     }
     QRegularExpression password_re("^^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
-    if (!password_re.match(password).hasMatch()) {
+    if (!password_re.match(raw_password).hasMatch()) {
         QMessageBox::warning(this, "Error", "password should have at least 8 characters, including at least one letter and one number.!");
         reject();
         return;
@@ -77,6 +78,9 @@ void sign_up::on_buttonBox_accepted()
     request["phoneNumber"]=phoneNumber;
     request["email"]=email;
     request["name"]=name;
+
+    QByteArray hash = QCryptographicHash::hash(raw_password.toUtf8(), QCryptographicHash::Sha256);
+    QString password = QString(hash.toHex());
     request["password"]=password;
 
     QJsonDocument doc(request);

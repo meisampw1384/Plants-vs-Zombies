@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
+#include <QCryptographicHash>
 #include <QTcpSocket>
 #include <QDebug>
 
@@ -25,13 +26,16 @@ log_in::~log_in()
 
 void log_in::on_buttonBox_rejected()
 {
-    // Handle rejection if needed
+
 }
 
 void log_in::on_buttonBox_accepted()
 {
     QString username = ui->line_edit_name->text();
-    QString password = ui->line_edit_password->text();
+    QString raw_password = ui->line_edit_password->text();
+
+    QByteArray hash = QCryptographicHash::hash(raw_password.toUtf8(), QCryptographicHash::Sha256);
+    QString password = QString(hash.toHex());
 
     QJsonObject request;
     request["action"] = "login";
@@ -46,12 +50,10 @@ void log_in::on_buttonBox_accepted()
     if (socket->waitForConnected(5000)) {
         qDebug() << "Connection established";
 
-        // Ensure the data is written to the server
         socket->write(data);
         socket->flush();
 
 
-        // Wait for the response
         if (!socket->waitForReadyRead(5000)) {
             qDebug() << "No response from server";
             QMessageBox::warning(this, "Error", "No response from the server.");

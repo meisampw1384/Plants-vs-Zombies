@@ -9,7 +9,7 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\mbakh\\AppData\\Local\\Temp\\QtCreator-ptoHCW\\clang-uiheader-gqNTIX",
+        "C:\\Users\\mbakh\\AppData\\Local\\Temp\\QtCreator-PqRbRA\\clang-uiheader-PyFegi",
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -31,7 +31,7 @@
         "-DQT_NETWORK_LIB",
         "-DQT_CORE_LIB",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\SERVER",
+        "X:\\Projects\\Plants-vs-Zombies\\SERVER",
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\include",
         "-I",
@@ -39,9 +39,9 @@
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\include\\QtCore",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug\\debug",
+        "X:\\Projects\\Plants-vs-Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug\\debug",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug",
+        "X:\\Projects\\Plants-vs-Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug",
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\mkspecs\\win32-g++",
         "-isystem",
@@ -65,10 +65,10 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-        "X:\\Projects\\Plants vs. Zombies\\SERVER\\main.cpp"
+        "X:\\Projects\\Plants-vs-Zombies\\SERVER\\main.cpp"
     ],
-    "directory": "X:/Projects/Plants vs. Zombies/build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "X:/Projects/Plants vs. Zombies/SERVER/main.cpp"
+    "directory": "X:/Projects/Plants-vs-Zombies/build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/.qtc_clangd",
+    "file": "X:/Projects/Plants-vs-Zombies/SERVER/main.cpp"
 },
 {
     "arguments": [
@@ -80,7 +80,7 @@
         "-I",
         "C:\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\mbakh\\AppData\\Local\\Temp\\QtCreator-ptoHCW\\clang-uiheader-gqNTIX",
+        "C:\\Users\\mbakh\\AppData\\Local\\Temp\\QtCreator-PqRbRA\\clang-uiheader-PyFegi",
         "-nostdinc",
         "-nostdinc++",
         "-g",
@@ -102,7 +102,7 @@
         "-DQT_NETWORK_LIB",
         "-DQT_CORE_LIB",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\SERVER",
+        "X:\\Projects\\Plants-vs-Zombies\\SERVER",
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\include",
         "-I",
@@ -110,9 +110,9 @@
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\include\\QtCore",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug\\debug",
+        "X:\\Projects\\Plants-vs-Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug\\debug",
         "-I",
-        "X:\\Projects\\Plants vs. Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug",
+        "X:\\Projects\\Plants-vs-Zombies\\build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug",
         "-I",
         "C:\\Qt\\6.2.4\\mingw_64\\mkspecs\\win32-g++",
         "-isystem",
@@ -136,9 +136,9 @@
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
         "-fno-delayed-template-parsing",
-        "X:\\Projects\\Plants vs. Zombies\\SERVER\\main.h"
+        "X:\\Projects\\Plants-vs-Zombies\\SERVER\\main.h"
     ],
-    "directory": "X:/Projects/Plants vs. Zombies/build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "X:/Projects/Plants vs. Zombies/SERVER/main.h"
+    "directory": "X:/Projects/Plants-vs-Zombies/build-SERVER-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/.qtc_clangd",
+    "file": "X:/Projects/Plants-vs-Zombies/SERVER/main.h"
 }
 ]
