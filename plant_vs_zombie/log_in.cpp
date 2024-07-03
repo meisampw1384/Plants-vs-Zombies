@@ -86,8 +86,8 @@ void log_in::readResponse()
         accept();
         game_menu * game_menu_windows = new game_menu();
         game_menu_windows->show();
-        this->hide();
-        connect(game_menu_windows, &game_menu::accepted, this, &menu::showMenu);
+        this->close();
+
 
 
     } else {

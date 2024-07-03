@@ -60,7 +60,7 @@ public:
 "border-radius: 10px;"));
         LoginButton = new QPushButton(centralwidget);
         LoginButton->setObjectName(QString::fromUtf8("LoginButton"));
-        LoginButton->setGeometry(QRect(740, 610, 281, 61));
+        LoginButton->setGeometry(QRect(360, 440, 281, 61));
         QFont font1;
         font1.setFamilies({QString::fromUtf8("Snap ITC")});
         font1.setPointSize(16);

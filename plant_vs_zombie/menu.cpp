@@ -2,6 +2,7 @@
 #include "ui_menu.h"
 #include "log_in.h"
 #include "sign_up.h"
+#include "game_menu.h"
 
 menu::menu(QWidget *parent)
     : QMainWindow(parent)
@@ -21,8 +22,9 @@ void menu::on_LoginButton_clicked()
 {
     log_in *window_login=new log_in();
     window_login->show();
-    this->hide();
+    this->close();
     connect(window_login, &log_in::rejected, this, &menu::showMenu);
+    connect(window_login, &game_menu::rejected, this, &menu::showMenu);
 }
 
 
@@ -30,7 +32,7 @@ void menu::on_SignUp_button_clicked()
 {
     sign_up *window_sign_up=new sign_up();
     window_sign_up->show();
-    this->hide();
+    this->close();
     connect(window_sign_up, &sign_up::rejected, this, &menu::showMenu);
 }
 

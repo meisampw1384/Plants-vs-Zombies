@@ -17,6 +17,7 @@ public:
 
 private slots:
     void on_logout_button_clicked();
+    void handleLogout();
 
 private:
     Ui::game_menu *ui;
