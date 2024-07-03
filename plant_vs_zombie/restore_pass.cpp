@@ -5,6 +5,7 @@
 #include <QJsonArray>
 #include <QMessageBox>
 #include <QJsonValue>
+#include <QCryptographicHash>
 #include <QJsonDocument>
 
 restore_pass::restore_pass(QWidget *parent) :
@@ -33,10 +34,13 @@ void restore_pass::on_buttonBox_accepted()
         return;
     }
 
+    QByteArray hash = QCryptographicHash::hash(new_password.toUtf8(), QCryptographicHash::Sha256);
+    QString password = QString(hash.toHex());
+
     QJsonObject request;
     request["action"]="restore";
     request["phoneNumber"]=phone_number;
-    request["newPassword"]=new_password;
+    request["newPassword"]=password;
 
     QJsonDocument doc(request);
     QByteArray data = doc.toJson();

@@ -1,5 +1,4 @@
 #include "menu.h"
-#include "server.h"
 
 #include <QApplication>
 

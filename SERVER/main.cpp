@@ -81,6 +81,7 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
         QString phoneNumber = request["phoneNumber"].toString();
         QString email = request["email"].toString();
         QString password = request["password"].toString();
+        QString name= request["name"].toString();
 
         QJsonDocument doc = readJsonFile("information.json");
         QJsonArray jsonArray = doc.array();
@@ -104,6 +105,7 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
             newUser["phoneNumber"] = phoneNumber;
             newUser["email"] = email;
             newUser["password"] = password;
+            newUser["name"]=name;
 
             jsonArray.append(newUser);
             writeJsonFile("information.json", QJsonDocument(jsonArray));

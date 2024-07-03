@@ -19,7 +19,6 @@ public:
 
 private slots:
     void on_LoginButton_clicked();
-
     void on_SignUp_button_clicked();
 
 private:
