@@ -21,10 +21,13 @@ private slots:
 
     void on_buttonBox_accepted();
 
+    void readyResponse();
+
 
 
 private:
     Ui::sign_up *ui;
+    QTcpSocket *socket;
 
 };
 

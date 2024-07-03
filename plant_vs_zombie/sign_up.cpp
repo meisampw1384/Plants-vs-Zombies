@@ -12,6 +12,9 @@ sign_up::sign_up(QWidget *parent) :
     ui(new Ui::sign_up)
 {
     ui->setupUi(this);
+    socket = new QTcpSocket(this);
+
+    connect(socket,&QTcpSocket::readyRead,this,&sign_up::readyResponse);
 }
 
 sign_up::~sign_up()
@@ -33,45 +36,50 @@ void sign_up::on_buttonBox_accepted()
     QString email = this->ui->line_edit_email_2->text();
     QString password = this->ui->line_edit_password_2->text();
 
-    QJsonObject jsonObject;
-    jsonObject["name"] = name;
-    jsonObject["username"] = username;
-    jsonObject["phoneNumber"] = phoneNumber;
-    jsonObject["email"] = email;
-    jsonObject["password"] = password;
+    QJsonObject request;
+    request["action"]="signup";
+    request["username"]=username;
+    request["phoneNumber"]=phoneNumber;
+    request["email"]=email;
+    request["password"]=password;
 
-    QFile file("information.json");
-    QJsonArray jsonArray;
+    QJsonDocument doc(request);
+    QByteArray data= doc.toJson();
 
-    if (file.exists()) {
-        if (!file.open(QIODevice::ReadOnly)) {
-            QMessageBox::warning(this, "Error", "Could not open file for reading");
-            return;
+    socket->connectToHost("127.0.0.1",1234);
+    if (socket->waitForConnected(5000)){
+        qDebug()<<"connection established";
+
+        socket->write(data);
+        socket->flush();
+
+        if (!socket->waitForReadyRead(5000)){
+            qDebug()<<"No response from server";
+            QMessageBox::warning(this, "Error", "No response from the server.");
+
         }
-
-        QByteArray data = file.readAll();
-        file.close();
-
-        QJsonDocument existingDoc = QJsonDocument::fromJson(data);
-        if (!existingDoc.isArray()) {
-            QMessageBox::warning(this, "Error", "Invalid JSON format");
-            return;
-        }
-
-        jsonArray = existingDoc.array();
     }
+    else {
+        qDebug() << "Failed to connect to server";
+        QMessageBox::warning(this, "Error", "Failed to connect to the server.");
 
-    jsonArray.append(jsonObject);
-
-    if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(this, "Error", "Could not open file for writing");
-        return;
     }
+}
 
-    QJsonDocument jsonDoc(jsonArray);
-    file.write(jsonDoc.toJson());
-    file.close();
 
-    QMessageBox::information(this, "Success", "Sign up successful");
-    this->accept();
+void sign_up::readyResponse()
+{
+    QByteArray response= socket->readAll();
+    qDebug()<<"Received response:"<<response;
+    QJsonDocument doc = QJsonDocument::fromJson(response);
+    QJsonObject obj=doc.object();
+
+    if (obj["result"].toString()=="success"){
+        QMessageBox::information(this, "SignUp Success", "SignUp Successfully!");
+        accept();
+    }
+    else {
+        QMessageBox::warning(this, "Failed SignUp", "Invalid informations!");
+        reject();
+    }
 }
