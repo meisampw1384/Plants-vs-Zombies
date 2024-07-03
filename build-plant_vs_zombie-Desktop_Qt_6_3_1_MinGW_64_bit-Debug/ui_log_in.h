@@ -90,6 +90,7 @@ public:
 
         line_edit_password = new QLineEdit(layoutWidget_2);
         line_edit_password->setObjectName(QString::fromUtf8("line_edit_password"));
+        line_edit_password->setEchoMode(QLineEdit::Password);
 
         verticalLayout_2->addWidget(line_edit_password);
 

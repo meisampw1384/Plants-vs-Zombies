@@ -131,6 +131,7 @@ public:
         line_edit_password_2 = new QLineEdit(sign_up);
         line_edit_password_2->setObjectName(QString::fromUtf8("line_edit_password_2"));
         line_edit_password_2->setGeometry(QRect(324, 343, 231, 26));
+        line_edit_password_2->setEchoMode(QLineEdit::Password);
         label_7->raise();
         layoutWidget->raise();
         buttonBox->raise();
