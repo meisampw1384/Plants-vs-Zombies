@@ -41,6 +41,7 @@ void sign_up::on_buttonBox_accepted()
     request["username"]=username;
     request["phoneNumber"]=phoneNumber;
     request["email"]=email;
+    request["name"]=name;
     request["password"]=password;
 
     QJsonDocument doc(request);

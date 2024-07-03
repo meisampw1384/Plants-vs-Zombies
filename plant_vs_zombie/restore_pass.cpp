@@ -12,6 +12,8 @@ restore_pass::restore_pass(QWidget *parent) :
     ui(new Ui::restore_pass)
 {
     ui->setupUi(this);
+    socket=new QTcpSocket(this);
+    connect(socket,&QTcpSocket::readyRead,this,&restore_pass::readyResponse);
 }
 
 restore_pass::~restore_pass()
@@ -23,54 +25,42 @@ void restore_pass::on_buttonBox_accepted()
 {
     QString phone_number=this->ui->line_edit_phone->text();
     QString new_password=this->ui->lineEdit_password->text();
+    QJsonObject request;
+    request["action"]="restore";
+    request["phoneNumber"]=phone_number;
+    request["newPassword"]=new_password;
 
-        QFile file("information.json");
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->connectToHost("127.0.0.1",1234);
 
-        if (!file.open(QIODevice::ReadWrite)) {
-            QMessageBox::warning(this, "Error", "Could not open file. If you haven't signed up, please do so.");
-            return;
+    if (socket->waitForConnected(5000)){
+        qDebug()<<"Connection established!";
+
+        socket->write(data);
+        socket->flush();
+
+        if (!socket->waitForReadyRead(5000)){
+            qDebug()<<"No response from server";
+            QMessageBox::warning(this,"Erorr","No response from server.");
         }
 
-        QByteArray data = file.readAll();
-        file.close();
+    }
+}
 
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
-        if (jsonDoc.isNull() || !jsonDoc.isArray()) {
-            QMessageBox::warning(this, "Error", "Invalid JSON format");
-            return;
-        }
+void restore_pass::readyResponse()
+{
+    QByteArray response = socket->readAll();
+    qDebug() << "Received response:" << response;  // Debug output
+    QJsonDocument doc = QJsonDocument::fromJson(response);
+    QJsonObject obj = doc.object();
 
-        QJsonArray jsonArray = jsonDoc.array();
-        bool userFound = false;
-
-        for (int i=0;i<jsonArray.size();i++)
-        {
-
-            QJsonObject obj = jsonArray[i].toObject();
-            if (obj["phoneNumber"].toString() == phone_number) {
-                obj["password"] = new_password;
-                jsonArray[i]=obj;
-                userFound = true;
-                break;
-            }
-        }
-
-        if (userFound) {
-            QJsonDocument updatedJsonDoc(jsonArray);
-
-            if (!file.open(QIODevice::WriteOnly)) {
-                QMessageBox::warning(this, "Error", "Could not open file for writing");
-                return;
-            }
-
-            file.write(updatedJsonDoc.toJson());
-            file.close();
-
-            QMessageBox::information(this, "Password Changed", "Password changed successfully!");
-            this->accept();
-        } else {
-            QMessageBox::warning(this, "Error", "Phone number not found. Please check and try again.");
-        }
-
+    if (obj["result"].toString() == "success") {
+        QMessageBox::information(this, "Password Changed", "Password changed successfully!");
+        this->accept();
+    }
+    else {
+        QMessageBox::warning(this, "Error", "Phone number not found. Please check and try again.");
+    }
 }
 

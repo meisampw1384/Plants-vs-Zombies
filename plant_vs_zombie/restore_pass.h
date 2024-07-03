@@ -2,6 +2,7 @@
 #define RESTORE_PASS_H
 
 #include <QDialog>
+#include <QTcpSocket>
 
 namespace Ui {
 class restore_pass;
@@ -17,9 +18,12 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
+    void readyResponse();
 
 private:
     Ui::restore_pass *ui;
+    QTcpSocket *socket;
+
 };
 
 #endif // RESTORE_PASS_H
