@@ -47,5 +47,23 @@
         "password": "fc3b181900f57d88fe9e212d5be357f4c9c90d00b90b163ab301a8f7a2d67be1",
         "phoneNumber": "09162403121",
         "username": "meisampw1384"
+    },
+    {
+        "email": "ali123456@gmail.com",
+        "password": "933df00c22556383ea33692a32bfb149a51b8d3b1bed868f6544d77894eae993",
+        "phoneNumber": "09354457289",
+        "username": "ali123456"
+    },
+    {
+        "email": "mamad123456@gmail.com",
+        "password": "b63b95a5cb10cdd8cfb4a83662166ec90df5cc3f37720cf0f5e3ac79ee8c75af",
+        "phoneNumber": "09339166396",
+        "username": "mamad123456"
+    },
+    {
+        "email": "aliali123@gmail.com",
+        "password": "483a2f7cb7c8af7b10adad8a16b8164c3559c4f216190115c5f503745412b2a5",
+        "phoneNumber": "09054775744",
+        "username": "aliali123"
     }
 ]
