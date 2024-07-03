@@ -2,6 +2,7 @@
 #define SIGN_UP_H
 
 #include <QDialog>
+#include <QTcpSocket>
 
 namespace Ui {
 class sign_up;
@@ -20,8 +21,11 @@ private slots:
 
     void on_buttonBox_accepted();
 
+
+
 private:
     Ui::sign_up *ui;
+
 };
 
 #endif // SIGN_UP_H

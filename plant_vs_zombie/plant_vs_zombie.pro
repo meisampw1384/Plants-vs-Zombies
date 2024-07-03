@@ -14,14 +14,12 @@ SOURCES += \
     main.cpp \
     menu.cpp \
     restore_pass.cpp \
-    server.cpp \
     sign_up.cpp
 
 HEADERS += \
     log_in.h \
     menu.h \
     restore_pass.h \
-    server.h \
     sign_up.h
 
 FORMS += \
