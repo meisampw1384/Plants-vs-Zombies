@@ -77,20 +77,39 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
         response["result"] = success ? "success" : "failure";
         qDebug() << "Login action result:" << response["result"].toString();  // Debug output
     } else if (action == "signup") {
-        QJsonObject newUser;
-        newUser["name"] = request["name"].toString();
-        newUser["username"] = request["username"].toString();
-        newUser["phoneNumber"] = request["phoneNumber"].toString();
-        newUser["email"] = request["email"].toString();
-        newUser["password"] = request["password"].toString();
+        QString username = request["username"].toString();
+        QString phoneNumber = request["phoneNumber"].toString();
+        QString email = request["email"].toString();
+        QString password = request["password"].toString();
 
         QJsonDocument doc = readJsonFile("information.json");
         QJsonArray jsonArray = doc.array();
-        jsonArray.append(newUser);
+        bool usernameExists = false;
 
-        writeJsonFile("information.json", QJsonDocument(jsonArray));
-        response["result"] = "success";
-        qDebug() << "Signup action result:" << response["result"].toString();  // Debug output
+        for (const QJsonValue &value : jsonArray) {
+            QJsonObject obj = value.toObject();
+            if (obj["username"].toString() == username) {
+                usernameExists = true;
+                break;
+            }
+        }
+
+        if (usernameExists) {
+            response["result"] = "failure";
+            response["message"] = "Username already exists.";
+            qDebug() << "Signup action result:" << response["result"].toString();  // Debug output
+        } else {
+            QJsonObject newUser;
+            newUser["username"] = username;
+            newUser["phoneNumber"] = phoneNumber;
+            newUser["email"] = email;
+            newUser["password"] = password;
+
+            jsonArray.append(newUser);
+            writeJsonFile("information.json", QJsonDocument(jsonArray));
+            response["result"] = "success";
+            qDebug() << "Signup action result:" << response["result"].toString();  // Debug output
+        }
     } else if (action == "restore") {
         QString phoneNumber = request["phoneNumber"].toString();
         QString newPassword = request["newPassword"].toString();
@@ -123,6 +142,7 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
     qDebug() << "Sent response:" << responseData;  // Debug output
     socket->disconnectFromHost();
 }
+
 
 QJsonDocument Server::readJsonFile(const QString &filePath)
 {

@@ -119,7 +119,7 @@ void sign_up::readyResponse()
         accept();
     }
     else {
-        QMessageBox::warning(this, "Failed SignUp", "Invalid informations!");
+        QMessageBox::warning(this, "Failed SignUp", "The Username existed!");
         reject();
     }
 }
