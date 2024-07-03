@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>game_menu</class>
+ <widget class="QDialog" name="game_menu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>-10</y>
+     <width>1141</width>
+     <height>731</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../images/game_menu.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="LoginButton">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>440</y>
+     <width>351</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Snap ITC</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #644370; /* Green */
+border-color: #2196F3;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size:25;
+  cursor: pointer;
+border-radius: 10px;</string>
+   </property>
+   <property name="text">
+    <string>games history</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="LoginButton_2">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>360</y>
+     <width>351</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Snap ITC</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #644370; /* Green */
+border-color: #2196F3;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size:25;
+  cursor: pointer;
+border-radius: 10px;</string>
+   </property>
+   <property name="text">
+    <string>change information</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="LoginButton_3">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>260</y>
+     <width>411</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Snap ITC</family>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #644370; /* Green */
+border-color: #2196F3;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size:25;
+  cursor: pointer;
+border-radius: 10px;</string>
+   </property>
+   <property name="text">
+    <string>START</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="logout_button">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>520</y>
+     <width>191</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Snap ITC</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #7b3432; /* Green */
+border-color: #2196F3;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size:25;
+  cursor: pointer;
+border-radius: 10px;</string>
+   </property>
+   <property name="text">
+    <string>logout</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

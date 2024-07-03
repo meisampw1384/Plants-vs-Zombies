@@ -1,12 +1,14 @@
 #include "log_in.h"
 #include "ui_log_in.h"
 #include "restore_pass.h"
+#include "game_menu.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QCryptographicHash>
 #include <QTcpSocket>
 #include <QDebug>
+#include "menu.h"
 
 log_in::log_in(QWidget *parent) :
     QDialog(parent),
@@ -82,6 +84,12 @@ void log_in::readResponse()
     if (obj["result"].toString() == "success") {
         QMessageBox::information(this, "Login Success", "Login successful!");
         accept();
+        game_menu * game_menu_windows = new game_menu();
+        game_menu_windows->show();
+        this->hide();
+        connect(game_menu_windows, &game_menu::accepted, this, &menu::showMenu);
+
+
     } else {
         QMessageBox::warning(this, "Login Failed", "Invalid username or password!");
         reject();

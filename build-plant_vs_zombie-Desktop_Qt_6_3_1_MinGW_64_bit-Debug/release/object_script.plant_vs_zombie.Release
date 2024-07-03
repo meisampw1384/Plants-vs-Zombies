@@ -1,0 +1,11 @@
+release/game_menu.o
+release/log_in.o
+release/main.o
+release/menu.o
+release/restore_pass.o
+release/sign_up.o
+release/moc_game_menu.o
+release/moc_log_in.o
+release/moc_menu.o
+release/moc_restore_pass.o
+release/moc_sign_up.o

@@ -30,45 +30,6 @@
      <pixmap>../images/background_menu.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="LoginButton">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>440</y>
-      <width>281</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Snap ITC</family>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="tabletTracking">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #04AA6D; /* Green */
-border-color: #2196F3;
-  border: none;
-  color: white;
-  text-align: center;
-  display: inline-block;
-  font-size:25;
-  cursor: pointer;
-border-radius: 10px;</string>
-    </property>
-    <property name="text">
-     <string>Log in</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="SignUp_button">
     <property name="geometry">
      <rect>
@@ -103,6 +64,45 @@ border-radius: 10px;</string>
     </property>
     <property name="text">
      <string>Sign up</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LoginButton">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>610</y>
+      <width>281</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Snap ITC</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="tabletTracking">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #04AA6D; /* Green */
+border-color: #2196F3;
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size:25;
+  cursor: pointer;
+border-radius: 10px;</string>
+    </property>
+    <property name="text">
+     <string>Log in</string>
     </property>
    </widget>
   </widget>
