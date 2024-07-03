@@ -36,6 +36,40 @@ void sign_up::on_buttonBox_accepted()
     QString email = this->ui->line_edit_email_2->text();
     QString password = this->ui->line_edit_password_2->text();
 
+    if(name.size() < 3)
+    {
+        QMessageBox::warning(this, "Error", "name should have at least 3 characters");
+        reject();
+        return;
+    }
+
+    QRegularExpression phoneNumber_re("^0\\d{10}$");
+    if (!phoneNumber_re.match(phoneNumber).hasMatch()) {
+        QMessageBox::warning(this, "Error", "phone number should have 11 digits and starts with 0 !");
+        reject();
+        return;
+    }
+
+    QRegularExpression username_re("^[a-zA-Z0-9_]{8,}$");
+    if (!username_re.match(username).hasMatch()) {
+        QMessageBox::warning(this, "Error", "username must have at least 8 characters");
+        reject();
+        return;
+    }
+    QRegularExpression email_re("^[\\w\\.]+@[\\w\\.-]+\\.\\w+$");
+    if (!email_re.match(email).hasMatch()) {
+        QMessageBox::warning(this, "Error", "wrong email format !");
+        reject();
+        return;
+    }
+    QRegularExpression password_re("^^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+    if (!password_re.match(password).hasMatch()) {
+        QMessageBox::warning(this, "Error", "password should have at least 8 characters, including at least one letter and one number.!");
+        reject();
+        return;
+    }
+
+
     QJsonObject request;
     request["action"]="signup";
     request["username"]=username;
