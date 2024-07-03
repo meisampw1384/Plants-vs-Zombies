@@ -110,7 +110,11 @@ color: rgb(29, 255, 123);</string>
      <widget class="QLineEdit" name="line_edit_name"/>
     </item>
     <item>
-     <widget class="QLineEdit" name="line_edit_password"/>
+     <widget class="QLineEdit" name="line_edit_password">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

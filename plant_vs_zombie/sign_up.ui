@@ -229,23 +229,20 @@ color: rgb(29, 255, 123);</string>
      <height>26</height>
     </rect>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
   </widget>
   <zorder>label_7</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>buttonBox</zorder>
   <zorder>label_4</zorder>
   <zorder>label_8</zorder>
-  <zorder>lineEdit</zorder>
-  <zorder>lineEdit_2</zorder>
-  <zorder>lineEdit_3</zorder>
-  <zorder>lineEdit_4</zorder>
-  <zorder>lineEdit_5</zorder>
   <zorder>line_edit_name_2</zorder>
   <zorder>line_edit_username_2</zorder>
   <zorder>line_edit_phonenumber_2</zorder>
   <zorder>line_edit_email_2</zorder>
   <zorder>line_edit_password_2</zorder>
-  <zorder></zorder>
  </widget>
  <resources/>
  <connections>

@@ -109,7 +109,11 @@
      <widget class="QLineEdit" name="line_edit_phone"/>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_password"/>
+     <widget class="QLineEdit" name="lineEdit_password">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

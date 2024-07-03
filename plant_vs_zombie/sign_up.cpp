@@ -56,6 +56,7 @@ void sign_up::on_buttonBox_accepted()
         reject();
         return;
     }
+
     QRegularExpression email_re("^[\\w\\.]+@[\\w\\.-]+\\.\\w+$");
     if (!email_re.match(email).hasMatch()) {
         QMessageBox::warning(this, "Error", "wrong email format !");

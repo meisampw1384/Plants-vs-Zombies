@@ -25,6 +25,14 @@ void restore_pass::on_buttonBox_accepted()
 {
     QString phone_number=this->ui->line_edit_phone->text();
     QString new_password=this->ui->lineEdit_password->text();
+
+    QRegularExpression password_re("^^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+    if (!password_re.match(new_password).hasMatch()) {
+        QMessageBox::warning(this, "Error", "password should have at least 8 characters, including at least one letter and one number.!");
+        reject();
+        return;
+    }
+
     QJsonObject request;
     request["action"]="restore";
     request["phoneNumber"]=phone_number;
