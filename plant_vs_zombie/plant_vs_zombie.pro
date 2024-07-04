@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    change_info.cpp \
     game_menu.cpp \
     log_in.cpp \
     main.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     sign_up.cpp
 
 HEADERS += \
+    change_info.h \
     game_menu.h \
     log_in.h \
     menu.h \
@@ -25,6 +27,7 @@ HEADERS += \
     sign_up.h
 
 FORMS += \
+    change_info.ui \
     game_menu.ui \
     log_in.ui \
     menu.ui \

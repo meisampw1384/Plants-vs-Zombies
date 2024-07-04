@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>change_info</class>
+ <widget class="QDialog" name="change_info">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>761</width>
+    <height>591</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <bold>false</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>510</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>-60</x>
+     <y>0</y>
+     <width>951</width>
+     <height>681</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../images/pvz2-ea-hero-pvz2-xl.jpg.adapt.crop191x100.1200w.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>-10</y>
+     <width>331</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>22</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(0, 0, 0);</string>
+   </property>
+   <property name="text">
+    <string>change information</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="line_edit_phonenumber_2">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>251</y>
+     <width>181</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="line_edit_name_2">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>129</y>
+     <width>221</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="line_edit_password_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>373</y>
+     <width>231</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>326</x>
+     <y>110</y>
+     <width>179</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka Banner</family>
+     <pointsize>15</pointsize>
+     <bold>false</bold>
+    </font>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="line_edit_name">
+      <property name="font">
+       <font>
+        <family>Sitka Banner</family>
+        <pointsize>15</pointsize>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(29, 255, 123);</string>
+      </property>
+      <property name="text">
+       <string>name : </string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="line_edit_username">
+      <property name="font">
+       <font>
+        <family>Sitka Banner</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+color: rgb(29, 255, 123);</string>
+      </property>
+      <property name="text">
+       <string>username :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="line_edit_phonenumber">
+      <property name="font">
+       <font>
+        <family>Sitka Banner</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(29, 255, 123);</string>
+      </property>
+      <property name="text">
+       <string>phone number :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="line_edit_email">
+      <property name="font">
+       <font>
+        <family>Sitka Banner</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(29, 255, 123);</string>
+      </property>
+      <property name="text">
+       <string>email :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="line_edit_password">
+      <property name="font">
+       <font>
+        <family>Sitka Banner</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(29, 255, 123);</string>
+      </property>
+      <property name="text">
+       <string>password :</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLineEdit" name="line_edit_email_2">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>312</y>
+     <width>261</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="line_edit_username_2">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>190</y>
+     <width>221</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>430</y>
+     <width>291</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:rgb(189, 12, 22);</string>
+   </property>
+   <property name="text">
+    <string>fill every field you wanna change</string>
+   </property>
+  </widget>
+  <zorder>label_7</zorder>
+  <zorder>buttonBox</zorder>
+  <zorder>label_8</zorder>
+  <zorder>line_edit_phonenumber_2</zorder>
+  <zorder>line_edit_name_2</zorder>
+  <zorder>line_edit_password_2</zorder>
+  <zorder>layoutWidget</zorder>
+  <zorder>line_edit_email_2</zorder>
+  <zorder>line_edit_username_2</zorder>
+  <zorder>label</zorder>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>change_info</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>change_info</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
