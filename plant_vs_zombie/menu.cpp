@@ -34,7 +34,7 @@ void menu::on_SignUp_button_clicked()
     window_sign_up->show();
     this->close();
     connect(window_sign_up, &sign_up::rejected, this, &menu::showMenu);
-    connect(window_sign_up,&sign_up::accepted,this,&menu::showMenu);
+    connect(window_sign_up, &game_menu::accepted, this, &menu::showMenu);
 }
 
 void menu::showMenu(){

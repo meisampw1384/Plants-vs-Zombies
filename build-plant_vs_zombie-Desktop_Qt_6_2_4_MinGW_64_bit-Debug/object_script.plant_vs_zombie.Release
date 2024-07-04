@@ -1,9 +1,17 @@
+<<<<<<< HEAD
+=======
+release/change_info.o
+>>>>>>> master
 release/game_menu.o
 release/log_in.o
 release/main.o
 release/menu.o
 release/restore_pass.o
 release/sign_up.o
+<<<<<<< HEAD
+=======
+release/moc_change_info.o
+>>>>>>> master
 release/moc_game_menu.o
 release/moc_log_in.o
 release/moc_menu.o

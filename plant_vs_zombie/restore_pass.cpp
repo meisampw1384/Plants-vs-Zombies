@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QCryptographicHash>
 #include <QJsonDocument>
+#include <QCryptographicHash>
 
 restore_pass::restore_pass(QWidget *parent) :
     QDialog(parent),

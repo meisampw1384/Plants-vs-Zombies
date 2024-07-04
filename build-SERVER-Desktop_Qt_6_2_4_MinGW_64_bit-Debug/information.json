@@ -1,20 +1,30 @@
 [
     {
+        "email": "matin1384@gmail.com",
+        "name": "matin",
+        "password": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "phoneNumber": "09054775744",
+        "username": "matin1384"
+    },
+    {
         "email": "mpwryamehr585@gmail.com",
-        "password": "013798fa741af1a27b8665c7278c29fd02762406cd0889cbfcc733515395cba3",
+        "name": "meysam",
+        "password": "meisampw1384",
         "phoneNumber": "09162403121",
         "username": "meisampw1384"
     },
     {
         "email": "mpwryamehr585@gmail.com",
-        "password": "4ae70ac855fc7b36c4f5b1ee1236eb95422a8c7c1b2e8f1aa63f952fddbd81a1",
-        "phoneNumber": "09131060128",
+        "name": "meysam",
+        "password": "fc3b181900f57d88fe9e212d5be357f4c9c90d00b90b163ab301a8f7a2d67be1",
+        "phoneNumber": "09162403121",
         "username": "meysam1384"
     },
     {
         "email": "mpwryamehr@gmail.com",
+        "name": "mohammad",
         "password": "fc3b181900f57d88fe9e212d5be357f4c9c90d00b90b163ab301a8f7a2d67be1",
-        "phoneNumber": "09173907569",
-        "username": "dijfidksld"
+        "phoneNumber": "09131060128",
+        "username": "mohammad1351"
     }
 ]

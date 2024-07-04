@@ -75,13 +75,14 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
         }
 
         response["result"] = success ? "success" : "failure";
+        response["user_name"]=username;
         qDebug() << "Login action result:" << response["result"].toString();  // Debug output
     } else if (action == "signup") {
         QString username = request["username"].toString();
         QString phoneNumber = request["phoneNumber"].toString();
         QString email = request["email"].toString();
         QString password = request["password"].toString();
-        QString name= request["name"].toString();
+        QString name = request["name"].toString();
 
         QJsonDocument doc = readJsonFile("information.json");
         QJsonArray jsonArray = doc.array();
@@ -105,7 +106,7 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
             newUser["phoneNumber"] = phoneNumber;
             newUser["email"] = email;
             newUser["password"] = password;
-            newUser["name"]=name;
+            newUser["name"] = name;
 
             jsonArray.append(newUser);
             writeJsonFile("information.json", QJsonDocument(jsonArray));
@@ -130,12 +131,56 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
             }
         }
 
+
+
         if (success) {
             writeJsonFile("information.json", QJsonDocument(jsonArray));
         }
         response["result"] = success ? "success" : "failure";
         qDebug() << "Restore action result:" << response["result"].toString();  // Debug output
     }
+    else if (action == "change_inf"){
+        QString prev_username=request["prev_username"].toString();
+        QString new_name=request["new_name"].toString();
+        QString new_user_name=request["new_username"].toString();
+        QString new_phoneNumber=request["new_phoneNumber"].toString();
+        QString new_email=request["new_email"].toString();
+        QString new_password=request["new_password"].toString();
+
+        QJsonDocument doc = readJsonFile("information.json");
+        QJsonArray jsonArray = doc.array();
+
+        // Find the user object based on prev_username
+        bool updated = false;
+        for (int i = 0; i < jsonArray.size(); ++i) {
+            QJsonObject obj = jsonArray[i].toObject();
+            if (obj["username"].toString() == prev_username) {
+                // Update fields if they are not empty
+                if (!new_name.isEmpty()) obj["name"] = new_name;
+                if (!new_user_name.isEmpty()) {obj["username"] = new_user_name;prev_username=new_user_name;};
+                if (!new_phoneNumber.isEmpty()) obj["phoneNumber"] = new_phoneNumber;
+                if (!new_email.isEmpty()) obj["email"] = new_email;
+                if (!new_password.isEmpty()) obj["password"] = new_password;
+                jsonArray[i] = obj;
+                updated = true;
+                break;
+            }
+        }
+
+        if (updated) {
+            // Write updated JSON data back to the file
+            writeJsonFile("information.json", QJsonDocument(jsonArray));
+            response["result"] = "success";
+            response["user_name"]=prev_username;
+            qDebug() << "Change info action result: success";  // Debug output
+        } else {
+            response["result"] = "failure";
+            response["message"] = "User not found";
+            qDebug() << "Change info action result: failure";  // Debug output
+        }
+
+    }
+
 
     QJsonDocument responseDoc(response);
     QByteArray responseData = responseDoc.toJson();

@@ -85,6 +85,7 @@ void log_in::readResponse()
         QMessageBox::information(this, "Login Success", "Login successful!");
         accept();
         game_menu * game_menu_windows = new game_menu();
+        game_menu_windows->set_user_name(obj["user_name"].toString());
         game_menu_windows->show();
         this->close();
 

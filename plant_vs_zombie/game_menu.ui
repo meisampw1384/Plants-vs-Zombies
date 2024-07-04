@@ -68,7 +68,7 @@ border-radius: 10px;</string>
     <string>games history</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="LoginButton_2">
+  <widget class="QPushButton" name="change_information_button">
    <property name="geometry">
     <rect>
      <x>340</x>
