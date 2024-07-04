@@ -37,17 +37,17 @@ void game_menu::handleLogout()
     w->show();
 }
 
-
-
-
-
 void game_menu::on_change_information_button_clicked()
 {
     this->close();
 
-    change_info *ch= new change_info();
+    change_info * ch= new change_info();
     ch->set_user_name(this->get_user_name());//send information to the change_info
     ch->show();
+    connect(ch, &game_menu::rejected, this, &game_menu::show_menu);
+}
 
+void game_menu::show_menu(){
+    this->show();
 }
 

@@ -22,7 +22,7 @@ class Ui_game_menu
 public:
     QLabel *label;
     QPushButton *LoginButton;
-    QPushButton *LoginButton_2;
+    QPushButton *change_information_button;
     QPushButton *LoginButton_3;
     QPushButton *logout_button;
 
@@ -54,14 +54,14 @@ public:
 "  font-size:25;\n"
 "  cursor: pointer;\n"
 "border-radius: 10px;"));
-        LoginButton_2 = new QPushButton(game_menu);
-        LoginButton_2->setObjectName(QString::fromUtf8("LoginButton_2"));
-        LoginButton_2->setGeometry(QRect(340, 360, 351, 61));
-        LoginButton_2->setFont(font);
-        LoginButton_2->setCursor(QCursor(Qt::PointingHandCursor));
-        LoginButton_2->setMouseTracking(true);
-        LoginButton_2->setTabletTracking(false);
-        LoginButton_2->setStyleSheet(QString::fromUtf8("background-color: #644370; /* Green */\n"
+        change_information_button = new QPushButton(game_menu);
+        change_information_button->setObjectName(QString::fromUtf8("change_information_button"));
+        change_information_button->setGeometry(QRect(340, 360, 351, 61));
+        change_information_button->setFont(font);
+        change_information_button->setCursor(QCursor(Qt::PointingHandCursor));
+        change_information_button->setMouseTracking(true);
+        change_information_button->setTabletTracking(false);
+        change_information_button->setStyleSheet(QString::fromUtf8("background-color: #644370; /* Green */\n"
 "border-color: #2196F3;\n"
 "  border: none;\n"
 "  color: white;\n"
@@ -116,7 +116,7 @@ public:
         game_menu->setWindowTitle(QCoreApplication::translate("game_menu", "Dialog", nullptr));
         label->setText(QString());
         LoginButton->setText(QCoreApplication::translate("game_menu", "games history", nullptr));
-        LoginButton_2->setText(QCoreApplication::translate("game_menu", "change information", nullptr));
+        change_information_button->setText(QCoreApplication::translate("game_menu", "change information", nullptr));
         LoginButton_3->setText(QCoreApplication::translate("game_menu", "START", nullptr));
         logout_button->setText(QCoreApplication::translate("game_menu", "logout", nullptr));
     } // retranslateUi
