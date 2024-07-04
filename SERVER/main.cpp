@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFile>
+#include <QCryptographicHash>
 #include <QDebug>
 
 Server::Server(QObject *parent): QTcpServer(parent)
@@ -152,21 +153,37 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
 
         // Find the user object based on prev_username
         bool updated = false;
+        bool is_same = false;
         for (int i = 0; i < jsonArray.size(); ++i) {
             QJsonObject obj = jsonArray[i].toObject();
-            if (obj["username"].toString() == prev_username) {
-                // Update fields if they are not empty
-                if (!new_name.isEmpty()) obj["name"] = new_name;
-                if (!new_user_name.isEmpty()) {obj["username"] = new_user_name;prev_username=new_user_name;};
-                if (!new_phoneNumber.isEmpty()) obj["phoneNumber"] = new_phoneNumber;
-                if (!new_email.isEmpty()) obj["email"] = new_email;
-                if (!new_password.isEmpty()) obj["password"] = new_password;
-                jsonArray[i] = obj;
-                updated = true;
+            if(new_name == obj["username"].toString())
+            {
+                is_same = true;
                 break;
             }
         }
+        if(!is_same)
+        {
+            for (int i = 0; i < jsonArray.size(); ++i) {
+                QJsonObject obj = jsonArray[i].toObject();
+                if (obj["username"].toString() == prev_username) {
+                    // Update fields if they are not empty
+                    if (!new_name.isEmpty()) obj["name"] = new_name;
+                    if (!new_user_name.isEmpty()) {obj["username"] = new_user_name;prev_username=new_user_name;};
+                    if (!new_phoneNumber.isEmpty()) obj["phoneNumber"] = new_phoneNumber;
+                    if (!new_email.isEmpty()) obj["email"] = new_email;
 
+                    QString for_cmp = "";
+                    QByteArray hash = QCryptographicHash::hash(for_cmp.toUtf8(), QCryptographicHash::Sha256);
+                    QString hashed_cmp = QString(hash.toHex());
+                    if (hashed_cmp != new_password) obj["password"] = new_password;
+
+                    jsonArray[i] = obj;
+                    updated = true;
+                    break;
+                }
+            }
+        }
         if (updated) {
             // Write updated JSON data back to the file
             writeJsonFile("information.json", QJsonDocument(jsonArray));
@@ -175,7 +192,7 @@ void Server::processReq(const QJsonObject &request, QTcpSocket *socket)
             qDebug() << "Change info action result: success";  // Debug output
         } else {
             response["result"] = "failure";
-            response["message"] = "User not found";
+            response["message"] = "User not found or new username is same with other user name";
             qDebug() << "Change info action result: failure";  // Debug output
         }
 

@@ -16,12 +16,12 @@ public:
     explicit game_menu(QWidget *parent = nullptr);
     void set_user_name(QString user_name);
     QString get_user_name();
+    void show_menu();
     ~game_menu();
 
 private slots:
     void on_logout_button_clicked();
     void handleLogout();
-
     void on_change_information_button_clicked();
 
 private:

@@ -69,6 +69,41 @@ void change_info::on_buttonBox_accepted()
     QString new_email = this->ui->line_edit_email_2->text();
     QString new_raw_password = this->ui->line_edit_password_2->text();
 
+    if(new_name.size() < 3 and new_name.size() != 0)
+    {
+        QMessageBox::warning(this, "Error", "name should have at least 3 characters");
+        reject();
+        return;
+    }
+
+    QRegularExpression phoneNumber_re("^0\\d{10}$");
+    if (!phoneNumber_re.match(new_phoneNumber).hasMatch() and new_phoneNumber.size() != 0 ) {
+        QMessageBox::warning(this, "Error", "phone number should have 11 digits and starts with 0 !");
+        reject();
+        return;
+    }
+
+    QRegularExpression username_re("^[a-zA-Z0-9_]{8,}$");
+    if (!username_re.match(new_username).hasMatch() and new_username.size() != 0) {
+        QMessageBox::warning(this, "Error", "username must have at least 8 characters");
+        reject();
+        return;
+    }
+
+    QRegularExpression email_re("^[\\w\\.]+@[\\w\\.-]+\\.\\w+$");
+    if (!email_re.match(new_email).hasMatch() and new_email.size() != 0) {
+        QMessageBox::warning(this, "Error", "wrong email format !");
+        reject();
+        return;
+    }
+    QRegularExpression password_re("^^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+    if (!password_re.match(new_raw_password).hasMatch() and new_raw_password.size() != 0) {
+        QMessageBox::warning(this, "Error", "password should have at least 8 characters, including at least one letter and one number.!");
+        reject();
+        return;
+    }
+
+
     QByteArray hash = QCryptographicHash::hash(new_raw_password.toUtf8(), QCryptographicHash::Sha256);
     QString password = QString(hash.toHex());
 
@@ -98,5 +133,11 @@ void change_info::on_buttonBox_accepted()
             reject();
         }
     }
+}
+
+
+void change_info::on_buttonBox_rejected()
+{
+
 }
 

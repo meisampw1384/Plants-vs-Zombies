@@ -53,7 +53,7 @@ void sign_up::on_buttonBox_accepted()
 
     QRegularExpression username_re("^[a-zA-Z0-9_]{8,}$");
     if (!username_re.match(username).hasMatch()) {
-        QMessageBox::warning(this, "Error", "username must have at least 8 characters");
+        QMessageBox::warning(this, "Error", "invalid username!");
         reject();
         return;
     }
