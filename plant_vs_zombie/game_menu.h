@@ -2,6 +2,7 @@
 #define GAME_MENU_H
 
 #include <QDialog>
+#include <QJsonObject>
 
 namespace Ui {
 class game_menu;
@@ -13,14 +14,19 @@ class game_menu : public QDialog
 
 public:
     explicit game_menu(QWidget *parent = nullptr);
+    void set_user_name(QString user_name);
+    QString get_user_name();
     ~game_menu();
 
 private slots:
     void on_logout_button_clicked();
     void handleLogout();
 
+    void on_change_information_button_clicked();
+
 private:
     Ui::game_menu *ui;
+    QString userName;
 };
 
 #endif // GAME_MENU_H

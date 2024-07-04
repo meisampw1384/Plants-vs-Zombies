@@ -122,4 +122,5 @@ void sign_up::readyResponse()
         QMessageBox::warning(this, "Failed SignUp", "The Username existed!");
         reject();
     }
+    socket->disconnectFromHost();
 }

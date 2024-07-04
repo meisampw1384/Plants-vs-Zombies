@@ -25,8 +25,8 @@ class Ui_menu
 public:
     QWidget *centralwidget;
     QLabel *label;
-    QPushButton *LoginButton;
     QPushButton *SignUp_button;
+    QPushButton *LoginButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -41,13 +41,30 @@ public:
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(0, 0, 1021, 671));
         label->setPixmap(QPixmap(QString::fromUtf8("../images/background_menu.png")));
+        SignUp_button = new QPushButton(centralwidget);
+        SignUp_button->setObjectName(QString::fromUtf8("SignUp_button"));
+        SignUp_button->setGeometry(QRect(360, 500, 281, 61));
+        QFont font;
+        font.setFamilies({QString::fromUtf8("Snap ITC")});
+        SignUp_button->setFont(font);
+        SignUp_button->setCursor(QCursor(Qt::PointingHandCursor));
+        SignUp_button->setMouseTracking(true);
+        SignUp_button->setStyleSheet(QString::fromUtf8("background-color:#f3d027; /* Green */\n"
+"border-color: #2196F3;\n"
+"  border: none;\n"
+"  color: white;\n"
+"  text-align: center;\n"
+"  display: inline-block;\n"
+"  font-size: 25px;\n"
+"  cursor: pointer;\n"
+"border-radius: 10px;"));
         LoginButton = new QPushButton(centralwidget);
         LoginButton->setObjectName(QString::fromUtf8("LoginButton"));
         LoginButton->setGeometry(QRect(360, 440, 281, 61));
-        QFont font;
-        font.setFamilies({QString::fromUtf8("Snap ITC")});
-        font.setPointSize(16);
-        LoginButton->setFont(font);
+        QFont font1;
+        font1.setFamilies({QString::fromUtf8("Snap ITC")});
+        font1.setPointSize(16);
+        LoginButton->setFont(font1);
         LoginButton->setCursor(QCursor(Qt::PointingHandCursor));
         LoginButton->setMouseTracking(true);
         LoginButton->setTabletTracking(false);
@@ -58,23 +75,6 @@ public:
 "  text-align: center;\n"
 "  display: inline-block;\n"
 "  font-size:25;\n"
-"  cursor: pointer;\n"
-"border-radius: 10px;"));
-        SignUp_button = new QPushButton(centralwidget);
-        SignUp_button->setObjectName(QString::fromUtf8("SignUp_button"));
-        SignUp_button->setGeometry(QRect(360, 500, 281, 61));
-        QFont font1;
-        font1.setFamilies({QString::fromUtf8("Snap ITC")});
-        SignUp_button->setFont(font1);
-        SignUp_button->setCursor(QCursor(Qt::PointingHandCursor));
-        SignUp_button->setMouseTracking(true);
-        SignUp_button->setStyleSheet(QString::fromUtf8("background-color:#f3d027; /* Green */\n"
-"border-color: #2196F3;\n"
-"  border: none;\n"
-"  color: white;\n"
-"  text-align: center;\n"
-"  display: inline-block;\n"
-"  font-size: 25px;\n"
 "  cursor: pointer;\n"
 "border-radius: 10px;"));
         menu->setCentralWidget(centralwidget);
@@ -95,8 +95,8 @@ public:
     {
         menu->setWindowTitle(QCoreApplication::translate("menu", "menu", nullptr));
         label->setText(QString());
-        LoginButton->setText(QCoreApplication::translate("menu", "Log in", nullptr));
         SignUp_button->setText(QCoreApplication::translate("menu", "Sign up", nullptr));
+        LoginButton->setText(QCoreApplication::translate("menu", "Log in", nullptr));
     } // retranslateUi
 
 };

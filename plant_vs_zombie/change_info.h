@@ -2,6 +2,9 @@
 #define CHANGE_INFO_H
 
 #include <QDialog>
+#include <QObject>
+#include <QJsonObject>
+#include <QTcpSocket>
 
 namespace Ui {
 class change_info;
@@ -13,6 +16,9 @@ class change_info : public QDialog
 
 public:
     explicit change_info(QWidget *parent = nullptr);
+    void set_user_name(QString _userName);
+    QString get_user_name();
+    void readyRespond();
     ~change_info();
 
 private slots:
@@ -20,6 +26,8 @@ private slots:
 
 private:
     Ui::change_info *ui;
+    QString user_name;
+    QTcpSocket *socket;
 };
 
 #endif // CHANGE_INFO_H
