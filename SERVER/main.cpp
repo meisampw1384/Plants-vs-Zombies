@@ -24,7 +24,7 @@ void Server::startServer()
 void Server::new_connection()
 {
     QTcpSocket *socket = nextPendingConnection();
-    clients.append(socket);
+    clients.append(socket);  //2
     connect(socket, &QTcpSocket::readyRead, this, &Server::ReadyRead);
     connect(socket, &QTcpSocket::disconnected, this, &Server::ClientDisconnected);
     qDebug() << "New client connected";
@@ -36,7 +36,7 @@ void Server::ReadyRead()
     if (!socket) return;
 
     QByteArray data = socket->readAll();
-    qDebug() << "Received data:" << data;  // Debug output
+    qDebug() << "Received data:" << data;
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject request = doc.object();
 

@@ -11,20 +11,26 @@ CONFIG += c++17
 
 SOURCES += \
     change_info.cpp \
+    characters.cpp \
     game_menu.cpp \
     log_in.cpp \
     main.cpp \
     menu.cpp \
+    plants.cpp \
     restore_pass.cpp \
-    sign_up.cpp
+    sign_up.cpp \
+    zombies.cpp
 
 HEADERS += \
     change_info.h \
+    characters.h \
     game_menu.h \
     log_in.h \
     menu.h \
+    plants.h \
     restore_pass.h \
-    sign_up.h
+    sign_up.h \
+    zombies.h
 
 FORMS += \
     change_info.ui \
