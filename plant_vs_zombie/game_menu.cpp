@@ -2,6 +2,7 @@
 #include "ui_game_menu.h"
 #include "change_info.h"
 #include "menu.h"
+#include "connect_to_game_server.h"
 
 game_menu::game_menu(QWidget *parent) :
     QDialog(parent),
@@ -54,6 +55,10 @@ void game_menu::show_menu(){
 
 void game_menu::on_Start_button_clicked()
 {
+    this->close();
 
+    connect_to_game_server * ctgs = new connect_to_game_server();
+    ctgs->show();
+    connect(ctgs, &game_menu::rejected, this, &game_menu::show_menu);
 }
 
