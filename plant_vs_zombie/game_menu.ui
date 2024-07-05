@@ -107,7 +107,7 @@ border-radius: 10px;</string>
     <string>change information</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="LoginButton_3">
+  <widget class="QPushButton" name="Start_button">
    <property name="geometry">
     <rect>
      <x>310</x>

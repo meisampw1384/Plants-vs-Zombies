@@ -24,6 +24,8 @@ private slots:
     void handleLogout();
     void on_change_information_button_clicked();
 
+    void on_Start_button_clicked();
+
 private:
     Ui::game_menu *ui;
     QString userName;

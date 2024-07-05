@@ -51,3 +51,9 @@ void game_menu::show_menu(){
     this->show();
 }
 
+
+void game_menu::on_Start_button_clicked()
+{
+
+}
+
