@@ -13,6 +13,7 @@ SOURCES += \
     change_info.cpp \
     characters.cpp \
     connect_to_game_server.cpp \
+    game.cpp \
     game_menu.cpp \
     log_in.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     change_info.h \
     characters.h \
     connect_to_game_server.h \
+    game.h \
     game_menu.h \
     log_in.h \
     menu.h \
@@ -37,6 +39,7 @@ HEADERS += \
 FORMS += \
     change_info.ui \
     connect_to_game_server.ui \
+    game.ui \
     game_menu.ui \
     log_in.ui \
     menu.ui \
