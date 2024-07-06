@@ -235,6 +235,7 @@
      <string>Quit game</string>
     </property>
    </widget>
+   <zorder>field_table</zorder>
    <zorder>label_6</zorder>
    <zorder>label_2</zorder>
    <zorder>label</zorder>
@@ -243,7 +244,6 @@
    <zorder>progressBar_brain</zorder>
    <zorder>label_4</zorder>
    <zorder>remaining_time_label</zorder>
-   <zorder>field_table</zorder>
    <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
