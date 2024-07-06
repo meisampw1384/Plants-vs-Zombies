@@ -20,6 +20,8 @@ private slots:
     void on_buttonBox_rejected();
 
     void on_buttonBox_accepted();
+signals:
+    void connectionEstablished(QString ip, int port);
 
 private:
     Ui::connect_to_game_server *ui;

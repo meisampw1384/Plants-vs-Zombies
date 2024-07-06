@@ -60,6 +60,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     QString action = request["action"].toString();
 
     if (action == "move") {
+        qDebug()<<"the move action called";
         handleMoveRequest(request);
     }
 

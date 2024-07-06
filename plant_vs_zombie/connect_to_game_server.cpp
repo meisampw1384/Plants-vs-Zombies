@@ -34,7 +34,8 @@ void connect_to_game_server::on_buttonBox_accepted()
     if (socket->waitForConnected(5000))
     {
         qDebug()<<"connection established";
-        //disconnect
+        emit connectionEstablished(entered_IP,Port);
+        socket->disconnectFromHost();
         this->close();
         game * game_windows = new game();
         game_windows->show();
