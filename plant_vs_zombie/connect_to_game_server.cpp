@@ -22,7 +22,14 @@ void connect_to_game_server::on_buttonBox_rejected()
 
 void connect_to_game_server::on_buttonBox_accepted()
 {
-    QString entered_IP = ui->lineEdit->text();
+    QString entered_IP = ui->IP_line->text();
+    QString entered_Port_str = ui->Port_line->text();
+    int Port = entered_Port_str.toInt();
 
+    //check input;
 
+    socket->connectToHost(entered_IP, Port);
+    if (socket->waitForConnected(5000)){
+        qDebug()<<"connection established";
+    }
 }

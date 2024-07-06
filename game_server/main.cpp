@@ -22,8 +22,8 @@ GameServer::GameServer(QObject *parent)
 
 void GameServer::startGameServer()
 {
-    if (listen(QHostAddress::Any, 1234)) {
-        qDebug() << "Game server started on port 1234";
+    if (listen(QHostAddress::Any, 8080)) {
+        qDebug() << "Game server started on port 8080";
     } else {
         qDebug() << "Game server failed to start";
     }
