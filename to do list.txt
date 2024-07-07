@@ -1,0 +1,5 @@
+to do list
+- put characters in the field
+- sun and brain progress bar
+- check progress bar to put characters
+- fire bullets
