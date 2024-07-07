@@ -1,5 +1,7 @@
 to do list
-- put characters in the field
-- sun and brain progress bar
-- check progress bar to put characters
+- put characters in the field | done
+- check sun\brain to put characters
 - fire bullets
+- handle correct position for characters
+- handle that every position has capacity for just one character
+- handle the sun and brain generation in the field
