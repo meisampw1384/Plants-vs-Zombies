@@ -34,7 +34,15 @@ game::~game()
 void game::onConnected()
 {
     qDebug() << "Connected to server";
-    // Optionally, send initial requests or data to the server
+    qDebug() << "Connected to server";
+    QJsonObject request;
+    request["action"] = "set_role";
+    request["role"] = role;
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->write(data);
+    socket->flush();
 }
 
 void game::onDisconnected()
@@ -50,16 +58,6 @@ void game::updateCountdown()
         int minutes = remainingTime / 60;
         int seconds = remainingTime % 60;
         ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-        if(ui->progressBar_Sun->value() < 100)
-        {
-            int current = ui->progressBar_Sun->value();
-            ui->progressBar_Sun->setValue(current + 20);
-        }
-        if(ui->progressBar_brain->value() < 100)
-        {
-            int current = ui->progressBar_brain->value();
-            ui->progressBar_brain->setValue(current + 20);
-        }
     } else
     {
         timer->stop();
@@ -99,7 +97,10 @@ void game::set_ip(QString _ip)
 void game::set_port(int _port){
     port=_port;
 }
-
+void game::set_role(QString _role)
+{
+    role = _role;
+}
 void game::sendMoveRequest(const QString &entityType, int entityId, const QString &direction)
 {
     QJsonObject request;
@@ -123,18 +124,8 @@ void game::updateGameState(const QJsonArray &gameState)
 void game::setupUI()
 {
     ui->remaining_time_label->setText("3:30");
-
-    // Setup the progress bars
-    ui->progressBar_Sun->setRange(0, 100);
-    ui->progressBar_Sun->setValue(0);
-    ui->progressBar_brain->setRange(0, 100);
-    ui->progressBar_brain->setValue(0);
-
-    // Setup the table widget with some rows and columns
-    ui->field_table->setRowCount(6);
-    ui->field_table->setColumnCount(22);
-
-    // Sample images (ensure the paths or resources are correct)
+    scene = new QGraphicsScene(this);
+    ui->graphicsView->setScene(scene);
 }
 
 void game::on_pushButton_clicked()
@@ -143,73 +134,77 @@ void game::on_pushButton_clicked()
     qDebug() << "quit game";
 }
 
-void game::on_astro_Z_2_clicked()
+
+
+
+
+void game::on_tall_Z_Pushbutton_clicked()
 {
 
 }
 
 
-void game::on_wallnut_P_clicked()
+void game::on_Reg_zombie_pushbutton_clicked()
 {
 
 }
 
 
-void game::on_twopeashoot_P_2_clicked()
+void game::on_purple_pushbutton_clicked()
 {
 
 }
 
 
-void game::on_peashoot_P_clicked()
+void game::on_leaf_Z_pushbutton_clicked()
 {
 
 }
 
 
-void game::on_Jalo_P_clicked()
+void game::on_bucket_Z_pushbutton_clicked()
 {
 
 }
 
 
-void game::on_boom_P_clicked()
+void game::on_astro_Z_pushbutton_clicked()
 {
 
 }
 
 
-void game::on_astro_Z_clicked()
+void game::on_boom_Pushbutton_clicked()
 {
 
 }
 
 
-void game::on_bucket_Z_clicked()
+void game::on_Jalo_P_button_clicked()
 {
 
 }
 
 
-void game::on_leaf_Z_clicked()
+void game::on_peashoot_Pushbutton_clicked()
 {
 
 }
 
 
-void game::on_pushButton_4_clicked()
+void game::on_twopeashoot_Pushbutton_clicked()
 {
 
 }
 
 
-void game::on_pushButton_5_clicked()
+void game::on_wallnut_Pushbutton_clicked()
 {
 
 }
 
 
-void game::on_twopeashoot_P_clicked()
+void game::on_Plum_mine_pushbutton_clicked()
 {
 
 }

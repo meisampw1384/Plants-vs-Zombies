@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="Plum_mine_label">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -107,7 +107,7 @@ color:rgb(0, 0, 0)</string>
      <string>Quit game</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="astro_z_label">
     <property name="geometry">
      <rect>
       <x>600</x>
@@ -123,7 +123,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/astronaut op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="astro_Z">
+   <widget class="QPushButton" name="astro_Z_pushbutton">
     <property name="geometry">
      <rect>
       <x>620</x>
@@ -155,7 +155,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/Bucket head op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="bucket_Z">
+   <widget class="QPushButton" name="bucket_Z_pushbutton">
     <property name="geometry">
      <rect>
       <x>710</x>
@@ -171,7 +171,7 @@ color:rgb(0, 0, 0)</string>
      <string>200</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="Leaf_Head_zombie_label">
     <property name="geometry">
      <rect>
       <x>760</x>
@@ -187,7 +187,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/leaf hair op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="leaf_Z">
+   <widget class="QPushButton" name="leaf_Z_pushbutton">
     <property name="geometry">
      <rect>
       <x>790</x>
@@ -203,7 +203,7 @@ color:rgb(0, 0, 0)</string>
      <string>150</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_9">
+   <widget class="QLabel" name="purple_hair_zombie_label">
     <property name="geometry">
      <rect>
       <x>850</x>
@@ -219,7 +219,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/purple hair op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="purple_pushbutton">
     <property name="geometry">
      <rect>
       <x>870</x>
@@ -235,7 +235,7 @@ color:rgb(0, 0, 0)</string>
      <string>800</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_10">
+   <widget class="QLabel" name="regular_zombie_label">
     <property name="geometry">
      <rect>
       <x>930</x>
@@ -251,7 +251,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/regular op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="Reg_zombie_pushbutton">
     <property name="geometry">
      <rect>
       <x>950</x>
@@ -267,7 +267,7 @@ color:rgb(0, 0, 0)</string>
      <string>100</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="tall_Z_label">
     <property name="geometry">
      <rect>
       <x>1000</x>
@@ -283,7 +283,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/tall op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="twopeashoot_P">
+   <widget class="QPushButton" name="tall_Z_Pushbutton">
     <property name="geometry">
      <rect>
       <x>1030</x>
@@ -315,7 +315,7 @@ color:rgb(0, 0, 0)</string>
      <pixmap>../images/opimized pictures/plum mine op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="astro_Z_2">
+   <widget class="QPushButton" name="Plum_mine_pushbutton">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -332,7 +332,7 @@ color:rgb(255, 85, 0)</string>
      <string>175</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="peashoot_P">
+   <widget class="QPushButton" name="peashoot_Pushbutton">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -349,7 +349,7 @@ color:rgb(255, 85, 0)</string>
      <string>50</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_13">
+   <widget class="QLabel" name="Two_PeaShooter_label">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -365,7 +365,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/two_peashooter op.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_14">
+   <widget class="QLabel" name="peashooter_label">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -381,7 +381,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/peashooter op.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_15">
+   <widget class="QLabel" name="Boomerang_label">
     <property name="geometry">
      <rect>
       <x>420</x>
@@ -397,7 +397,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/boomrang op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="twopeashoot_P_2">
+   <widget class="QPushButton" name="twopeashoot_Pushbutton">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -430,7 +430,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/jalapino op.png</pixmap>
     </property>
    </widget>
-   <widget class="QPushButton" name="wallnut_P">
+   <widget class="QPushButton" name="wallnut_Pushbutton">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -447,7 +447,7 @@ color:rgb(255, 85, 0)</string>
      <string>100</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Jalo_P">
+   <widget class="QPushButton" name="Jalo_P_button">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -464,7 +464,7 @@ color:rgb(255, 85, 0)</string>
      <string>150</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="boom_P">
+   <widget class="QPushButton" name="boom_Pushbutton">
     <property name="geometry">
      <rect>
       <x>430</x>
@@ -481,7 +481,7 @@ color:rgb(255, 85, 0)</string>
      <string>125</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_17">
+   <widget class="QLabel" name="Walnut_label">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -497,7 +497,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/walnut op.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_18">
+   <widget class="QLabel" name="Sun_label">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -519,11 +519,11 @@ color:rgb(255, 85, 0)</string>
      <string>Suns</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_19">
+   <widget class="QLabel" name="brain_label">
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>730</y>
+      <x>770</x>
+      <y>720</y>
       <width>91</width>
       <height>41</height>
      </rect>
@@ -541,7 +541,7 @@ color:rgb(255, 85, 0)</string>
      <string>brains</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="Sun_Pic_label">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -557,7 +557,7 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/sun op.png</pixmap>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="brain_Pic_label">
     <property name="geometry">
      <rect>
       <x>880</x>
@@ -573,39 +573,85 @@ color:rgb(255, 85, 0)</string>
      <pixmap>../images/opimized pictures/Brain op.png</pixmap>
     </property>
    </widget>
+   <widget class="QLabel" name="amount_of_brain">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>720</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(220, 55, 178)</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="amoun_of_sun">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>720</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255, 85, 0)</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
    <zorder>label_6</zorder>
    <zorder>label_2</zorder>
-   <zorder>label</zorder>
+   <zorder>Plum_mine_label</zorder>
    <zorder>remaining_time_label</zorder>
    <zorder>Quit_Button</zorder>
-   <zorder>label_5</zorder>
-   <zorder>astro_Z</zorder>
+   <zorder>astro_z_label</zorder>
+   <zorder>astro_Z_pushbutton</zorder>
    <zorder>label_7</zorder>
-   <zorder>bucket_Z</zorder>
-   <zorder>label_8</zorder>
-   <zorder>leaf_Z</zorder>
-   <zorder>label_9</zorder>
-   <zorder>pushButton_4</zorder>
-   <zorder>label_10</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>label_11</zorder>
-   <zorder>twopeashoot_P</zorder>
+   <zorder>bucket_Z_pushbutton</zorder>
+   <zorder>Leaf_Head_zombie_label</zorder>
+   <zorder>leaf_Z_pushbutton</zorder>
+   <zorder>purple_hair_zombie_label</zorder>
+   <zorder>purple_pushbutton</zorder>
+   <zorder>regular_zombie_label</zorder>
+   <zorder>Reg_zombie_pushbutton</zorder>
+   <zorder>tall_Z_label</zorder>
+   <zorder>tall_Z_Pushbutton</zorder>
    <zorder>label_12</zorder>
-   <zorder>astro_Z_2</zorder>
-   <zorder>peashoot_P</zorder>
-   <zorder>label_13</zorder>
-   <zorder>label_14</zorder>
-   <zorder>label_15</zorder>
-   <zorder>twopeashoot_P_2</zorder>
+   <zorder>Plum_mine_pushbutton</zorder>
+   <zorder>peashoot_Pushbutton</zorder>
+   <zorder>Two_PeaShooter_label</zorder>
+   <zorder>peashooter_label</zorder>
+   <zorder>Boomerang_label</zorder>
+   <zorder>twopeashoot_Pushbutton</zorder>
    <zorder>label_16</zorder>
-   <zorder>wallnut_P</zorder>
-   <zorder>Jalo_P</zorder>
-   <zorder>boom_P</zorder>
-   <zorder>label_17</zorder>
-   <zorder>label_18</zorder>
-   <zorder>label_19</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_4</zorder>
+   <zorder>wallnut_Pushbutton</zorder>
+   <zorder>Jalo_P_button</zorder>
+   <zorder>boom_Pushbutton</zorder>
+   <zorder>Walnut_label</zorder>
+   <zorder>Sun_label</zorder>
+   <zorder>brain_label</zorder>
+   <zorder>Sun_Pic_label</zorder>
+   <zorder>brain_Pic_label</zorder>
+   <zorder>amount_of_brain</zorder>
+   <zorder>amoun_of_sun</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -613,7 +659,7 @@ color:rgb(255, 85, 0)</string>
      <x>0</x>
      <y>0</y>
      <width>1074</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

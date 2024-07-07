@@ -2,21 +2,23 @@
 #define ZOMBIES_H
 
 #include "characters.h"
+#include <QGraphicsPixmapItem>
 
-class zombies : Characters
+class zombies : public Characters
 {
 private:
-    int movment_delay;
-    int time_between_attacks;
+    int movementDelay;
+    int timeBetweenAttacks;
+
 public:
-    zombies(int x, int y, int H, int AP, QString D, int MD, int TBA);
-    int & GS_COOR_x();
-    int & GS_COOR_y();
-    int & GS_Health();
-    int & GS_Attack_Power();
-    QString G_Description();
-    int G_Move_delay();
-    int G_time_beetwen();
+    zombies(int x, int y, int health, int attackPower, int id, QString type, const QString &description, int movementDelay, int timeBetweenAttacks, QGraphicsItem *parent = nullptr);
+
+    // Override moveLeft to specify zombie's movement behavior
+    void moveLeft();
+
+    // Accessors for additional zombie-specific attributes
+    int getMovementDelay() const;
+    int getTimeBetweenAttacks() const;
 };
 
 #endif // ZOMBIES_H

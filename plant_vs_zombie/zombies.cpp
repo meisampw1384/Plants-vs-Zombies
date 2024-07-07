@@ -1,36 +1,42 @@
 #include "zombies.h"
+#include <QPixmap>
+#include <QGraphicsPixmapItem>
 
-zombies::zombies(int x, int y, int H, int AP, QString D, int MD, int TBA) : Characters(x, y, H, AP, D), movment_delay(MD), time_between_attacks(TBA)
+zombies::zombies(int x, int y, int health, int attackPower, int id, QString type, const QString &description, int movementDelay, int timeBetweenAttacks, QGraphicsItem *parent)
+    : Characters(x, y, health, attackPower, id, type, description), movementDelay(movementDelay), timeBetweenAttacks(timeBetweenAttacks)
 {
+    setPos(x * 50, y * 50); // Assuming each cell is 50x50 pixels
+    if (type == "buckethead") {
+        setPixmap(QPixmap(":/images/opimized pictures/Bucket head op.png"));
+    } else if (type == "regular") {
+        setPixmap(QPixmap(":/images/opimized pictures/regular op.png"));
+    } else if (type == "tall") {
+        setPixmap(QPixmap(""));
+    } else if (type == "leafhead") {
+        setPixmap(QPixmap(":/images/opimized pictures/leaf hair op.png"));
+    } else if (type == "astronaut") {
+        setPixmap(QPixmap(":/images/opimized pictures/astronaut op.png"));
+    } else if (type == "purplehair") {
+        setPixmap(QPixmap(":/images/opimized pictures/purple hair op.png"));
+    } else {
+        qDebug()<<"there is no picture!";
+    }
 }
 
-int & zombies::GS_COOR_x()
+void zombies::moveLeft()
 {
-    return COOR_x;
+    if (getX() > 0)
+    {
+        setX(getX() - 1);
+    }
 }
 
-int & zombies::GS_COOR_y()
+int zombies::getMovementDelay() const
 {
-    return COOR_y;
+    return movementDelay;
 }
 
-int & zombies::GS_Health()
+int zombies::getTimeBetweenAttacks() const
 {
-    return Health;
+    return timeBetweenAttacks;
 }
-
-int & zombies::GS_Attack_Power()
-{
-    return Attack_power;
-}
-
-QString zombies::G_Description()
-{
-    return Description;
-}
-
-int zombies::G_Move_delay()
-{
-    return movment_delay;
-}
-
