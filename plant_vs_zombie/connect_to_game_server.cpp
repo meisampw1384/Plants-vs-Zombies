@@ -45,7 +45,7 @@ void connect_to_game_server::on_buttonBox_accepted()
     else
     {
         this->close();
-        QMessageBox::warning(this,"Erorr","connection failed !");
+        QMessageBox::warning(this,"Error","connection failed !");
         reject();
     }
 }

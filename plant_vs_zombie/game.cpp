@@ -125,3 +125,81 @@ void game::setupUI()
 
     // Sample images (ensure the paths or resources are correct)
 }
+
+void game::on_pushButton_clicked()
+{
+    socket->disconnect();
+    qDebug() << "quit game";
+}
+
+void game::on_astro_Z_2_clicked()
+{
+
+}
+
+
+void game::on_wallnut_P_clicked()
+{
+
+}
+
+
+void game::on_twopeashoot_P_2_clicked()
+{
+
+}
+
+
+void game::on_peashoot_P_clicked()
+{
+
+}
+
+
+void game::on_Jalo_P_clicked()
+{
+
+}
+
+
+void game::on_boom_P_clicked()
+{
+
+}
+
+
+void game::on_astro_Z_clicked()
+{
+
+}
+
+
+void game::on_bucket_Z_clicked()
+{
+
+}
+
+
+void game::on_leaf_Z_clicked()
+{
+
+}
+
+
+void game::on_pushButton_4_clicked()
+{
+
+}
+
+
+void game::on_pushButton_5_clicked()
+{
+
+}
+
+
+void game::on_twopeashoot_P_clicked()
+{
+
+}
+

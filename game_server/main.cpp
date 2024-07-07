@@ -34,6 +34,7 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
     QTcpSocket *socket = new QTcpSocket(this);
     if (socket->setSocketDescriptor(socketDescriptor)) {
         clients.append(socket);
+        clientMap[socketDescriptor] = socket;
         connect(socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);
         connect(socket, &QTcpSocket::disconnected, this, &GameServer::clientDisconnected);
         qDebug() << "New client connected with descriptor:" << socketDescriptor;
@@ -60,8 +61,9 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     QString action = request["action"].toString();
 
     if (action == "move") {
-        qDebug()<<"the move action called";
+        qDebug() << "The move action called";
         handleMoveRequest(request);
+        sendGameStateToClient(socket);
     }
 
     // Other request types can be handled here
@@ -93,9 +95,18 @@ void GameServer::handleMoveRequest(const QJsonObject &request)
             break;
         }
     }
+}
 
-    // Broadcast updated game state to all clients
-    broadcastGameState();
+void GameServer::sendGameStateToClient(QTcpSocket *client)
+{
+    QJsonObject gameStateUpdate;
+    gameStateUpdate["action"] = "update";
+    gameStateUpdate["game_state"] = gameState;
+
+    QJsonDocument responseDoc(gameStateUpdate);
+    QByteArray responseData = responseDoc.toJson();
+    client->write(responseData);
+    client->flush();
 }
 
 void GameServer::broadcastGameState()
@@ -118,6 +129,7 @@ void GameServer::clientDisconnected()
     if (!socket) return;
 
     clients.removeOne(socket);
+    clientMap.remove(socket->socketDescriptor());
     socket->deleteLater();
     qDebug() << "Client disconnected";
 }
