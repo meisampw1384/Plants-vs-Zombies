@@ -7,7 +7,9 @@
 class plants : public Characters
 {
 public:
-    plants(int x, int y, int health, int attackPower, int id, QString type, const QString &description, QGraphicsItem *parent = nullptr);
+    plants(int x, int y, int health, int attackPower,int _firing_rate,  QString type, const QString &description, QGraphicsItem *parent = nullptr);
+private:
+    int firing_rate;
 };
 
 #endif // PLANTS_H

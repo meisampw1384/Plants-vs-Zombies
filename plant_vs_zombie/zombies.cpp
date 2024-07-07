@@ -2,10 +2,9 @@
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 
-zombies::zombies(int x, int y, int health, int attackPower, int id, QString type, const QString &description, int movementDelay, int timeBetweenAttacks, QGraphicsItem *parent)
-    : Characters(x, y, health, attackPower, id, type, description), movementDelay(movementDelay), timeBetweenAttacks(timeBetweenAttacks)
+zombies::zombies(int x, int y, int health, int attackPower, QString type, const QString &description, float movementDelay, float timeBetweenAttacks, QGraphicsItem *parent)
+    : Characters(x, y, health, attackPower, type, description), movementDelay(movementDelay), timeBetweenAttacks(timeBetweenAttacks)
 {
-    setPos(x * 50, y * 50); // Assuming each cell is 50x50 pixels
     if (type == "buckethead") {
         setPixmap(QPixmap("../images/opimized pictures/Bucket head op.png"));
     } else if (type == "regular") {
@@ -31,12 +30,20 @@ void zombies::moveLeft()
     }
 }
 
-int zombies::getMovementDelay() const
+float zombies::getMovementDelay() const
 {
     return movementDelay;
 }
 
-int zombies::getTimeBetweenAttacks() const
+float zombies::getTimeBetweenAttacks() const
 {
     return timeBetweenAttacks;
+}
+
+void zombies::setMovementDelay(float movement_delay)
+{
+    movementDelay=movement_delay;
+}
+void zombies::setTimeBetweenAttacks(float time_attacks){
+    timeBetweenAttacks=time_attacks;
 }

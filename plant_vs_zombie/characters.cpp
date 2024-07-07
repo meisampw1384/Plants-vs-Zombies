@@ -1,8 +1,12 @@
 #include "characters.h"
 
-Characters::Characters(int x, int y, int health, int attackPower,int id,QString type, const QString &description, QGraphicsItem *parent)
-    : QGraphicsPixmapItem(parent), coorX(x), coorY(y), health(health), attackPower(attackPower),id(id),type(type), description(description) {
-    setPos(coorX * 50, coorY * 50); // Assuming each cell is 50x50 pixels
+int Characters::gen_id=0;
+
+Characters::Characters(int x, int y, int health, int attackPower,QString type, const QString &description, QGraphicsItem *parent)
+    : QGraphicsPixmapItem(parent), coorX(x), coorY(y), health(health), attackPower(attackPower),type(type), description(description) {
+    setPos(coorX * 50, coorY * 50);
+    id=gen_id+1;
+    gen_id++;
 }
 
 Characters::~Characters() {

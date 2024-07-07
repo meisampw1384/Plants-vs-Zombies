@@ -1,14 +1,13 @@
 #include "plants.h"
 #include <QPixmap>
 
-plants::plants(int x, int y, int health, int attackPower, int id, QString type, const QString &description, QGraphicsItem *parent)
-    : Characters(x, y, health, attackPower, id, type, description)
-{
-    setPos(x * 50, y * 50); // Assuming each cell is 50x50 pixels
+plants::plants(int x, int y, int health, int attackPower,int _firing_rate , QString type, const QString &description, QGraphicsItem *parent)
+    : Characters(x, y, health, attackPower, type, description),firing_rate(_firing_rate)
+{ // Assuming each cell is 50x50 pixels
     if (type == "walnut") {
         setPixmap(QPixmap("../images/opimized pictures/walnut op.png"));
     } else if (type == "peashooter") {
-        setPixmap(QPixmap("../images/peashooter.png"));
+        setPixmap(QPixmap("../images/opimized pictures/peashooter op.png"));
     } else if (type == "twopeashooter") {
         setPixmap(QPixmap("../images/opimized pictures/two_peashooter op.png"));
     } else if (type == "plummine") {

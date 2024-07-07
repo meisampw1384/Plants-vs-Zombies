@@ -4,11 +4,14 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QTimer>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include "characters.h"
+#include "plants.h"
+#include "zombies.h"
+#include "customgraphicscene.h"
 
 namespace Ui {
 class game;
@@ -20,60 +23,72 @@ class game : public QMainWindow
 
 public:
     explicit game(QWidget *parent = nullptr);
-    ~game();
-
     void set_ip(QString _ip);
-    void set_port(int _port);
-    void set_role(QString _role);
 
-private slots:
+    void set_port(int _port);
+
+    void set_role(QString _role);
+    ~game();
+public slots:
     void onConnected();
     void onDisconnected();
     void updateCountdown();
+    void updateGameState(const QJsonArray& game_state);
+    void connect_to_server(const QString &ip, int port);
     void onReadyRead();
-    void on_pushButton_clicked();
+    void processResponse(const QJsonObject &response);
+    void sendMoveRequest(const QString &entityType, int entityId, const QString &direction);
 
-    void on_Reg_zombie_pushbutton_clicked();
+
+private slots:
+
+    // Add button click slots here
     void on_tall_Z_Pushbutton_clicked();
-
+    void on_Reg_zombie_pushbutton_clicked();
     void on_purple_pushbutton_clicked();
-
     void on_leaf_Z_pushbutton_clicked();
-
     void on_bucket_Z_pushbutton_clicked();
-
     void on_astro_Z_pushbutton_clicked();
-
     void on_boom_Pushbutton_clicked();
-
     void on_Jalo_P_button_clicked();
-
     void on_peashoot_Pushbutton_clicked();
-
     void on_twopeashoot_Pushbutton_clicked();
-
     void on_wallnut_Pushbutton_clicked();
-
     void on_Plum_mine_pushbutton_clicked();
+
+    void onFieldClicked(const QPointF &position);
 
 private:
     Ui::game *ui;
     QTcpSocket *socket;
     QTimer *timer;
+    CustomGraphicsScene *scene;
     int remainingTime;
     QString ip;
     int port;
     QString role;
-    QGraphicsScene *scene;
-    QMap<int, QGraphicsPixmapItem*> entities;
 
-    void connect_to_server(const QString &ip, int port);
-    void processResponse(const QJsonObject &response);
-    void updateGameState(const QJsonArray &gameState);
+    enum CharacterType {
+        None,
+        TallZombie,
+        RegZombie,
+        PurpleZombie,
+        LeafZombie,
+        BucketZombie,
+        AstroZombie,
+        BoomPlant,
+        JalapenoPlant,
+        PeashooterPlant,
+        TwoPeashooterPlant,
+        WalnutPlant,
+        PlumMinePlant
+    };
+
+    CharacterType selectedCharacterType;
+
+    void add_character(Characters *ch);
     void setupUI();
-    void sendMoveRequest(const QString &entityType, int entityId, const QString &direction);
-    void addEntity(int id, const QString &type, int x, int y);
-    void updateEntity(int id, int x, int y);
+    void addCharacterAtPosition(int x, int y);
 };
 
 #endif // GAME_H

@@ -7,18 +7,20 @@
 class zombies : public Characters
 {
 private:
-    int movementDelay;
-    int timeBetweenAttacks;
+    float movementDelay;
+    float timeBetweenAttacks;
 
 public:
-    zombies(int x, int y, int health, int attackPower, int id, QString type, const QString &description, int movementDelay, int timeBetweenAttacks, QGraphicsItem *parent = nullptr);
+    zombies(int x, int y, int health, int attackPower,  QString type, const QString &description, float movementDelay, float timeBetweenAttacks, QGraphicsItem *parent = nullptr);
 
     // Override moveLeft to specify zombie's movement behavior
     void moveLeft();
 
     // Accessors for additional zombie-specific attributes
-    int getMovementDelay() const;
-    int getTimeBetweenAttacks() const;
+    float getMovementDelay() const;
+    float getTimeBetweenAttacks() const;
+    void setMovementDelay(float movement_delay);
+    void setTimeBetweenAttacks(float time_attacks);
 };
 
 #endif // ZOMBIES_H

@@ -11,12 +11,13 @@ protected:
     int coorY;
     int health;
     int id;
+    static int gen_id;
     int attackPower;
     QString type;
     QString description;
 
 public:
-    Characters(int x, int y, int health, int attackPower,int id,QString type ,const QString &description, QGraphicsItem *parent = nullptr);
+    Characters(int x, int y, int health, int attackPower,QString type ,const QString &description, QGraphicsItem *parent = nullptr);
     virtual ~Characters();
 
     int getX() const;

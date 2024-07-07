@@ -13,6 +13,7 @@ SOURCES += \
     change_info.cpp \
     characters.cpp \
     connect_to_game_server.cpp \
+    customgraphicscene.cpp \
     game.cpp \
     game_menu.cpp \
     log_in.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     change_info.h \
     characters.h \
     connect_to_game_server.h \
+    customgraphicscene.h \
     game.h \
     game_menu.h \
     log_in.h \
