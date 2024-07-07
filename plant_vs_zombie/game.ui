@@ -14,22 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="Plum_mine_label">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>50</y>
-      <width>1081</width>
-      <height>531</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../images/field.png</pixmap>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
@@ -299,7 +283,7 @@ color:rgb(0, 0, 0)</string>
      <string>150</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_12">
+   <widget class="QLabel" name="plum_mine_lable">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -617,9 +601,18 @@ color:rgb(255, 85, 0)</string>
      <string>0</string>
     </property>
    </widget>
+   <widget class="QGraphicsView" name="field_view">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>60</y>
+      <width>1091</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>label_6</zorder>
    <zorder>label_2</zorder>
-   <zorder>Plum_mine_label</zorder>
    <zorder>remaining_time_label</zorder>
    <zorder>Quit_Button</zorder>
    <zorder>astro_z_label</zorder>
@@ -634,7 +627,7 @@ color:rgb(255, 85, 0)</string>
    <zorder>Reg_zombie_pushbutton</zorder>
    <zorder>tall_Z_label</zorder>
    <zorder>tall_Z_Pushbutton</zorder>
-   <zorder>label_12</zorder>
+   <zorder>plum_mine_lable</zorder>
    <zorder>Plum_mine_pushbutton</zorder>
    <zorder>peashoot_Pushbutton</zorder>
    <zorder>Two_PeaShooter_label</zorder>
@@ -652,6 +645,7 @@ color:rgb(255, 85, 0)</string>
    <zorder>brain_Pic_label</zorder>
    <zorder>amount_of_brain</zorder>
    <zorder>amoun_of_sun</zorder>
+   <zorder>field_view</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

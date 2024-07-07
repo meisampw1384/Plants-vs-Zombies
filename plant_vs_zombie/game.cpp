@@ -125,7 +125,19 @@ void game::setupUI()
 {
     ui->remaining_time_label->setText("3:30");
     scene = new QGraphicsScene(this);
-    ui->graphicsView->setScene(scene);
+    ui->field_view->setScene(scene);
+
+    // Load your background image
+    QPixmap backgroundImage("../images/field.png");
+
+    if (backgroundImage.isNull()) {
+        qDebug() << "Failed to load background image";
+    } else {
+        // Create a QGraphicsPixmapItem with the background image
+        QGraphicsPixmapItem *background = new QGraphicsPixmapItem(backgroundImage);
+        background->setPos(0, 0); // Set position at top-left corner of the scene
+        scene->addItem(background);
+    }
 }
 
 void game::on_pushButton_clicked()

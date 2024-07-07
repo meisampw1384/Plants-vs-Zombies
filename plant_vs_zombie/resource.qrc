@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/images">
+        <file>field.png</file>
+        <!-- Add more files here as needed -->
+    </qresource>
+</RCC>

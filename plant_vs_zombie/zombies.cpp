@@ -7,17 +7,17 @@ zombies::zombies(int x, int y, int health, int attackPower, int id, QString type
 {
     setPos(x * 50, y * 50); // Assuming each cell is 50x50 pixels
     if (type == "buckethead") {
-        setPixmap(QPixmap(":/images/opimized pictures/Bucket head op.png"));
+        setPixmap(QPixmap("../images/opimized pictures/Bucket head op.png"));
     } else if (type == "regular") {
-        setPixmap(QPixmap(":/images/opimized pictures/regular op.png"));
+        setPixmap(QPixmap("../images/opimized pictures/regular op.png"));
     } else if (type == "tall") {
-        setPixmap(QPixmap(""));
+        setPixmap(QPixmap("../images/opimized pictures/tall op.png"));
     } else if (type == "leafhead") {
-        setPixmap(QPixmap(":/images/opimized pictures/leaf hair op.png"));
+        setPixmap(QPixmap("../images/opimized pictures/leaf hair op.png"));
     } else if (type == "astronaut") {
-        setPixmap(QPixmap(":/images/opimized pictures/astronaut op.png"));
+        setPixmap(QPixmap("../images/opimized pictures/astronaut op.png"));
     } else if (type == "purplehair") {
-        setPixmap(QPixmap(":/images/opimized pictures/purple hair op.png"));
+        setPixmap(QPixmap("../images/opimized pictures/purple hair op.png"));
     } else {
         qDebug()<<"there is no picture!";
     }
