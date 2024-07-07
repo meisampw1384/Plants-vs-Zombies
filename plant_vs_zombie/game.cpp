@@ -50,7 +50,18 @@ void game::updateCountdown()
         int minutes = remainingTime / 60;
         int seconds = remainingTime % 60;
         ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-    } else {
+        if(ui->progressBar_Sun->value() < 100)
+        {
+            int current = ui->progressBar_Sun->value();
+            ui->progressBar_Sun->setValue(current + 20);
+        }
+        if(ui->progressBar_brain->value() < 100)
+        {
+            int current = ui->progressBar_brain->value();
+            ui->progressBar_brain->setValue(current + 20);
+        }
+    } else
+    {
         timer->stop();
         QMessageBox::information(this, "Game Over", "The game has ended!");
     }
@@ -114,9 +125,9 @@ void game::setupUI()
     ui->remaining_time_label->setText("3:30");
 
     // Setup the progress bars
-    ui->progressBar_Sun->setRange(0, 175);
+    ui->progressBar_Sun->setRange(0, 100);
     ui->progressBar_Sun->setValue(0);
-    ui->progressBar_brain->setRange(0, 1);
+    ui->progressBar_brain->setRange(0, 100);
     ui->progressBar_brain->setValue(0);
 
     // Setup the table widget with some rows and columns
