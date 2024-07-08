@@ -22,9 +22,6 @@ game::game(QWidget *parent) :
     setupUI();
 
     timer->start(1000);
-
-    // Connect to the server
-    connect_to_server(ip, port); // Replace with your server IP and port
 }
 
 // Destructor
@@ -36,15 +33,11 @@ game::~game()
 // Slot when connected to the server
 void game::onConnected()
 {
+    socket->connectToHost(ip, port);
     qDebug() << "Connected to server";
     QJsonObject request;
     request["action"] = "set_role";
     request["role"] = role;
-
-    QJsonDocument doc(request);
-    QByteArray data = doc.toJson();
-    socket->write(data);
-    socket->flush();
 }
 
 // Slot when disconnected from the server
@@ -68,15 +61,6 @@ void game::updateCountdown()
     }
 }
 
-
-
-// Connect to server
-void game::connect_to_server(const QString &ip, int port)
-{
-    socket->connectToHost(ip, port);
-}
-
-// Slot for readyRead signal
 void game::onReadyRead()
 {
     QByteArray data = socket->readAll();
@@ -90,22 +74,65 @@ void game::onReadyRead()
 void game::processResponse(const QJsonObject &response)
 {
     QString action = response["action"].toString();
-    if (action == "update") {
-        QJsonArray gameState = response["game_state"].toArray();
-        updateGameState(gameState);
-    } else {
-        // Handle other responses as needed
+    qDebug() << "cc get data";
+    Characters *ch = nullptr;
+    if (action == "add_char")
+    qDebug() << response["character"];
+    {
+        switch (response["character"].toInt()) {
+        case 1:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+            break;
+        case 2:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+            break;
+        case 3:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+            break;
+        case 4:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+            break;
+        case 5:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+            break;
+        case 6:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+            break;
+        case 7:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
+            break;
+        case 8:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 0, 300, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+            break;
+        case 9:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+            break;
+        case 10:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+            break;
+        case 11:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 400, 0, 0, "walnut", "acts as armor and stops zombies");
+            break;
+        case 12:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+            break;
+        default:
+            return;
+        }
     }
+    scene->addItem(ch);
 }
 
 // Setter methods
 void game::set_ip(QString _ip)
 {
     ip = _ip;
+    qDebug() << ip;
 }
 
 void game::set_port(int _port) {
     port = _port;
+    qDebug() << port;
 }
 
 void game::set_role(QString _role)
@@ -273,9 +300,7 @@ void game::onFieldClicked(const QPointF &position)
     }
 
     qDebug() << "tmpx : " << tmpx << "  tmpy : " << tmpy;
-    qDebug() << "Grid Position: (" << x << ", " << y << ")";
-
-    // Now you can use x and y to place your character
+    qDebug() << "Grid Position: (" << x << ", " << y << ")";  
     addCharacterAtPosition(x, y);
 }
 
@@ -284,49 +309,82 @@ void game::addCharacterAtPosition(int x, int y)
 {
     Characters *ch = nullptr;
 
+    QJsonObject request;
+    request["action"] = "add";
+
     switch (selectedCharacterType) {
     case TallZombie:
-        ch = new zombies(x, y, 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+        request["character"] = 1;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case RegZombie:
-        ch = new zombies(x, y, 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+        request["character"] = 2;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case PurpleZombie:
-        ch = new zombies(x, y, 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+        request["character"] = 3;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case LeafZombie:
-        ch = new zombies(x, y, 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+        request["character"] = 4;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case BucketZombie:
-        ch = new zombies(x, y, 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+        request["character"] = 5;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case AstroZombie:
-        ch = new zombies(x, y, 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+        request["character"] = 6;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case BoomPlant:
-        ch = new plants(x, y, 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
+        request["character"] = 7;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case JalapenoPlant:
-        ch = new plants(x, y, 0, 0, 300, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+        request["character"] = 8;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case PeashooterPlant:
-        ch = new plants(x, y, 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+        request["character"] = 9;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case TwoPeashooterPlant:
-        ch = new plants(x, y, 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+        request["character"] = 10;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case WalnutPlant:
-        ch = new plants(x, y, 400, 0, 0, "walnut", "acts as armor and stops zombies");
+        request["character"] = 11;
+        request["x"] = x;
+        request["y"] = y;
         break;
     case PlumMinePlant:
-        ch = new plants(x, y, 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+        request["character"] = 12;
+        request["x"] = x;
+        request["y"] = y;
         break;
     default:
         return;
     }
-    scene->addItem(ch);
-}
+    qDebug() << request["character"];
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    qDebug() << "send data to id :" << ip << " and port " << port;
+    socket->write(data);
+    socket->flush();
 
+    //scene->addItem(ch);
+}
 
 // Slot for button clicks to set the character type
 void game::on_tall_Z_Pushbutton_clicked()

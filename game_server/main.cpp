@@ -5,19 +5,13 @@ GameServer::GameServer(QObject *parent)
 {
     // Initialize game state with example entities
     gameState = QJsonArray();
-    QJsonObject plant;
-    plant["id"] = 1;
-    plant["type"] = "plant";
-    plant["x"] = 0;
-    plant["y"] = 0;
-    gameState.append(plant);
-
-    QJsonObject zombie;
-    zombie["id"] = 1;
-    zombie["type"] = "zombie";
-    zombie["x"] = 10;
-    zombie["y"] = 0;
-    gameState.append(zombie);
+    for(int i = 0; i < 22; i++)
+    {
+        for(int j = 0; j < 6; j++)
+        {
+            game_field[i][j] = 0;
+        }
+    }
 }
 
 void GameServer::startGameServer()
@@ -46,6 +40,7 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
 
 void GameServer::readyRead()
 {
+    qDebug() << "data cathced";
     QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
     if (!socket) return;
 
@@ -60,11 +55,37 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
 {
     QString action = request["action"].toString();
 
-    if (action == "move") {
-        qDebug() << "The move action called";
-        handleMoveRequest(request);
-        sendGameStateToClient(socket);
+    if (action == "add")
+    {
+        double doubleValue = request["x"].toDouble();
+        int x = static_cast<int>(doubleValue);
+
+        doubleValue = request["y"].toDouble();
+        int y = static_cast<int>(doubleValue);
+
+        doubleValue = request["character"].toDouble();
+        int character = static_cast<int>(doubleValue);
+
+        qDebug() << "before change : " << game_field[x][y];
+        if(game_field[request["x"].toInt()][request["y"].toInt()] == 0)
+        {
+            game_field[x][y] = character;
+            QJsonObject gameStateUpdate;
+            gameStateUpdate["action"] = "add_char";
+            gameStateUpdate["character"] = request["character"];
+            gameStateUpdate["x"] = request["x"];
+            gameStateUpdate["y"] = request["y"];
+            qDebug() << "send data";
+            QJsonDocument responseDoc(gameStateUpdate);
+            QByteArray responseData = responseDoc.toJson();
+            socket->write(responseData);
+            socket->flush();
+        }
+//        handleMoveRequest(request);
+//        sendGameStateToClient(socket);
     }
+
+
 
     // Other request types can be handled here
 
@@ -78,30 +99,30 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
 
 void GameServer::handleMoveRequest(const QJsonObject &request)
 {
-    QString entityType = request["entity_type"].toString();
-    int entityId = request["entity_id"].toInt();
-    QString direction = request["direction"].toString();
+//    QString entityType = request["entity_type"].toString();
+//    int entityId = request["entity_id"].toInt();
+//    QString direction = request["direction"].toString();
 
-    // Update game state
-    for (int i = 0; i < gameState.size(); ++i) {
-        QJsonObject entity = gameState[i].toObject();
-        if (entity["id"].toInt() == entityId && entity["type"].toString() == entityType) {
-            if (direction == "up") entity["y"] = entity["y"].toInt() - 1;
-            else if (direction == "down") entity["y"] = entity["y"].toInt() + 1;
-            else if (direction == "left") entity["x"] = entity["x"].toInt() - 1;
-            else if (direction == "right") entity["x"] = entity["x"].toInt() + 1;
+//    // Update game state
+//    for (int i = 0; i < gameState.size(); ++i) {
+//        QJsonObject entity = gameState[i].toObject();
+//        if (entity["id"].toInt() == entityId && entity["type"].toString() == entityType) {
+//            if (direction == "up") entity["y"] = entity["y"].toInt() - 1;
+//            else if (direction == "down") entity["y"] = entity["y"].toInt() + 1;
+//            else if (direction == "left") entity["x"] = entity["x"].toInt() - 1;
+//            else if (direction == "right") entity["x"] = entity["x"].toInt() + 1;
 
-            gameState[i] = entity;
-            break;
-        }
-    }
+//            gameState[i] = entity;
+//            break;
+//        }
+//    }
 }
 
 void GameServer::sendGameStateToClient(QTcpSocket *client)
 {
     QJsonObject gameStateUpdate;
-    gameStateUpdate["action"] = "update";
-    gameStateUpdate["game_state"] = gameState;
+    gameStateUpdate["action"] = "add_char";
+
 
     QJsonDocument responseDoc(gameStateUpdate);
     QByteArray responseData = responseDoc.toJson();

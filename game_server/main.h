@@ -36,6 +36,7 @@ private:
     QList<QTcpSocket *> clients;
     QJsonArray gameState;
     QMap<qintptr, QTcpSocket *> clientMap;
+    int game_field[22][6];
 };
 
 const int FIELD_WIDTH = 22;

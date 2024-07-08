@@ -34,7 +34,6 @@ public slots:
     void onDisconnected();
     void updateCountdown();
     void updateGameState(const QJsonArray& game_state);
-    void connect_to_server(const QString &ip, int port);
     void onReadyRead();
     void processResponse(const QJsonObject &response);
     void sendMoveRequest(const QString &entityType, int entityId, const QString &direction);

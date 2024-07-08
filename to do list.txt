@@ -9,5 +9,6 @@ high :
 - fix windows sizes
 - delete item from sence
 - make a file for plants and another for zombies
+- handle server
 low :
 - server should handle that, is selected character can take the place

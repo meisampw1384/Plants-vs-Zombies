@@ -34,12 +34,12 @@ void connect_to_game_server::on_buttonBox_accepted()
     if (socket->waitForConnected(5000))
     {
         qDebug()<<"connection established";
-        emit connectionEstablished(entered_IP,Port);
         socket->disconnectFromHost();
         this->close();
         game * game_windows = new game();
         game_windows->set_ip(entered_IP);
         game_windows->set_port(Port);
+        game_windows->onConnected();
         game_windows->show();
     }
     else
