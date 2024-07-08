@@ -6,17 +6,17 @@ zombies::zombies(int x, int y, int health, int attackPower, QString type, const 
     : Characters(x, y, health, attackPower, type, description), movementDelay(movementDelay), timeBetweenAttacks(timeBetweenAttacks)
 {
     if (type == "buckethead") {
-        setPixmap(QPixmap("../images/opimized pictures/Bucket head op.png"));
+        setPixmap(QPixmap("../images/optimized for game/Bucket head op.png"));
     } else if (type == "regular") {
-        setPixmap(QPixmap("../images/opimized pictures/regular op.png"));
+        setPixmap(QPixmap("../images/optimized for game/regular op.png"));
     } else if (type == "tall") {
-        setPixmap(QPixmap("../images/opimized pictures/tall op.png"));
+        setPixmap(QPixmap("../images/optimized for game/tall op.png"));
     } else if (type == "leafhead") {
-        setPixmap(QPixmap("../images/opimized pictures/leaf hair op.png"));
+        setPixmap(QPixmap("../images/optimized for game/leaf hair op.png"));
     } else if (type == "astronaut") {
-        setPixmap(QPixmap("../images/opimized pictures/astronaut op.png"));
+        setPixmap(QPixmap("../images/optimized for game/astronaut op.png"));
     } else if (type == "purplehair") {
-        setPixmap(QPixmap("../images/opimized pictures/purple hair op.png"));
+        setPixmap(QPixmap("../images/optimized for game/purple hair op.png"));
     } else {
         qDebug()<<"there is no picture!";
     }

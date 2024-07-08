@@ -4,7 +4,7 @@ int Characters::gen_id=0;
 
 Characters::Characters(int x, int y, int health, int attackPower,QString type, const QString &description, QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent), coorX(x), coorY(y), health(health), attackPower(attackPower),type(type), description(description) {
-    setPos(coorX * 50, coorY * 50);
+    setPos(coorX * 77, coorY * 72);
     id=gen_id+1;
     gen_id++;
 }
@@ -18,7 +18,7 @@ int Characters::getX() const {
 
 void Characters::setX(int x) {
     coorX = x;
-    setPos(coorX * 50, coorY * 50);
+    setPos(coorX * 77, coorY * 72);
 }
 
 int Characters::getY() const {
@@ -27,7 +27,7 @@ int Characters::getY() const {
 
 void Characters::setY(int y) {
     coorY = y;
-    setPos(coorX * 50, coorY * 50);
+    setPos(coorX * 77, coorY * 72);
 }
 
 int Characters::getHealth() const {
@@ -57,7 +57,7 @@ void Characters::setDescription(const QString &description) {
 void Characters::setPosition(int x, int y) {
     coorX = x;
     coorY = y;
-    setPos(coorX * 50, coorY * 50);
+    setPos(coorX * 77, coorY * 72);
 }
 
 int Characters::get_id()

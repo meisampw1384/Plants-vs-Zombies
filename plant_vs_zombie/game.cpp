@@ -87,7 +87,58 @@ void game::onReadyRead()
         updateGameState(gameState);
     } else {
         qDebug() << "Unsupported action received:" << action;
-        // Handle other actions if needed
+       }
+}
+
+void game::processResponse(const QJsonObject &response)
+{
+    QString action = response["action"].toString();
+    qDebug() << "cc get data";
+    Characters *ch = nullptr;
+    if (action == "add_char")
+    {
+         qDebug() << response["character"];
+        switch (response["character"].toInt()) {
+        case 1:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+            break;
+        case 2:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+            break;
+        case 3:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+            break;
+        case 4:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+            break;
+        case 5:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+            break;
+        case 6:
+            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+            break;
+        case 7:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
+            break;
+        case 8:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 0, 300, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+            break;
+        case 9:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+            break;
+        case 10:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+            break;
+        case 11:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 400, 0, 0, "walnut", "acts as armor and stops zombies");
+            break;
+        case 12:
+            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+            break;
+        default:
+            return;
+        }
+        scene->addItem(ch);
     }
 }
 
@@ -101,10 +152,12 @@ void game::onReadyRead()
 void game::set_ip(QString _ip)
 {
     ip = _ip;
+    qDebug() << ip;
 }
 
 void game::set_port(int _port) {
     port = _port;
+    qDebug() << port;
 }
 
 void game::set_role(QString _role)
@@ -162,10 +215,11 @@ void game::setupUI()
 
     if (backgroundImage.isNull()) {
         qDebug() << "Failed to load background image";
-    } else {
+    }
+    else {
         // Create a QGraphicsPixmapItem with the background image
         QGraphicsPixmapItem *background = new QGraphicsPixmapItem(backgroundImage);
-        background->setPos(0, 0); // Set position at top-left corner of the scene
+        background->setPos(30,-20); // Set position at top-left corner of the scene
         scene->addItem(background);
     }
 
@@ -268,12 +322,100 @@ void game::updateGameState(const QJsonArray &gameState)
 void game::onFieldClicked(const QPointF &position)
 {
     // Convert the scene position to grid coordinates
-    int x = position.x() / 50; // Assuming each grid cell is 50x50 pixels
-    int y = position.y() / 50;
+    int x; // Assuming each grid cell is 50x50 pixels
+    int y;
 
-    qDebug() << "Grid Position: (" << x << ", " << y << ")";
+    int tmpx = position.x();
+    int tmpy = position.y();
 
-    // Now you can use x and y to place your character
+    if(tmpx >= 145 and tmpx < 225)
+    {
+        x = 2;
+    }
+    else if(tmpx >= 225 and tmpx < 305)
+    {
+        x = 3;
+    }
+    else if(tmpx >= 305 and tmpx < 385)
+    {
+        x = 4;
+    }
+    else if(tmpx >= 385 and tmpx < 465)
+    {
+        x = 5;
+    }
+    else if(tmpx >= 465 and tmpx < 545)
+    {
+        x = 6;
+    }
+    else if(tmpx >= 545 and tmpx < 625)
+    {
+        x = 7;
+    }
+    else if(tmpx >= 625 and tmpx < 705)
+    {
+        x = 8;
+    }
+    else if(tmpx >= 705 and tmpx < 785)
+    {
+        x = 9;
+    }
+    else if(tmpx >= 785 and tmpx < 865)
+    {
+        x = 10;
+    }
+    else if(tmpx >= 865 and tmpx < 945)
+    {
+        x = 11;
+    }
+    else if(tmpx >= 945 and tmpx < 1025)
+    {
+        x = 12;
+    }
+    else if(tmpx >= 1025 and tmpx < 1105)
+    {
+        x = 13;
+    }
+    else if(tmpx >= 1105 and tmpx < 1185)
+    {
+        x = 14;
+    }
+    else
+    {
+        return;
+    }
+
+    if(tmpy >= 40 and tmpy < 110)
+    {
+        y = 0;
+    }
+    else if(tmpy >= 110 and tmpy < 180)
+    {
+        y = 1;
+    }
+    else if(tmpy >= 180 and tmpy < 250)
+    {
+        y = 2;
+    }
+    else if(tmpy >= 250 and tmpy < 320)
+    {
+        y = 3;
+    }
+    else if(tmpy >= 320 and tmpy < 390)
+    {
+        y = 4;
+    }
+    else if(tmpy >= 390 and tmpy < 460)
+    {
+        y = 5;
+    }
+    else
+    {
+        return;
+    }
+
+    qDebug() << "tmpx : " << tmpx << "  tmpy : " << tmpy;
+    qDebug() << "Grid Position: (" << x << ", " << y << ")";  
     addCharacterAtPosition(x, y);
 }
 
@@ -284,152 +426,143 @@ void game::addCharacterAtPosition(int x, int y)
     QJsonObject newEntity;
     static int entityIdCounter = 2; // Start from 2 since 1 is already used for initial entities
 
+    QJsonObject request;
+    request["action"] = "add";
+
     switch (selectedCharacterType) {
-    case TallZombie:
-        ch = new zombies(x, y, 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "tall";
-        newEntity["health"] = 500;
-        newEntity["damage"] = 30;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 1000; // Example delay
-        newEntity["time_between"]=1000;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="can move over walnut and move quickly";
-        break;
-    case RegZombie:
-        ch = new zombies(x, y, 500, 25, "regular", "basic zombie with average abilities", 1, 1);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "regular";
-        newEntity["health"] = 500;
-        newEntity["damage"] = 25;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 1000;
-        newEntity["time_between"]=1000;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="basic zombie with average abilities";
-        break;
-    case PurpleZombie:
-        ch = new zombies(x, y, 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "purplehair";
-        newEntity["health"] = 4000;
-        newEntity["damage"] = 75;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 1000;
-        newEntity["time_between"]=500;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="very powerful zombie";
-        break;
-    case LeafZombie:
-        ch = new zombies(x, y, 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "leafhead";
-        newEntity["health"] = 800;
-        newEntity["damage"] = 25;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 1000; // Example delay
-        newEntity["time_between"]=500;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="leaves on the head make more resilient";
-        break;
-    case BucketZombie:
-        ch = new zombies(x, y, 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "buckethead";
-        newEntity["health"] = 1950;
-        newEntity["damage"] = 50;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 2000; // Example delay
-        newEntity["time_between"]=1000;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="wears a bucket on his head, giving it extra health";
-        break;
-    case AstroZombie:
-        ch = new zombies(x, y, 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
-        newEntity["type"] = "zombie";
-        newEntity["subtype"] = "astronaut";
-        newEntity["health"] = 500;
-        newEntity["damage"] = 20;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["move_delay"] = 1000; // Example delay
-        newEntity["time_between"]=1000;
-        newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
-        newEntity["discription"]="speeds up after health becomes 100";
-        break;
-    case BoomPlant:
-        ch = new plants(x, y, 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "boomerang";
-        newEntity["health"] = 200;
-        newEntity["damage"] = 30;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["discription"]= "all zombies on the same row of the boomerang will lose 15 of their health";
-        break;
-    case JalapenoPlant:
-        ch = new plants(x, y, 0, 300, 0, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "jalpeno";
-        newEntity["health"] = 0;
-        newEntity["damage"] = 300;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["firing_rate"]=0;
-        newEntity["discription"]="zombies who are in the same row as jalapeno will lose 300 of their health";
-        break;
-    case PeashooterPlant:
-        ch = new plants(x, y, 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "peashooter";
-        newEntity["health"] = 200;
-        newEntity["damage"] = 15;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["firing_rate"]=1;
-        newEntity["discription"]="basic plant that shoots peas at zombies regularly";
-        break;
-    case TwoPeashooterPlant:
-        ch = new plants(x, y, 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "twopeashooter";
-        newEntity["health"] = 200;
-        newEntity["damage"] = 40;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["firing_rate"]=1;
-        newEntity["discription"]="more powerful than basic shooter";
-        break;
-    case WalnutPlant:
-        ch = new plants(x, y, 400, 0, 0, "walnut", "acts as armor and stops zombies");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "walnut";
-        newEntity["health"] = 400;
-        newEntity["damage"] = 0;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["firing_rate"]=0;
-        newEntity["discription"]="acts as armor and stops zombies";
-        break;
-    case PlumMinePlant:
-        ch = new plants(x, y, 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
-        newEntity["type"] = "plant";
-        newEntity["subtype"] = "plummine";
-        newEntity["health"] = 0;
-        newEntity["damage"] = 500;
-        newEntity["x"] = x;
-        newEntity["y"] = y;
-        newEntity["firing_rate"]=0;
-        newEntity["discription"]="those who are in the two squares of the bomb will lose 200 health";
-        break;
-    default:
-        return; // No character selected, do nothing
+        case TallZombie:
+            ch = new zombies(x, y, 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "tall";
+            newEntity["health"] = 500;
+            newEntity["damage"] = 30;
+            newEntity["move_delay"] = 1000; // Example delay
+            newEntity["time_between"] = 1000;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "can move over walnut and move quickly";
+            request["character"] = 1;
+            break;
+        case RegZombie:
+            ch = new zombies(x, y, 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "regular";
+            newEntity["health"] = 500;
+            newEntity["damage"] = 25;
+            newEntity["move_delay"] = 1000;
+            newEntity["time_between"] = 1000;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "basic zombie with average abilities";
+            request["character"] = 2;
+            break;
+        case PurpleZombie:
+            ch = new zombies(x, y, 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "purplehair";
+            newEntity["health"] = 4000;
+            newEntity["damage"] = 75;
+            newEntity["move_delay"] = 1000;
+            newEntity["time_between"] = 500;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "very powerful zombie";
+            request["character"] = 3;
+            break;
+        case LeafZombie:
+            ch = new zombies(x, y, 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "leafhead";
+            newEntity["health"] = 800;
+            newEntity["damage"] = 25;
+            newEntity["move_delay"] = 1000; // Example delay
+            newEntity["time_between"] = 500;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "leaves on the head make more resilient";
+            request["character"] = 4;
+            break;
+        case BucketZombie:
+            ch = new zombies(x, y, 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "buckethead";
+            newEntity["health"] = 1950;
+            newEntity["damage"] = 50;
+            newEntity["move_delay"] = 2000; // Example delay
+            newEntity["time_between"] = 1000;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "wears a bucket on his head, giving it extra health";
+            request["character"] = 5;
+            break;
+        case AstroZombie:
+            ch = new zombies(x, y, 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+            newEntity["type"] = "zombie";
+            newEntity["subtype"] = "astronaut";
+            newEntity["health"] = 500;
+            newEntity["damage"] = 20;
+            newEntity["move_delay"] = 1000; // Example delay
+            newEntity["time_between"] = 1000;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            newEntity["description"] = "speeds up after health becomes 100";
+            request["character"] = 6;
+            break;
+        case BoomPlant:
+            ch = new plants(x, y, 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "boomerang";
+            newEntity["health"] = 200;
+            newEntity["damage"] = 30;
+            newEntity["description"] = "all zombies on the same row of the boomerang will lose 15 of their health";
+            request["character"] = 7;
+            break;
+        case JalapenoPlant:
+            ch = new plants(x, y, 0, 300, 0, "jalapeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "jalapeno";
+            newEntity["health"] = 0;
+            newEntity["damage"] = 300;
+            newEntity["firing_rate"] = 0;
+            newEntity["description"] = "zombies who are in the same row as jalapeno will lose 300 of their health";
+            request["character"] = 8;
+            break;
+        case PeashooterPlant:
+            ch = new plants(x, y, 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "peashooter";
+            newEntity["health"] = 200;
+            newEntity["damage"] = 15;
+            newEntity["firing_rate"] = 1;
+            newEntity["description"] = "basic plant that shoots peas at zombies regularly";
+            request["character"] = 9;
+            break;
+        case TwoPeashooterPlant:
+            ch = new plants(x, y, 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "twopeashooter";
+            newEntity["health"] = 200;
+            newEntity["damage"] = 40;
+            newEntity["firing_rate"] = 1;
+            newEntity["description"] = "more powerful than basic shooter";
+            request["character"] = 10;
+            break;
+        case WalnutPlant:
+            ch = new plants(x, y, 400, 0, 0, "walnut", "acts as armor and stops zombies");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "walnut";
+            newEntity["health"] = 400;
+            newEntity["damage"] = 0;
+            newEntity["firing_rate"] = 0;
+            newEntity["description"] = "acts as armor and stops zombies";
+            request["character"] = 11;
+            break;
+        case PlumMinePlant:
+            ch = new plants(x, y, 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+            newEntity["type"] = "plant";
+            newEntity["subtype"] = "plummine";
+            newEntity["health"] = 0;
+            newEntity["damage"] = 500;
+            newEntity["firing_rate"] = 0;
+            newEntity["description"] = "those who are in the two squares of the bomb will lose 200 health";
+            request["character"] = 12;
+            break;
+        default:
+            return;
     }
 
     // Set common properties
@@ -444,15 +577,19 @@ void game::addCharacterAtPosition(int x, int y)
     gameState.append(newEntity);
 
     // Send the new game state to the server
-    QJsonObject request;
-    request["action"] = "add";
     request["entity"] = newEntity;
 
     QJsonDocument doc(request);
     QByteArray data = doc.toJson();
     socket->write(data);
     socket->flush();
+
+    qDebug() << request["character"];
+    qDebug() << "send data to id :" << ip << " and port " << port;
+    socket->write(data);
+    socket->flush();
 }
+
 
 
 
