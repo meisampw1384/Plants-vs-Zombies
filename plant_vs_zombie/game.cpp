@@ -81,66 +81,61 @@ void game::onReadyRead()
 
     QJsonObject obj_data = doc.object();
     QString action = obj_data["action"].toString();
+
     if (action == "update") {
         QJsonArray gameState = obj_data["game_state"].toArray();
         qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
-    } else {
-        qDebug() << "Unsupported action received:" << action;
-       }
-}
-
-void game::processResponse(const QJsonObject &response)
-{
-    QString action = response["action"].toString();
-    qDebug() << "cc get data";
-    Characters *ch = nullptr;
-    if (action == "add_char")
-    {
-         qDebug() << response["character"];
-        switch (response["character"].toInt()) {
-        case 1:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
-            break;
-        case 2:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 25, "regular", "basic zombie with average abilities", 1, 1);
-            break;
-        case 3:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
-            break;
-        case 4:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
-            break;
-        case 5:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
-            break;
-        case 6:
-            ch = new zombies(response["x"].toInt(), response["y"].toInt(), 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
-            break;
-        case 7:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
-            break;
-        case 8:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 0, 300, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
-            break;
-        case 9:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
-            break;
-        case 10:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
-            break;
-        case 11:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 400, 0, 0, "walnut", "acts as armor and stops zombies");
-            break;
-        case 12:
-            ch = new plants(response["x"].toInt(), response["y"].toInt(), 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
-            break;
-        default:
-            return;
+    } else if (action == "add_char") {
+        qDebug() << "Received add_char action. Adding character:" << obj_data["character"];
+        Characters *ch = nullptr;
+        switch (obj_data["character"].toInt()) {
+            case 1:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+                break;
+            case 2:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+                break;
+            case 3:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+                break;
+            case 4:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+                break;
+            case 5:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+                break;
+            case 6:
+                ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+                break;
+            case 7:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
+                break;
+            case 8:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 0, 0, 300, "jalapeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+                break;
+            case 9:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+                break;
+            case 10:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+                break;
+            case 11:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 400, 0, 0, "walnut", "acts as armor and stops zombies");
+                break;
+            case 12:
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+                break;
+            default:
+                qDebug() << "Unknown character type:" << obj_data["character"];
+                return;
         }
         scene->addItem(ch);
+    } else {
+        qDebug() << "Unsupported action received:" << action;
     }
 }
+
 
 
 
