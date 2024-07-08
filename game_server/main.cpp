@@ -3,21 +3,6 @@
 GameServer::GameServer(QObject *parent)
     : QTcpServer(parent)
 {
-    // Initialize game state with example entities
-    gameState = QJsonArray();
-    QJsonObject plant;
-    plant["id"] = 1;
-    plant["type"] = "plant";
-    plant["x"] = 0;
-    plant["y"] = 0;
-    gameState.append(plant);
-
-    QJsonObject zombie;
-    zombie["id"] = 1;
-    zombie["type"] = "zombie";
-    zombie["x"] = 10;
-    zombie["y"] = 0;
-    gameState.append(zombie);
 }
 
 void GameServer::startGameServer()
@@ -58,22 +43,29 @@ void GameServer::readyRead()
 
 void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
 {
+    qDebug() << "processRequest called with socket:" << socket << "and request:" << request;
+
     QString action = request["action"].toString();
+    qDebug() << "Action parsed from request:" << action;
 
     if (action == "move") {
         qDebug() << "The move action called";
         handleMoveRequest(request);
+        qDebug() << "Move action processed, sending game state to client";
         sendGameStateToClient(socket);
     }
+    else if (action == "add") {
+        qDebug() << "The add action called";
+        QJsonObject newEntity = request["entity"].toObject();
+        qDebug() << "New entity parsed from request:" << newEntity;
+        gameState.append(newEntity);
+        qDebug() << "New entity added to game state, broadcasting updated game state";
+        broadcastGameState();
+    } else {
+        qDebug() << "Unknown action received:" << action;
+    }
 
-    // Other request types can be handled here
-
-    // Send response to the client if needed
-    // QJsonObject response;
-    // QJsonDocument responseDoc(response);
-    // QByteArray responseData = responseDoc.toJson();
-    // socket->write(responseData);
-    // socket->flush();
+    qDebug() << "processRequest completed for socket:" << socket;
 }
 
 void GameServer::handleMoveRequest(const QJsonObject &request)
@@ -97,7 +89,7 @@ void GameServer::handleMoveRequest(const QJsonObject &request)
     }
 }
 
-void GameServer::sendGameStateToClient(QTcpSocket *client)
+void GameServer::sendGameStateToClient(QTcpSocket *socket)
 {
     QJsonObject gameStateUpdate;
     gameStateUpdate["action"] = "update";
@@ -105,8 +97,8 @@ void GameServer::sendGameStateToClient(QTcpSocket *client)
 
     QJsonDocument responseDoc(gameStateUpdate);
     QByteArray responseData = responseDoc.toJson();
-    client->write(responseData);
-    client->flush();
+    socket->write(responseData);
+    socket->flush();
 }
 
 void GameServer::broadcastGameState()
@@ -136,18 +128,30 @@ void GameServer::clientDisconnected()
 
 void GameServer::updateGameState()
 {
-    // Example: Move all zombies to the left every second
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+
     for (int i = 0; i < gameState.size(); ++i) {
         QJsonObject entity = gameState[i].toObject();
+
         if (entity["type"].toString() == "zombie") {
-            entity["x"] = entity["x"].toInt() - 1;
-            gameState[i] = entity;
+            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
+            int moveDelay = entity["move_delay"].toInt();
+
+            if (currentTime - lastMove >= moveDelay) {
+                // Update zombie position
+                entity["x"] = entity["x"].toInt() - 1;
+                entity["last_move"] = currentTime;
+
+                // Update the game state array
+                gameState[i] = entity;
+            }
         }
     }
 
     // Broadcast updated game state to all clients
     broadcastGameState();
 }
+
 
 int main(int argc, char *argv[])
 {

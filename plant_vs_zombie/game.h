@@ -8,10 +8,13 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include "zombies.h"
+#include "plants.h"
 #include "characters.h"
 #include "plants.h"
 #include "zombies.h"
 #include "customgraphicscene.h"
+#include <QGraphicsPixmapItem>
 
 namespace Ui {
 class game;
@@ -33,11 +36,9 @@ public slots:
     void onConnected();
     void onDisconnected();
     void updateCountdown();
-    void updateGameState(const QJsonArray& game_state);
-    void connect_to_server(const QString &ip, int port);
+    void updateGameState(const QJsonArray &_game_state);
     void onReadyRead();
-    void processResponse(const QJsonObject &response);
-    void sendMoveRequest(const QString &entityType, int entityId, const QString &direction);
+    void sendZombieMoveRequests();
 
 
 private slots:
@@ -62,6 +63,8 @@ private:
     Ui::game *ui;
     QTcpSocket *socket;
     QTimer *timer;
+    QTimer *moveTimer;
+    QJsonArray gameState;
     CustomGraphicsScene *scene;
     int remainingTime;
     QString ip;
