@@ -554,7 +554,7 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["damage"] = 500;
             newEntity["firing_rate"] = 0;
             newEntity["description"] = "those who are in the two squares of the bomb will lose 200 health";
-            request["character"] = 12;
+            request["character"] = 1;
             break;
         default:
             return;
@@ -573,6 +573,8 @@ void game::addCharacterAtPosition(int x, int y)
 
     // Send the new game state to the server
     request["entity"] = newEntity;
+    request["x"]=x;
+    request["y"]=y;
 
     QJsonDocument doc(request);
     QByteArray data = doc.toJson();
