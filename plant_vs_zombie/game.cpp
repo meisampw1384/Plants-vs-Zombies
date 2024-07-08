@@ -148,10 +148,11 @@ void game::setupUI()
 
     if (backgroundImage.isNull()) {
         qDebug() << "Failed to load background image";
-    } else {
+    }
+    else {
         // Create a QGraphicsPixmapItem with the background image
         QGraphicsPixmapItem *background = new QGraphicsPixmapItem(backgroundImage);
-        background->setPos(0, 0); // Set position at top-left corner of the scene
+        background->setPos(30,-20); // Set position at top-left corner of the scene
         scene->addItem(background);
     }
 
@@ -179,9 +180,99 @@ void game::setupUI()
 void game::onFieldClicked(const QPointF &position)
 {
     // Convert the scene position to grid coordinates
-    int x = position.x() / 50; // Assuming each grid cell is 50x50 pixels
-    int y = position.y() / 50;
+    int x; // Assuming each grid cell is 50x50 pixels
+    int y;
 
+    int tmpx = position.x();
+    int tmpy = position.y();
+
+    if(tmpx >= 145 and tmpx < 225)
+    {
+        x = 2;
+    }
+    else if(tmpx >= 225 and tmpx < 305)
+    {
+        x = 3;
+    }
+    else if(tmpx >= 305 and tmpx < 385)
+    {
+        x = 4;
+    }
+    else if(tmpx >= 385 and tmpx < 465)
+    {
+        x = 5;
+    }
+    else if(tmpx >= 465 and tmpx < 545)
+    {
+        x = 6;
+    }
+    else if(tmpx >= 545 and tmpx < 625)
+    {
+        x = 7;
+    }
+    else if(tmpx >= 625 and tmpx < 705)
+    {
+        x = 8;
+    }
+    else if(tmpx >= 705 and tmpx < 785)
+    {
+        x = 9;
+    }
+    else if(tmpx >= 785 and tmpx < 865)
+    {
+        x = 10;
+    }
+    else if(tmpx >= 865 and tmpx < 945)
+    {
+        x = 11;
+    }
+    else if(tmpx >= 945 and tmpx < 1025)
+    {
+        x = 12;
+    }
+    else if(tmpx >= 1025 and tmpx < 1105)
+    {
+        x = 13;
+    }
+    else if(tmpx >= 1105 and tmpx < 1185)
+    {
+        x = 14;
+    }
+    else
+    {
+        return;
+    }
+
+    if(tmpy >= 40 and tmpy < 110)
+    {
+        y = 0;
+    }
+    else if(tmpy >= 110 and tmpy < 180)
+    {
+        y = 1;
+    }
+    else if(tmpy >= 180 and tmpy < 250)
+    {
+        y = 2;
+    }
+    else if(tmpy >= 250 and tmpy < 320)
+    {
+        y = 3;
+    }
+    else if(tmpy >= 320 and tmpy < 390)
+    {
+        y = 4;
+    }
+    else if(tmpy >= 390 and tmpy < 460)
+    {
+        y = 5;
+    }
+    else
+    {
+        return;
+    }
+
+    qDebug() << "tmpx : " << tmpx << "  tmpy : " << tmpy;
     qDebug() << "Grid Position: (" << x << ", " << y << ")";
 
     // Now you can use x and y to place your character
@@ -231,7 +322,7 @@ void game::addCharacterAtPosition(int x, int y)
         ch = new plants(x, y, 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
         break;
     default:
-        return; // No character selected, do nothing
+        return;
     }
     scene->addItem(ch);
 }
