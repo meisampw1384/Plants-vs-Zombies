@@ -91,6 +91,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
             gameStateUpdate["character"] = request["character"];
             gameStateUpdate["x"] = request["x"];
             gameStateUpdate["y"] = request["y"];
+            gameStateUpdate["game_state"]=gameState;
             qDebug() << "send data";
             QJsonDocument responseDoc(gameStateUpdate);
             QByteArray responseData = responseDoc.toJson();

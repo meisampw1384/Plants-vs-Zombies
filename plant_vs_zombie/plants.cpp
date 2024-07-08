@@ -3,7 +3,7 @@
 
 plants::plants(int x, int y, int health, int attackPower,int _firing_rate , QString type, const QString &description, QGraphicsItem *parent)
     : Characters(x, y, health, attackPower, type, description),firing_rate(_firing_rate)
-{ // Assuming each cell is 50x50 pixels
+{
     if (type == "walnut") {
         setPixmap(QPixmap("../images/optimized for game/walnut op.png"));
     } else if (type == "peashooter") {

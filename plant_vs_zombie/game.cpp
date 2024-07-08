@@ -89,6 +89,7 @@ void game::onReadyRead()
     } else if (action == "add_char") {
         qDebug() << "Received add_char action. Adding character:" << obj_data["character"];
         Characters *ch = nullptr;
+        gameState=obj_data["game_state"].toArray();
         switch (obj_data["character"].toInt()) {
             case 1:
                 ch = new zombies(obj_data["x"].toInt(), obj_data["y"].toInt(), 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
@@ -112,7 +113,7 @@ void game::onReadyRead()
                 ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
                 break;
             case 8:
-                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 0, 0, 300, "jalapeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
+                ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 0, 0, 300, "jalpeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
                 break;
             case 9:
                 ch = new plants(obj_data["x"].toInt(), obj_data["y"].toInt(), 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
@@ -262,24 +263,24 @@ void game::updateGameState(const QJsonArray &gameState)
             int y = entity["y"].toInt();
 
             // Create a new zombie object based on subtype
-            zombies *zombie = nullptr;
+            Characters *ch = nullptr;
             if (subtype == "tall") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "tall", entity["discription"].toString(),entity["move_delay"].toDouble() ,entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "tall", entity["discription"].toString(),entity["move_delay"].toDouble() ,entity["time_between"].toDouble());
             } else if (subtype == "regular") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "regular", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "regular", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
             } else if (subtype == "purplehair") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "purplehair", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "purplehair", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
             } else if (subtype == "leafhead") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "leafhead", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "leafhead", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
             } else if (subtype == "buckethead") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "buckethead", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "buckethead", entity["discription"].toString(),entity["move_delay"].toDouble() , entity["time_between"].toDouble());
             } else if (subtype == "astronaut") {
-                zombie = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "astronaut", entity["discription"].toString(), entity["move_delay"].toDouble() ,entity["time_between"].toDouble());
+                ch = new zombies(x, y, entity["health"].toInt(), entity["damage"].toInt(), "astronaut", entity["discription"].toString(), entity["move_delay"].toDouble() ,entity["time_between"].toDouble());
             }
 
             // Add the zombie to the scene
-            if (zombie) {
-                scene->addItem(zombie);
+            if (ch) {
+                scene->addItem(ch);
             }
         } else if (type == "plant") {
             QString subtype = entity["subtype"].toString();
@@ -287,7 +288,7 @@ void game::updateGameState(const QJsonArray &gameState)
             int y = entity["y"].toInt();
 
             // Create a new plant object based on subtype
-            plants *plant = nullptr;
+            Characters *plant = nullptr;
             if (subtype == "boomerang") {
                 plant = new plants(x, y, entity["health"].toInt(), entity["damage"].toInt(), entity["firing_rate"].toInt(), "boomerang", entity["discription"].toString());
             } else if (subtype == "jalpeno") {
@@ -417,7 +418,7 @@ void game::onFieldClicked(const QPointF &position)
 
 void game::addCharacterAtPosition(int x, int y)
 {
-    Characters *ch = nullptr;
+
     QJsonObject newEntity;
     static int entityIdCounter = 2; // Start from 2 since 1 is already used for initial entities
 
@@ -426,7 +427,7 @@ void game::addCharacterAtPosition(int x, int y)
 
     switch (selectedCharacterType) {
         case TallZombie:
-            ch = new zombies(x, y, 500, 30, "tall", "can move over walnut and move quickly", 1, 1);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "tall";
             newEntity["health"] = 500;
@@ -438,7 +439,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 1;
             break;
         case RegZombie:
-            ch = new zombies(x, y, 500, 25, "regular", "basic zombie with average abilities", 1, 1);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "regular";
             newEntity["health"] = 500;
@@ -450,7 +451,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 2;
             break;
         case PurpleZombie:
-            ch = new zombies(x, y, 4000, 75, "purplehair", "very powerful zombie", 1, 0.5);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "purplehair";
             newEntity["health"] = 4000;
@@ -462,7 +463,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 3;
             break;
         case LeafZombie:
-            ch = new zombies(x, y, 800, 25, "leafhead", "leaves on the head make more resilient", 1, 1);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "leafhead";
             newEntity["health"] = 800;
@@ -474,7 +475,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 4;
             break;
         case BucketZombie:
-            ch = new zombies(x, y, 1950, 50, "buckethead", "wears a bucket on his head, giving it extra health", 2, 1);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "buckethead";
             newEntity["health"] = 1950;
@@ -486,7 +487,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 5;
             break;
         case AstroZombie:
-            ch = new zombies(x, y, 500, 20, "astronaut", "speeds up after health becomes 100", 1, 1);
+
             newEntity["type"] = "zombie";
             newEntity["subtype"] = "astronaut";
             newEntity["health"] = 500;
@@ -498,7 +499,6 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 6;
             break;
         case BoomPlant:
-            ch = new plants(x, y, 200, 30, 1, "boomerang", "all zombies on the same row of the boomerang will lose 15 of their health");
             newEntity["type"] = "plant";
             newEntity["subtype"] = "boomerang";
             newEntity["health"] = 200;
@@ -507,9 +507,8 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 7;
             break;
         case JalapenoPlant:
-            ch = new plants(x, y, 0, 300, 0, "jalapeno", "zombies who are in the same row as jalapeno will lose 300 of their health");
             newEntity["type"] = "plant";
-            newEntity["subtype"] = "jalapeno";
+            newEntity["subtype"] = "jalpeno";
             newEntity["health"] = 0;
             newEntity["damage"] = 300;
             newEntity["firing_rate"] = 0;
@@ -517,7 +516,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 8;
             break;
         case PeashooterPlant:
-            ch = new plants(x, y, 200, 15, 1, "peashooter", "basic plant that shoots peas at zombies regularly");
+
             newEntity["type"] = "plant";
             newEntity["subtype"] = "peashooter";
             newEntity["health"] = 200;
@@ -527,7 +526,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 9;
             break;
         case TwoPeashooterPlant:
-            ch = new plants(x, y, 200, 40, 1, "twopeashooter", "more powerful than basic shooter");
+
             newEntity["type"] = "plant";
             newEntity["subtype"] = "twopeashooter";
             newEntity["health"] = 200;
@@ -537,7 +536,7 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 10;
             break;
         case WalnutPlant:
-            ch = new plants(x, y, 400, 0, 0, "walnut", "acts as armor and stops zombies");
+
             newEntity["type"] = "plant";
             newEntity["subtype"] = "walnut";
             newEntity["health"] = 400;
@@ -547,14 +546,14 @@ void game::addCharacterAtPosition(int x, int y)
             request["character"] = 11;
             break;
         case PlumMinePlant:
-            ch = new plants(x, y, 0, 500, 0, "plummine", "those who are in the two squares of the bomb will lose 200 health");
+
             newEntity["type"] = "plant";
             newEntity["subtype"] = "plummine";
             newEntity["health"] = 0;
             newEntity["damage"] = 500;
             newEntity["firing_rate"] = 0;
             newEntity["description"] = "those who are in the two squares of the bomb will lose 200 health";
-            request["character"] = 1;
+            request["character"] = 12;
             break;
         default:
             return;
@@ -565,11 +564,7 @@ void game::addCharacterAtPosition(int x, int y)
     newEntity["x"] = x;
     newEntity["y"] = y;
 
-    // Add the character to the game scene
-    scene->addItem(ch);
 
-    // Add the new entity to the game state
-    gameState.append(newEntity);
 
     // Send the new game state to the server
     request["entity"] = newEntity;
@@ -639,7 +634,7 @@ void game::on_peashoot_Pushbutton_clicked()
 
 void game::on_twopeashoot_Pushbutton_clicked()
 {
-    selectedCharacterType = PeashooterPlant;
+    selectedCharacterType = TwoPeashooterPlant;
 }
 
 void game::on_wallnut_Pushbutton_clicked()
