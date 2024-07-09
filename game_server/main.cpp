@@ -93,6 +93,28 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
             socket->flush();
         }
     }
+    else if (action == "delete")
+    {
+        QString type = request["type"].toString();
+        int x = request["x"].toInt();
+        int y = request["y"].toInt();
+
+        if (type == "sun" || type == "brain")
+        {
+            // Find and remove the entity from gameState
+            for (int i = 0; i < gameState.size(); ++i) {
+                QJsonObject entity = gameState[i].toObject();
+                if (entity["type"].toString() == type &&
+                    entity["x"].toInt() == x &&
+                    entity["y"].toInt() == y) {
+                    gameState.removeAt(i);
+                    qDebug() << "Removed" << type << "at" << x << "," << y;
+                    broadcastGameState();
+                    break;  // Assuming only one entity per position
+                }
+            }
+        }
+    }
     else {
         qDebug() << "Unknown action received:" << action;
     }
@@ -111,7 +133,7 @@ void GameServer::sendGameStateToClient(QTcpSocket *socket)
     socket->write(responseData);
     socket->flush();
 }
-
+//broadcast of the  update of the map
 void GameServer::broadcastGameState()
 {
     QJsonObject gameStateUpdate;
@@ -125,6 +147,7 @@ void GameServer::broadcastGameState()
         client->flush();
     }
 }
+
 
 void GameServer::clientDisconnected()
 {
@@ -164,6 +187,44 @@ void GameServer::updateGameState()
 }
 
 
+
+void GameServer::add_sun()
+{
+    int x = QRandomGenerator::global()->bounded(2, 7);
+    int y = QRandomGenerator::global()->bounded(1, 6); // Assuming y ranges from 1 to 6
+
+    // Create the sun entity
+    QJsonObject sun;
+    sun["type"] = "sun";
+    sun["x"] = x;
+    sun["y"] = y;
+    sun["value"] = 25;
+    sun["timestamp"] = QDateTime::currentMSecsSinceEpoch();
+
+    // Add the sun entity to the game state
+    gameState.append(sun);
+
+    broadcastGameState();
+}
+void GameServer::add_brain()
+{
+    int x = QRandomGenerator::global()->bounded(8, 11);
+    int y = QRandomGenerator::global()->bounded(1, 6); // Assuming y ranges from 1 to 6
+
+    QJsonObject brain;
+    brain["type"] = "brain";
+    brain["x"] = x;
+    brain["y"] = y;
+    brain["value"] = 25;
+    brain["timestamp"] = QDateTime::currentMSecsSinceEpoch();
+
+
+    gameState.append(brain);
+
+    broadcastGameState();
+}
+
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -172,7 +233,14 @@ int main(int argc, char *argv[])
 
     // Periodically update game state
     QTimer timer;
+    QTimer sun_timer;
+    QObject::connect(&sun_timer,&QTimer::timeout,&server,&GameServer::add_sun);
+    sun_timer.start(5000);
     QObject::connect(&timer, &QTimer::timeout, &server, &GameServer::updateGameState);
+    QTimer brain_timer;
+    QObject::connect(&brain_timer,&QTimer::timeout,&server,&GameServer::add_brain);
+    brain_timer.start(5000);
+
     timer.start(1000); // Update every second
 
     return a.exec();

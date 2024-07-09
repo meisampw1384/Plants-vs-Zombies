@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QTimer>
+#include <QRandomGenerator>
 #include <QCoreApplication>
 #include <QDebug>
 #include <QMap>
@@ -19,6 +20,8 @@ public:
     GameServer(QObject *parent = nullptr);
     void startGameServer();
     void updateGameState();
+    void add_sun();
+    void add_brain();
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
@@ -31,6 +34,7 @@ private:
     void processRequest(QTcpSocket *socket, const QJsonObject &request);
     void sendGameStateToClient(QTcpSocket *client);
     void broadcastGameState();
+
 
     QList<QTcpSocket *> clients;
     QJsonArray gameState;

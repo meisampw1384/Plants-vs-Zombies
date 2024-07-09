@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+
 #include "zombies.h"
 #include "plants.h"
 #include "characters.h"
@@ -56,6 +57,8 @@ private slots:
     void on_Plum_mine_pushbutton_clicked();
 
     void onFieldClicked(const QPointF &position);
+    void onBrainClicked(const QPointF &pos);
+    void onSunClicked(const QPointF &pos);
 
 private:
     Ui::game *ui;

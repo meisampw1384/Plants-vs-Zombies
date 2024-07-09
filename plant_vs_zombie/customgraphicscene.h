@@ -14,6 +14,8 @@ public:
 
 signals:
     void sceneClicked(const QPointF &position);
+    void sunClicked(const QPointF &position);
+    void brainClicked(const QPointF &position);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

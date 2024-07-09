@@ -12,7 +12,6 @@ game::game(QWidget *parent) :
     ui->setupUi(this);
     socket = new QTcpSocket(this);
     timer = new QTimer(this);
-    moveTimer = new QTimer(this);
     remainingTime = 210;
 
     connect(timer, &QTimer::timeout, this, &game::updateCountdown);
@@ -23,7 +22,6 @@ game::game(QWidget *parent) :
     setupUI();
 
     timer->start(1000);
-    moveTimer->start(1000);
 
 }
 
@@ -200,7 +198,7 @@ void game::setupUI()
     selectedCharacterType = None;
 }
 
-
+//that is update zombies after movement
 void game::updateGameState(const QJsonArray &gameState)
 {
 
@@ -269,7 +267,35 @@ void game::updateGameState(const QJsonArray &gameState)
             if (plant) {
                 scene->addItem(plant);
             }
-        } else {
+
+        }
+        else if (type=="sun"){
+            int x= entity["x"].toInt();
+            int y= entity["y"].toInt();
+            QPixmap sun ("../images/sun.png");
+            QGraphicsPixmapItem *sunG=new QGraphicsPixmapItem(sun);
+            sunG->setPos(x*77,y*72);
+            sunG->setScale(.06);
+            sunG->setData(Qt::UserRole, "sun");
+            scene->addItem(sunG);
+            connect(scene, &CustomGraphicsScene::sunClicked, this, &game::onSunClicked);
+
+
+        }
+        else if (type=="brain"){
+            int x= entity["x"].toInt();
+            int y= entity["y"].toInt();
+            QPixmap brain ("../images/Brain.png");
+            QGraphicsPixmapItem *brainG=new QGraphicsPixmapItem(brain);
+            brainG->setPos(x*77,y*72);
+            brainG->setScale(.2);
+            brainG->setData(Qt::UserRole, "brain");
+            scene->addItem(brainG);
+            connect(scene, &CustomGraphicsScene::brainClicked, this, &game::onBrainClicked);
+
+
+        }
+        else {
             qDebug() << "Unsupported entity type received:" << type;
         }
     }
@@ -376,6 +402,74 @@ void game::onFieldClicked(const QPointF &position)
     qDebug() << "Grid Position: (" << x << ", " << y << ")";  
     addCharacterAtPosition(x, y);
 }
+
+void game::onBrainClicked(const QPointF &pos)
+{
+    qDebug() << "Brain clicked at position:" << pos;
+
+       // Example: Remove brain item from the scene
+    QList<QGraphicsItem *> items = scene->items(pos);
+    for (QGraphicsItem *item : items) {
+        if (item->data(Qt::UserRole) == "brain") {
+            scene->removeItem(item);
+            QString x=ui->amount_of_brain->text();
+            QString currentText = ui->amount_of_brain->text();
+            int currentAmount = currentText.toInt();
+            currentAmount += 25;
+            ui->amount_of_brain->setText(QString::number(currentAmount));
+            delete item;
+            break; // Assuming there's only one brain item at this position
+        }
+    }
+    QJsonObject request;
+    request["action"] = "delete";
+    request["type"] = "sun";
+    request["x"] = static_cast<int>(pos.x() / 77);  // Convert to grid coordinates if necessary
+    request["y"] = static_cast<int>(pos.y() / 72);
+
+    QJsonDocument doc(request);
+    QByteArray requestData = doc.toJson();
+
+    socket->write(requestData);
+    socket->flush();
+}
+
+void game::onSunClicked(const QPointF &pos)
+{
+    // Handle sun clicked event here
+    qDebug() << "Sun clicked at position:" << pos;
+
+    // Example: Remove sun item from the scene
+    QList<QGraphicsItem *> items = scene->items(pos);
+    for (QGraphicsItem *item : items) {
+        if (item->data(Qt::UserRole) == "sun") {
+            scene->removeItem(item);
+
+            // Update the amount of sun in the UI
+            QString currentText = ui->amoun_of_sun->text();
+            int currentAmount = currentText.toInt();
+            currentAmount += 25;
+            ui->amoun_of_sun->setText(QString::number(currentAmount));
+
+            delete item;
+            break; // Assuming there's only one sun item at this position
+        }
+    }
+
+    QJsonObject request;
+    request["action"] = "delete";
+    request["type"] = "sun";
+    request["x"] = static_cast<int>(pos.x() / 77);  // Convert to grid coordinates if necessary
+    request["y"] = static_cast<int>(pos.y() / 72);
+
+    QJsonDocument doc(request);
+    QByteArray requestData = doc.toJson();
+
+    socket->write(requestData);
+    socket->flush();
+}
+
+
 
 
 void game::addCharacterAtPosition(int x, int y)
