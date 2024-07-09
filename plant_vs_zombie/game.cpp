@@ -120,7 +120,9 @@ void game::onReadyRead()
                 return;
         }
         scene->addItem(ch);
-    } else {
+    }
+    else
+    {
         qDebug() << "Unsupported action received:" << action;
     }
 }
@@ -193,10 +195,19 @@ void game::updateGameState(const QJsonArray &gameState)
 
     QList<QGraphicsItem *> items = scene->items();
     for (QGraphicsItem *item : items) {
-        zombies *zombie = dynamic_cast<zombies *>(item);
-        if (zombie) {
+        zombies * zombie = dynamic_cast<zombies *>(item);
+        if (zombie)
+        {
             scene->removeItem(zombie);
             delete zombie;
+            continue;
+        }
+        plants * plant = dynamic_cast<plants *>(item);
+        if (plant)
+        {
+            scene->removeItem(plant);
+            delete plant;
+            continue;
         }
     }
     // Iterate through the received game state array
@@ -681,9 +692,6 @@ void game::addCharacterAtPosition(int x, int y)
     socket->write(data);
     socket->flush();
 }
-
-
-
 
 // Slot for button clicks to set the character type
 void game::on_tall_Z_Pushbutton_clicked()
