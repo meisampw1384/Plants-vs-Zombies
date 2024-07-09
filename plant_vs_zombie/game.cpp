@@ -36,14 +36,11 @@ void game::onConnected()
 {
     qDebug()<<ip<<port;
     socket->connectToHost(ip,port);
-    qDebug() << "Connected to server";
-
 }
 
 // Slot when disconnected from the server
 void game::onDisconnected()
 {
-    qDebug() << "Disconnected from server";
     QMessageBox::warning(this, "Disconnected", "Disconnected from server.");
 }
 
@@ -64,11 +61,7 @@ void game::updateCountdown()
 // Slot for readyRead signal
 void game::onReadyRead()
 {
-    qDebug() << "onReadyRead called";
-
     QByteArray data = socket->readAll();
-    qDebug() << "Data read from socket:" << data;
-
     QJsonDocument doc = QJsonDocument::fromJson(data);
 
     if (doc.isNull()) {
@@ -81,10 +74,8 @@ void game::onReadyRead()
 
     if (action == "update") {
         QJsonArray gameState = obj_data["game_state"].toArray();
-        qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
     } else if (action == "add_char") {
-        qDebug() << "Received add_char action. Adding character:" << obj_data["character"];
         Characters *ch = nullptr;
         gameState=obj_data["game_state"].toArray();
         switch (obj_data["character"].toInt()) {
@@ -145,12 +136,10 @@ void game::onReadyRead()
 void game::set_ip(QString _ip)
 {
     ip = _ip;
-    qDebug() << ip;
 }
 
 void game::set_port(int _port) {
     port = _port;
-    qDebug() << port;
 }
 
 void game::set_role(QString _role)
@@ -360,10 +349,6 @@ void game::onFieldClicked(const QPointF &position)
     {
         x = 13;
     }
-    else if(tmpx >= 1105 and tmpx < 1185)
-    {
-        x = 14;
-    }
     else
     {
         return;
@@ -398,16 +383,11 @@ void game::onFieldClicked(const QPointF &position)
         return;
     }
 
-    qDebug() << "tmpx : " << tmpx << "  tmpy : " << tmpy;
-    qDebug() << "Grid Position: (" << x << ", " << y << ")";  
     addCharacterAtPosition(x, y);
 }
 
 void game::onBrainClicked(const QPointF &pos)
 {
-    qDebug() << "Brain clicked at position:" << pos;
-
-       // Example: Remove brain item from the scene
     QList<QGraphicsItem *> items = scene->items(pos);
     for (QGraphicsItem *item : items) {
         if (item->data(Qt::UserRole) == "brain") {
@@ -436,9 +416,6 @@ void game::onBrainClicked(const QPointF &pos)
 
 void game::onSunClicked(const QPointF &pos)
 {
-    // Handle sun clicked event here
-    qDebug() << "Sun clicked at position:" << pos;
-
     // Example: Remove sun item from the scene
     QList<QGraphicsItem *> items = scene->items(pos);
     for (QGraphicsItem *item : items) {
@@ -450,7 +427,6 @@ void game::onSunClicked(const QPointF &pos)
             int currentAmount = currentText.toInt();
             currentAmount += 25;
             ui->amoun_of_sun->setText(QString::number(currentAmount));
-
             delete item;
             break; // Assuming there's only one sun item at this position
         }
@@ -480,7 +456,7 @@ void game::addCharacterAtPosition(int x, int y)
 
     QJsonObject request;
     request["action"] = "add";
-
+    
     switch (selectedCharacterType) {
         case TallZombie:
 
@@ -492,6 +468,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 1000;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "can move over walnut and move quickly";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 1;
             break;
         case RegZombie:
@@ -504,6 +482,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 1000;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "basic zombie with average abilities";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 2;
             break;
         case PurpleZombie:
@@ -516,6 +496,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 500;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "very powerful zombie";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 3;
             break;
         case LeafZombie:
@@ -528,6 +510,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 500;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "leaves on the head make more resilient";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 4;
             break;
         case BucketZombie:
@@ -540,6 +524,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 1000;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "wears a bucket on his head, giving it extra health";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 5;
             break;
         case AstroZombie:
@@ -552,6 +538,8 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["time_between"] = 1000;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
             newEntity["description"] = "speeds up after health becomes 100";
+            newEntity["x"] = 13;
+            request["x"]=13;
             request["character"] = 6;
             break;
         case BoomPlant:
@@ -561,6 +549,17 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["damage"] = 30;
             newEntity["description"] = "all zombies on the same row of the boomerang will lose 15 of their health";
             request["character"] = 7;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         case JalapenoPlant:
             newEntity["type"] = "plant";
@@ -570,6 +569,16 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["firing_rate"] = 0;
             newEntity["description"] = "zombies who are in the same row as jalapeno will lose 300 of their health";
             request["character"] = 8;
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         case PeashooterPlant:
 
@@ -580,6 +589,17 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["firing_rate"] = 1;
             newEntity["description"] = "basic plant that shoots peas at zombies regularly";
             request["character"] = 9;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         case TwoPeashooterPlant:
 
@@ -590,6 +610,17 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["firing_rate"] = 1;
             newEntity["description"] = "more powerful than basic shooter";
             request["character"] = 10;
+            newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         case WalnutPlant:
 
@@ -600,6 +631,16 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["firing_rate"] = 0;
             newEntity["description"] = "acts as armor and stops zombies";
             request["character"] = 11;
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         case PlumMinePlant:
 
@@ -610,6 +651,16 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["firing_rate"] = 0;
             newEntity["description"] = "those who are in the two squares of the bomb will lose 200 health";
             request["character"] = 12;
+            if(x > 6)
+            {
+                newEntity["x"] = 7;
+                request["x"]= 7;
+            }
+            else
+            {
+                newEntity["x"] = x;
+                request["x"]= x;
+            }
             break;
         default:
             return;
@@ -617,23 +668,16 @@ void game::addCharacterAtPosition(int x, int y)
 
     // Set common properties
     newEntity["id"] = entityIdCounter++;
-    newEntity["x"] = x;
     newEntity["y"] = y;
 
 
 
     // Send the new game state to the server
     request["entity"] = newEntity;
-    request["x"]=x;
     request["y"]=y;
 
     QJsonDocument doc(request);
     QByteArray data = doc.toJson();
-    socket->write(data);
-    socket->flush();
-
-    qDebug() << request["character"];
-    qDebug() << "send data to id :" << ip << " and port " << port;
     socket->write(data);
     socket->flush();
 }

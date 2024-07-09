@@ -66,8 +66,9 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
         doubleValue = request["y"].toDouble();
         int y = static_cast<int>(doubleValue);
 
-        doubleValue = request["character"].toDouble();
-        int character = static_cast<int>(doubleValue);
+        QJsonObject entity = request["entity"].toObject();
+        doubleValue = entity["id"].toDouble();
+        int ID = static_cast<int>(doubleValue);
 
         qDebug() << "The add action called";
         QJsonObject newEntity = request["entity"].toObject();
@@ -79,7 +80,8 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
         qDebug() << "before change : " << game_field[x][y];
         if(game_field[request["x"].toInt()][request["y"].toInt()] == 0)
         {
-            game_field[x][y] = character;
+            game_field[x][y] = ID;
+
             QJsonObject gameStateUpdate;
             gameStateUpdate["action"] = "add_char";
             gameStateUpdate["character"] = request["character"];
@@ -133,7 +135,7 @@ void GameServer::sendGameStateToClient(QTcpSocket *socket)
     socket->write(responseData);
     socket->flush();
 }
-//broadcast of the  update of the map
+
 void GameServer::broadcastGameState()
 {
     QJsonObject gameStateUpdate;
@@ -167,17 +169,48 @@ void GameServer::updateGameState()
     for (int i = 0; i < gameState.size(); ++i) {
         QJsonObject entity = gameState[i].toObject();
 
-        if (entity["type"].toString() == "zombie") {
+        if (entity["type"].toString() == "zombie")
+        {
             qint64 lastMove = entity["last_move"].toVariant().toLongLong();
             int moveDelay = entity["move_delay"].toInt();
+            if(entity["x"].toInt() - 1 != 1)
+            {
+                if (currentTime - lastMove >= moveDelay){
+                    // Update zombie position
+                    entity["x"] = entity["x"].toInt() - 1;
+                    entity["last_move"] = currentTime;
 
-            if (currentTime - lastMove >= moveDelay) {
-                // Update zombie position
-                entity["x"] = entity["x"].toInt() - 1;
-                entity["last_move"] = currentTime;
+                    // Update the game state array
+                    gameState[i] = entity;
+                }
+            }
+        }
 
-                // Update the game state array
-                gameState[i] = entity;
+        else if(entity["type"].toString() == "plant")
+        {
+            if(entity["subtype"] == "boomerang")
+            {
+
+            }
+            else if(entity["subtype"] == "jalpeno")
+            {
+
+            }
+            else if(entity["subtype"] == "peashooter")
+            {
+
+            }
+            else if(entity["subtype"] == "twopeashooter")
+            {
+
+            }
+            else if(entity["subtype"] == "walnut")
+            {
+
+            }
+            else if(entity["subtype"] == "plummine")
+            {
+
             }
         }
     }
@@ -201,7 +234,6 @@ void GameServer::add_sun()
     sun["value"] = 25;
     sun["timestamp"] = QDateTime::currentMSecsSinceEpoch();
 
-    // Add the sun entity to the game state
     gameState.append(sun);
 
     broadcastGameState();
@@ -218,7 +250,6 @@ void GameServer::add_brain()
     brain["value"] = 25;
     brain["timestamp"] = QDateTime::currentMSecsSinceEpoch();
 
-
     gameState.append(brain);
 
     broadcastGameState();
@@ -233,13 +264,16 @@ int main(int argc, char *argv[])
 
     // Periodically update game state
     QTimer timer;
+
     QTimer sun_timer;
     QObject::connect(&sun_timer,&QTimer::timeout,&server,&GameServer::add_sun);
     sun_timer.start(5000);
-    QObject::connect(&timer, &QTimer::timeout, &server, &GameServer::updateGameState);
+
     QTimer brain_timer;
     QObject::connect(&brain_timer,&QTimer::timeout,&server,&GameServer::add_brain);
     brain_timer.start(5000);
+
+    QObject::connect(&timer, &QTimer::timeout, &server, &GameServer::updateGameState);
 
     timer.start(1000); // Update every second
 
