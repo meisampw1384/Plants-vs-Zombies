@@ -162,18 +162,21 @@ void GameServer::updateGameState()
 
         if (entity["type"].toString() == "zombie")
         {
-            if(entity["health"].toInt() < 0)
-            {
-                gameState.removeAt(i);
-                continue;
-            }
-            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
-            int moveDelay = entity["move_delay"].toInt();
             double doubleValue = entity["x"].toDouble();
             int x = static_cast<int>(doubleValue);
 
             doubleValue = entity["y"].toDouble();
             int y = static_cast<int>(doubleValue);
+
+            if(entity["health"].toInt() < 0)
+            {
+                gameState.removeAt(i);
+                game_field[x][y] = 0;
+                continue;
+            }
+
+            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
+            int moveDelay = entity["move_delay"].toInt();
 
             if(entity["x"].toInt() - 1 != 1)
             {
@@ -198,9 +201,9 @@ void GameServer::updateGameState()
                 {
                     if (currentTime - lastMove >= moveDelay)
                     {
-                        for (int i = 0; i < gameState.size(); ++i)
+                        for (int j = 0; j < gameState.size(); ++j)
                         {
-                            QJsonObject find = gameState[i].toObject();
+                            QJsonObject find = gameState[j].toObject();
 
                             double doubleValue = find["id"].toDouble();
                             int check_id = static_cast<int>(doubleValue);
@@ -208,7 +211,7 @@ void GameServer::updateGameState()
                             if(check_id == game_field[x - 1][y] and find["type"] == "plant")
                             {
                                 find["health"] = find["health"].toInt() - entity["damage"].toInt();
-                                gameState[i] = find;
+                                gameState[j] = find;
                                 break;
                             }
 
@@ -221,43 +224,139 @@ void GameServer::updateGameState()
 
         else if(entity["type"].toString() == "plant")
         {
+            double doubleValue = entity["x"].toDouble();
+            int x = static_cast<int>(doubleValue);
+
+            doubleValue = entity["y"].toDouble();
+            int y = static_cast<int>(doubleValue);
+
+            doubleValue = entity["id"].toDouble();
+            int ID = static_cast<int>(doubleValue);
+
             if(entity["health"].toInt() < 0)
             {
                 gameState.removeAt(i);
-
-                double doubleValue = entity["x"].toDouble();
-                int x = static_cast<int>(doubleValue);
-
-                doubleValue = entity["y"].toDouble();
-                int y = static_cast<int>(doubleValue);
-
                 game_field[x][y] = 0;
                 continue;
             }
-//            if(entity["subtype"] == "boomerang")
-//            {
 
-//            }
-//            else if(entity["subtype"] == "jalpeno")
-//            {
+            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
+            int firing_rate = entity["firing_rate"].toInt();
+            if (currentTime - lastMove >= firing_rate){
+                if(entity["subtype"] == "boomerang")
+                {
+                    for(int z = 0; z < FIELD_WIDTH; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
 
-//            }
-//            else if(entity["subtype"] == "peashooter")
-//            {
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
 
-//            }
-//            else if(entity["subtype"] == "twopeashooter")
-//            {
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 15;
+                                    gameState[j] = find;
+                                    break;
+                                }
 
-//            }
-//            else if(entity["subtype"] == "walnut")
-//            {
+                            }
 
-//            }
-//            else if(entity["subtype"] == "plummine")
-//            {
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "jalpeno")
+                {
+                    for(int z = 0; z < FIELD_WIDTH; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
 
-//            }
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 300;
+                                    gameState[j] = find;
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                    gameState.removeAt(i);
+                    game_field[x][y] = 0;
+                }
+                else if(entity["subtype"] == "peashooter")
+                {
+                    int flag = 1;
+                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 15;
+                                    gameState[j] = find;
+                                    flag = 0;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "twopeashooter")
+                {
+                    int flag = 1;
+                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 40;
+                                    gameState[j] = find;
+                                    flag = 0;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "walnut")
+                {
+
+                }
+                else if(entity["subtype"] == "plummine")
+                {
+
+                }
+            }
         }
     }
 

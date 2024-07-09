@@ -558,6 +558,7 @@ void game::addCharacterAtPosition(int x, int y)
             newEntity["subtype"] = "boomerang";
             newEntity["health"] = 200;
             newEntity["damage"] = 30;
+            newEntity["firing_rate"] = 0;
             newEntity["description"] = "all zombies on the same row of the boomerang will lose 15 of their health";
             request["character"] = 7;
             newEntity["last_move"] = QDateTime::currentMSecsSinceEpoch();
