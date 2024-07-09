@@ -4,11 +4,13 @@ high :
 - check sun\brain to put characters
 - fire bullets
 - handle correct position for characters | done
-- handle that every position has capacity for just one character
+- handle that every position has capacity for just one character 
 - handle the sun and brain generation in the field
 - fix windows sizes
 - delete item from sence
 - make a file for plants and another for zombies
 - handle server
+- crash of plants and zombies
+- correct place for plants and zombies
 low :
-- server should handle that, is selected character can take the place
+- server should handle that, is selected character can take the place | done

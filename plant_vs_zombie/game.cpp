@@ -16,7 +16,6 @@ game::game(QWidget *parent) :
     remainingTime = 210;
 
     connect(timer, &QTimer::timeout, this, &game::updateCountdown);
-    connect(moveTimer, &QTimer::timeout, this, &game::sendZombieMoveRequests);
     connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
     connect(socket, &QTcpSocket::connected, this, &game::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
@@ -161,44 +160,6 @@ void game::set_role(QString _role)
     role = _role;
 }
 
-void game::sendZombieMoveRequests()
-{
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-
-    // Iterate through the game state to check for zombies that need to move
-    for (const QJsonValue &value : gameState) {
-        QJsonObject entity = value.toObject();
-        if (entity["type"].toString() == "zombie") {
-            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
-            int moveDelay = entity["move_delay"].toInt();
-
-            if (currentTime - lastMove >= moveDelay) {
-                // Send move request to server
-                QJsonObject request;
-                request["action"] = "move";
-                request["entity_type"] = "zombie";
-                request["entity_id"] = entity["id"].toInt();
-                request["direction"] = "left"; // Assuming zombies move left
-
-                QJsonDocument doc(request);
-                QByteArray data = doc.toJson();
-                socket->write(data);
-                socket->flush();
-
-                // Update the last move time
-                entity["last_move"] = currentTime;
-            }
-        }
-    }
-}
-
-
-// Update the game state based on server response
-
-
-
-
-
 // Setup UI elements
 void game::setupUI()
 {
@@ -252,7 +213,8 @@ void game::updateGameState(const QJsonArray &gameState)
         }
     }
     // Iterate through the received game state array
-    for (const QJsonValue &value : gameState) {
+    for (const QJsonValue &value : gameState)
+    {
         QJsonObject entity = value.toObject();
 
         // Determine the type of entity (zombie or plant)

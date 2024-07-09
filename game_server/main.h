@@ -29,7 +29,6 @@ private slots:
 
 private:
     void processRequest(QTcpSocket *socket, const QJsonObject &request);
-    void handleMoveRequest(const QJsonObject &request);
     void sendGameStateToClient(QTcpSocket *client);
     void broadcastGameState();
 

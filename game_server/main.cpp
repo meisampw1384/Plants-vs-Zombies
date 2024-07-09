@@ -58,13 +58,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     QString action = request["action"].toString();
     qDebug() << "Action parsed from request:" << action;
 
-    if (action == "move") {
-        qDebug() << "The move action called";
-        handleMoveRequest(request);
-        qDebug() << "Move action processed, sending game state to client";
-        sendGameStateToClient(socket);
-    }
-    else if (action == "add")
+    if (action == "add")
     {
         double doubleValue = request["x"].toDouble();
         int x = static_cast<int>(doubleValue);
@@ -104,27 +98,6 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     }
 
     qDebug() << "processRequest completed for socket:" << socket;
-}
-
-void GameServer::handleMoveRequest(const QJsonObject &request)
-{
-    QString entityType = request["entity_type"].toString();
-    int entityId = request["entity_id"].toInt();
-    QString direction = request["direction"].toString();
-
-    // Update game state
-    for (int i = 0; i < gameState.size(); ++i) {
-        QJsonObject entity = gameState[i].toObject();
-        if (entity["id"].toInt() == entityId && entity["type"].toString() == entityType) {
-            if (direction == "up") entity["y"] = entity["y"].toInt() - 1;
-            else if (direction == "down") entity["y"] = entity["y"].toInt() + 1;
-            else if (direction == "left") entity["x"] = entity["x"].toInt() - 1;
-            else if (direction == "right") entity["x"] = entity["x"].toInt() + 1;
-
-            gameState[i] = entity;
-            break;
-        }
-    }
 }
 
 void GameServer::sendGameStateToClient(QTcpSocket *socket)

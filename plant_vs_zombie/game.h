@@ -38,8 +38,6 @@ public slots:
     void updateCountdown();
     void updateGameState(const QJsonArray &_game_state);
     void onReadyRead();
-    void sendZombieMoveRequests();
-
 
 private slots:
 
