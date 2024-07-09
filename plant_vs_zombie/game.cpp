@@ -80,7 +80,7 @@ void game::onReadyRead()
     QString action = obj_data["action"].toString();
 
     if (action == "update") {
-        QJsonArray gameState = obj_data["game_state"].toArray();
+        gameState = obj_data["game_state"].toArray();
         qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
     } else if (action == "add_char") {
@@ -210,6 +210,8 @@ void game::updateGameState(const QJsonArray &gameState)
             delete zombie;
         }
     }
+
+
     // Iterate through the received game state array
     for (const QJsonValue &value : gameState)
     {
@@ -412,18 +414,21 @@ void game::onBrainClicked(const QPointF &pos)
     for (QGraphicsItem *item : items) {
         if (item->data(Qt::UserRole) == "brain") {
             scene->removeItem(item);
-            QString x=ui->amount_of_brain->text();
-            QString currentText = ui->amount_of_brain->text();
-            int currentAmount = currentText.toInt();
-            currentAmount += 25;
-            ui->amount_of_brain->setText(QString::number(currentAmount));
             delete item;
             break; // Assuming there's only one brain item at this position
         }
     }
+
+    QString x=ui->amount_of_brain->text();
+    QString currentText = ui->amount_of_brain->text();
+    int currentAmount = currentText.toInt();
+    currentAmount += 25;
+    ui->amount_of_brain->setText(QString::number(currentAmount));
+
+
     QJsonObject request;
     request["action"] = "delete";
-    request["type"] = "sun";
+    request["type"] = "brain";
     request["x"] = static_cast<int>(pos.x() / 77);  // Convert to grid coordinates if necessary
     request["y"] = static_cast<int>(pos.y() / 72);
 
@@ -446,15 +451,15 @@ void game::onSunClicked(const QPointF &pos)
             scene->removeItem(item);
 
             // Update the amount of sun in the UI
-            QString currentText = ui->amoun_of_sun->text();
-            int currentAmount = currentText.toInt();
-            currentAmount += 25;
-            ui->amoun_of_sun->setText(QString::number(currentAmount));
 
             delete item;
             break; // Assuming there's only one sun item at this position
         }
     }
+    QString currentText = ui->amoun_of_sun->text();
+    int currentAmount = currentText.toInt();
+    currentAmount += 25;
+    ui->amoun_of_sun->setText(QString::number(currentAmount));
 
     QJsonObject request;
     request["action"] = "delete";

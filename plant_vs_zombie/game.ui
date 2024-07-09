@@ -560,7 +560,7 @@ color:rgb(255, 85, 0)</string>
    <widget class="QLabel" name="amount_of_brain">
     <property name="geometry">
      <rect>
-      <x>970</x>
+      <x>980</x>
       <y>720</y>
       <width>91</width>
       <height>41</height>
@@ -582,7 +582,7 @@ color:rgb(255, 85, 0)</string>
    <widget class="QLabel" name="amoun_of_sun">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>60</x>
       <y>720</y>
       <width>81</width>
       <height>41</height>

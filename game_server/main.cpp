@@ -12,6 +12,12 @@ GameServer::GameServer(QObject *parent)
             game_field[i][j] = 0;
         }
     }
+    mainTimer=new QTimer(this);
+    sunTimer=new QTimer(this);
+    brainTimer=new QTimer(this);
+    connect(mainTimer, &QTimer::timeout, this, &GameServer::updateGameState);
+    connect(sunTimer, &QTimer::timeout, this, &GameServer::add_sun);
+    connect(brainTimer, &QTimer::timeout, this, &GameServer::add_brain);
 }
 
 void GameServer::startGameServer()
@@ -22,6 +28,8 @@ void GameServer::startGameServer()
         qDebug() << "Game server failed to start";
     }
 }
+GameServer server;
+
 
 void GameServer::incomingConnection(qintptr socketDescriptor)
 {
@@ -29,6 +37,11 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
     if (socket->setSocketDescriptor(socketDescriptor)) {
         clients.append(socket);
         clientMap[socketDescriptor] = socket;
+        mainTimer->start(1000); // Update every second
+        sunTimer->start(5000);  // Add sun every 5 seconds
+        brainTimer->start(5000);
+
+
         connect(socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);
         connect(socket, &QTcpSocket::disconnected, this, &GameServer::clientDisconnected);
         qDebug() << "New client connected with descriptor:" << socketDescriptor;
@@ -107,10 +120,12 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
                 if (entity["type"].toString() == type &&
                     entity["x"].toInt() == x &&
                     entity["y"].toInt() == y) {
+                    qDebug()<<"deleted"<<entity;
                     gameState.removeAt(i);
                     qDebug() << "Removed" << type << "at" << x << "," << y;
                     broadcastGameState();
-                    break;  // Assuming only one entity per position
+                    break;
+                    // Assuming only one entity per position
                 }
             }
         }
@@ -228,20 +243,10 @@ void GameServer::add_brain()
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    GameServer server;
     server.startGameServer();
 
     // Periodically update game state
-    QTimer timer;
-    QTimer sun_timer;
-    QObject::connect(&sun_timer,&QTimer::timeout,&server,&GameServer::add_sun);
-    sun_timer.start(5000);
-    QObject::connect(&timer, &QTimer::timeout, &server, &GameServer::updateGameState);
-    QTimer brain_timer;
-    QObject::connect(&brain_timer,&QTimer::timeout,&server,&GameServer::add_brain);
-    brain_timer.start(5000);
-
-    timer.start(1000); // Update every second
+ // Update every second
 
     return a.exec();
 }
