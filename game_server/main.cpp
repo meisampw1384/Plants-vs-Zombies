@@ -348,13 +348,28 @@ void GameServer::updateGameState()
                         }
                     }
                 }
-                else if(entity["subtype"] == "walnut")
-                {
-
-                }
                 else if(entity["subtype"] == "plummine")
                 {
+                    qDebug() << "plummine : ";
 
+                    for (int j = 0; j < gameState.size(); ++j)
+                    {
+                        QJsonObject find = gameState[j].toObject();
+
+                        double doubleValue = find["x"].toDouble();
+                        int z_x = static_cast<int>(doubleValue);
+
+                        doubleValue = find["y"].toDouble();
+                        int z_y = static_cast<int>(doubleValue);
+
+                        if((z_y <= y + 1 and z_y >= y - 1) and (z_x <= x + 1 and z_x >= x - 1) and find["type"] == "zombie")
+                        {
+                            find["health"] = find["health"].toInt() - 200;
+                            gameState[j] = find;
+                        }
+                    }
+                    gameState.removeAt(i);
+                    game_field[x][y] = 0;
                 }
             }
         }
