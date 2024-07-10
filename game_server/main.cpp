@@ -34,7 +34,8 @@ GameServer server;
 void GameServer::incomingConnection(qintptr socketDescriptor)
 {
     QTcpSocket *socket = new QTcpSocket(this);
-    if (socket->setSocketDescriptor(socketDescriptor)) {
+    if (socket->setSocketDescriptor(socketDescriptor))
+    {
         clients.append(socket);
         clientMap[socketDescriptor] = socket;
         mainTimer->start(1000); // Update every second
