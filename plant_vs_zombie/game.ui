@@ -611,6 +611,51 @@ color:rgb(255, 85, 0)</string>
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="UserName_plant">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>10</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>27</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(184, 0, 184)</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="userName_zombie">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>10</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>27</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(255, 255, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>label_6</zorder>
    <zorder>label_2</zorder>
    <zorder>remaining_time_label</zorder>
@@ -646,6 +691,8 @@ color:rgb(255, 85, 0)</string>
    <zorder>amount_of_brain</zorder>
    <zorder>amoun_of_sun</zorder>
    <zorder>field_view</zorder>
+   <zorder>UserName_plant</zorder>
+   <zorder>userName_zombie</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -31,6 +31,7 @@ private slots:
     void clientDisconnected();
 
 private:
+    void update_count_down();
     void processRequest(QTcpSocket *socket, const QJsonObject &request);
     void sendGameStateToClient(QTcpSocket *client);
     void broadcastGameState();
@@ -40,9 +41,14 @@ private:
     QJsonArray gameState;
     QMap<qintptr, QTcpSocket *> clientMap;
     int game_field[22][6];
+    QTcpSocket *socket;
     QTimer *mainTimer;        // Main game update timer
     QTimer *sunTimer;         // Timer for generating suns
     QTimer *brainTimer;
+    QMap<QTcpSocket*, QString> clientRoles;
+    int clientRoleCounter;
+    int remainingTime;
+
 };
 
 const int FIELD_WIDTH = 22;

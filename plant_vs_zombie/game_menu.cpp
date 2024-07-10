@@ -59,6 +59,7 @@ void game_menu::on_Start_button_clicked()
 
     connect_to_game_server * ctgs = new connect_to_game_server();
     ctgs->show();
+    ctgs->set_userName(userName);
     connect(ctgs, &game_menu::rejected, this, &game_menu::show_menu);
 }
 

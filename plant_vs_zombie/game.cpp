@@ -19,11 +19,27 @@ game::game(QWidget *parent) :
     connect(socket, &QTcpSocket::connected, this, &game::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
 
-    setupUI();
-
     timer->start(1000);
 
+
+
+
 }
+
+void game::set_ip(QString _ip)
+{
+    ip=_ip;
+}
+
+void game::set_port(int _port)
+{
+    port=_port;
+}
+void game::setSocket(QTcpSocket *sock){
+
+    socket=sock;
+}
+
 
 // Destructor
 game::~game()
@@ -31,12 +47,10 @@ game::~game()
     delete ui;
 }
 
+
+
 // Slot when connected to the server
-void game::onConnected()
-{
-    qDebug()<<ip<<port;
-    socket->connectToHost(ip,port);
-}
+
 
 // Slot when disconnected from the server
 void game::onDisconnected()
@@ -44,18 +58,35 @@ void game::onDisconnected()
     QMessageBox::warning(this, "Disconnected", "Disconnected from server.");
 }
 
+void game::onConnected()
+{
+    qDebug()<<ip<<port;
+    socket->connectToHost(ip,port);
+
+}
+void game::get_role(){
+    QJsonObject request;
+    request["action"] = "get_role";
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->write(data);
+    socket->flush();
+
+
+}
+
 // Update countdown timer
 void game::updateCountdown()
 {
-    if (remainingTime > 0) {
-        remainingTime--;
-        int minutes = remainingTime / 60;
-        int seconds = remainingTime % 60;
-        ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-    } else {
-        timer->stop();
-        QMessageBox::information(this, "Game Over", "The game has ended!");
-    }
+    QJsonObject request;
+    request["action"] ="time";
+    request["remaining"]=remainingTime;
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->write(data);
+    socket->flush();
 }
 
 // Slot for readyRead signal
@@ -76,7 +107,23 @@ void game::onReadyRead()
         gameState = obj_data["game_state"].toArray();
         qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
-    } else if (action == "add_char") {
+
+    }
+    else if (action == "time"){
+        remainingTime=obj_data["remaining"].toInt();
+        if (remainingTime<0){
+            QMessageBox::information(this,"End","the game is ended!");
+        }
+        else {
+            int minutes = remainingTime / 60;
+            int seconds = remainingTime % 60;
+            ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
+        }
+    }
+    else if (action=="get_role"){
+        role=obj_data["role"].toString();
+    }
+    else if (action == "add_char") {
         Characters *ch = nullptr;
         gameState=obj_data["game_state"].toArray();
         switch (obj_data["character"].toInt()) {
@@ -132,23 +179,24 @@ void game::onReadyRead()
 
 
 
-// Process server response
 
 
-// Setter methods
-void game::set_ip(QString _ip)
+
+
+void game::set_userName(QString _user_name)
 {
-    ip = _ip;
-}
-
-void game::set_port(int _port) {
-    port = _port;
+    userName=_user_name;
 }
 
 void game::set_role(QString _role)
 {
-    role = _role;
+    role=_role;
 }
+QString game::get_userName(){
+    return userName;
+}
+
+
 
 // Setup UI elements
 void game::setupUI()
@@ -186,6 +234,14 @@ void game::setupUI()
     connect(ui->twopeashoot_Pushbutton, &QPushButton::clicked, this, &game::on_twopeashoot_Pushbutton_clicked);
     connect(ui->wallnut_Pushbutton, &QPushButton::clicked, this, &game::on_wallnut_Pushbutton_clicked);
     connect(ui->Plum_mine_pushbutton, &QPushButton::clicked, this, &game::on_Plum_mine_pushbutton_clicked);
+
+//    get_role();
+//    if (role=="plant"){
+//        ui->UserName_plant->setText(userName);
+//    }
+//    else{
+//        ui->userName_zombie->setText(userName);
+//    }
 
     selectedCharacterType = None;
 }
@@ -285,7 +341,7 @@ void game::updateGameState(const QJsonArray &gameState)
 
 
         }
-        else if (type=="brain"){
+        else if ( type=="brain"){
             int x= entity["x"].toInt();
             int y= entity["y"].toInt();
             QPixmap brain ("../images/Brain.png");
@@ -411,7 +467,7 @@ void game::onBrainClicked(const QPointF &pos)
         }
     }
 
-    QString x=ui->amount_of_brain->text();
+
     QString currentText = ui->amount_of_brain->text();
     int currentAmount = currentText.toInt();
     currentAmount += 25;
@@ -473,7 +529,7 @@ void game::addCharacterAtPosition(int x, int y)
 
     QJsonObject request;
     request["action"] = "add";
-    
+
     switch (selectedCharacterType) {
         case TallZombie:
 

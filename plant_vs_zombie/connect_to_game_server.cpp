@@ -20,7 +20,10 @@ void connect_to_game_server::on_buttonBox_rejected()
 {
     reject();
 }
-
+void connect_to_game_server::set_userName(QString UserName)
+{
+    user_name = UserName;
+}
 
 void connect_to_game_server::on_buttonBox_accepted()
 {
@@ -39,7 +42,9 @@ void connect_to_game_server::on_buttonBox_accepted()
         game * game_windows = new game();
         game_windows->set_ip(entered_IP);
         game_windows->set_port(Port);
+        game_windows->set_userName(user_name);
         game_windows->onConnected();
+        game_windows->setupUI();
         game_windows->show();
     }
     else
