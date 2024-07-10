@@ -10,20 +10,30 @@ game::game(QWidget *parent) :
     ui(new Ui::game)
 {
     ui->setupUi(this);
-    socket = new QTcpSocket(this);
     timer = new QTimer(this);
     remainingTime = 210;
 
-    connect(timer, &QTimer::timeout, this, &game::updateCountdown);
-    connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
-    connect(socket, &QTcpSocket::connected, this, &game::onConnected);
-    connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
 
-    setupUI();
 
-    timer->start(1000);
+
+
 
 }
+
+void game::set_ip(QString _ip)
+{
+    ip=_ip;
+}
+
+void game::set_port(int _port)
+{
+    port=_port;
+}
+void game::setSocket(QTcpSocket *sock){
+
+    socket=sock;
+}
+
 
 // Destructor
 game::~game()
@@ -31,17 +41,25 @@ game::~game()
     delete ui;
 }
 
+
+
 // Slot when connected to the server
-void game::onConnected()
-{
-    qDebug()<<ip<<port;
-    socket->connectToHost(ip,port);
-}
+
 
 // Slot when disconnected from the server
 void game::onDisconnected()
 {
     QMessageBox::warning(this, "Disconnected", "Disconnected from server.");
+}
+
+void game::onConnected()
+{
+    connect(timer, &QTimer::timeout, this, &game::updateCountdown);
+    timer->start();
+    connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
+    connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
+    setupUI();
+
 }
 
 // Update countdown timer
@@ -76,7 +94,12 @@ void game::onReadyRead()
         gameState = obj_data["game_state"].toArray();
         qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
-    } else if (action == "add_char") {
+
+    }
+    else if (action=="get_role"){
+        role=obj_data["role"].toString();
+    }
+    else if (action == "add_char") {
         Characters *ch = nullptr;
         gameState=obj_data["game_state"].toArray();
         switch (obj_data["character"].toInt()) {
@@ -132,23 +155,24 @@ void game::onReadyRead()
 
 
 
-// Process server response
 
 
-// Setter methods
-void game::set_ip(QString _ip)
+
+
+void game::set_userName(QString _user_name)
 {
-    ip = _ip;
-}
-
-void game::set_port(int _port) {
-    port = _port;
+    userName=_user_name;
 }
 
 void game::set_role(QString _role)
 {
-    role = _role;
+    role=_role;
 }
+QString game::get_userName(){
+    return userName;
+}
+
+
 
 // Setup UI elements
 void game::setupUI()
@@ -186,6 +210,21 @@ void game::setupUI()
     connect(ui->twopeashoot_Pushbutton, &QPushButton::clicked, this, &game::on_twopeashoot_Pushbutton_clicked);
     connect(ui->wallnut_Pushbutton, &QPushButton::clicked, this, &game::on_wallnut_Pushbutton_clicked);
     connect(ui->Plum_mine_pushbutton, &QPushButton::clicked, this, &game::on_Plum_mine_pushbutton_clicked);
+
+//    QJsonObject request;
+//    request["action"] = "get_role";
+
+//    QJsonDocument doc(request);
+//    QByteArray data = doc.toJson();
+//    socket->write(data);
+//    socket->flush();
+
+//    if (role=="plant"){
+//        ui->UserName_plant->setText(userName);
+//    }
+//    else{
+//        ui->userName_zombie->setText(userName);
+//    }
 
     selectedCharacterType = None;
 }
@@ -473,7 +512,7 @@ void game::addCharacterAtPosition(int x, int y)
 
     QJsonObject request;
     request["action"] = "add";
-    
+
     switch (selectedCharacterType) {
         case TallZombie:
 

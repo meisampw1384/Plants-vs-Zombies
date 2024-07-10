@@ -27,15 +27,18 @@ class game : public QMainWindow
 
 public:
     explicit game(QWidget *parent = nullptr);
+
     void set_ip(QString _ip);
-
     void set_port(int _port);
-
+    void set_userName(QString _user_name);
     void set_role(QString _role);
+    void setSocket(QTcpSocket *sock);
+
+    QString get_userName();
     ~game();
 public slots:
-    void onConnected();
     void onDisconnected();
+    void onConnected();
     void updateCountdown();
     void updateGameState(const QJsonArray &_game_state);
     void onReadyRead();
@@ -71,6 +74,7 @@ private:
     QString ip;
     int port;
     QString role;
+    QString userName;
 
     enum CharacterType {
         None,

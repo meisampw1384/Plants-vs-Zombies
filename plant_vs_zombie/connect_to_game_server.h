@@ -15,16 +15,19 @@ class connect_to_game_server : public QDialog
 public:
     explicit connect_to_game_server(QWidget *parent = nullptr);
     ~connect_to_game_server();
-
+    void set_userName(QString _UserName);
+    QString get_userName();
+public slots:
+    void onConnected();
 private slots:
     void on_buttonBox_rejected();
-
     void on_buttonBox_accepted();
 signals:
     void connectionEstablished(QString ip, int port);
 
 private:
     Ui::connect_to_game_server *ui;
+    QString user_name;
     QTcpSocket *socket;
 };
 

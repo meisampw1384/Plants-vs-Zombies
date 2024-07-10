@@ -5,6 +5,7 @@ GameServer::GameServer(QObject *parent)
 {
     // Initialize game state with example entities
     gameState = QJsonArray();
+    clientRoleCounter=0;
     for(int i = 0; i < 22; i++)
     {
         for(int j = 0; j < 6; j++)
@@ -28,32 +29,47 @@ void GameServer::startGameServer()
         qDebug() << "Game server failed to start";
     }
 }
-GameServer server;
+
 
 
 void GameServer::incomingConnection(qintptr socketDescriptor)
 {
-    QTcpSocket *socket = new QTcpSocket(this);
-    if (socket->setSocketDescriptor(socketDescriptor)) {
-        clients.append(socket);
-        clientMap[socketDescriptor] = socket;
-        mainTimer->start(1000); // Update every second
-        sunTimer->start(5000);  // Add sun every 5 seconds
-        brainTimer->start(5000);
-
-
-        connect(socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);
-        connect(socket, &QTcpSocket::disconnected, this, &GameServer::clientDisconnected);
+    QTcpSocket *new_socket = new QTcpSocket(this);
+    if (new_socket->setSocketDescriptor(socketDescriptor)) {
+        clients.append(new_socket);
         qDebug() << "New client connected with descriptor:" << socketDescriptor;
+
+        // Assign roles to clients
+        if (clientRoleCounter == 0) {
+            clientRoles[new_socket] = "zombie";
+            qDebug() << "Client assigned to control zombies.";
+        } else if (clientRoleCounter == 1) {
+            clientRoles[new_socket] = "plant";
+            qDebug() << "Client assigned to control plants.";
+        }
+
+        clientRoleCounter++;
+
+        if (clients.size() == 2) {
+            mainTimer->start(1000); // Update every second
+            sunTimer->start(5000);  // Add sun every 5 seconds
+            brainTimer->start(5000); // Add brain every 5 seconds
+        }
+
+        connect(new_socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);
+        connect(new_socket, &QTcpSocket::disconnected, this, &GameServer::clientDisconnected);
+        connect(new_socket, &QTcpSocket::connected, this, [=]() {
+            qDebug() << "Socket connected with descriptor:" << socketDescriptor;
+        });
     } else {
-        qDebug() << "Failed to set socket descriptor:" << socket->errorString();
-        delete socket;
+        qDebug() << "Failed to set socket descriptor:" << new_socket->errorString();
+        delete new_socket;
     }
 }
 
 void GameServer::readyRead()
 {
-    QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
+    socket = qobject_cast<QTcpSocket *>(sender());
     if (!socket) return;
 
     QByteArray data = socket->readAll();
@@ -78,7 +94,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
         QJsonObject entity = request["entity"].toObject();
         doubleValue = entity["id"].toDouble();
         int ID = static_cast<int>(doubleValue);
-
+    if ((entity["type"]=="plant"&&clientRoles[socket]=="plant") || (entity["type"]=="zombie"&&clientRoles[socket]=="zombie")){
         QJsonObject newEntity = request["entity"].toObject();
         gameState.append(newEntity);
         broadcastGameState();
@@ -99,13 +115,15 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
             socket->flush();
         }
     }
+    }
+
     else if (action == "delete")
     {
         QString type = request["type"].toString();
         int x = request["x"].toInt();
         int y = request["y"].toInt();
 
-        if (type == "sun" || type == "brain")
+        if ((clientRoles[socket]=="plant" && type == "sun") || (clientRoles[socket]=="zombie" && type == "brain"))
         {
             // Find and remove the entity from gameState
             for (int i = 0; i < gameState.size(); ++i) {
@@ -114,7 +132,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
                     entity["x"].toInt() == x &&
                     entity["y"].toInt() == y) {
                     qDebug()<<"deleted"<<entity;
-                    gameState.removeAt(i);
+                    gameState.removeAt(i--);
                     qDebug() << "Removed" << type << "at" << x << "," << y;
                     broadcastGameState();
                     break;
@@ -123,6 +141,23 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
             }
         }
     }
+    else if (action=="get_role"){
+        QString role;
+        if (clientRoles[socket]=="plant"){
+            role="plant";
+        }
+        else {
+            role="zombie";
+        }
+        QJsonObject respond;
+        respond["action"]="get_role";
+        respond["role"]=role;
+        qDebug()<<"get_role";
+        QJsonDocument responseDoc(respond);
+        QByteArray responseData = responseDoc.toJson();
+        socket->write(responseData);
+        socket->flush();
+    }
     else {
         qDebug() << "Unknown action received:" << action;
     }
@@ -130,17 +165,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     qDebug() << "processRequest completed for socket:" << socket;
 }
 
-void GameServer::sendGameStateToClient(QTcpSocket *socket)
-{
-    QJsonObject gameStateUpdate;
-    gameStateUpdate["action"] = "update";
-    gameStateUpdate["game_state"] = gameState;
 
-    QJsonDocument responseDoc(gameStateUpdate);
-    QByteArray responseData = responseDoc.toJson();
-    socket->write(responseData);
-    socket->flush();
-}
 
 void GameServer::broadcastGameState()
 {
@@ -163,9 +188,15 @@ void GameServer::clientDisconnected()
     if (!socket) return;
 
     clients.removeOne(socket);
-    clientMap.remove(socket->socketDescriptor());
+    clientRoles.remove(socket);
     socket->deleteLater();
     qDebug() << "Client disconnected";
+    clientRoleCounter--;
+
+
+    gameState = QJsonArray();
+    std::fill(&game_field[0][0], &game_field[0][0] + sizeof(game_field) / sizeof(int), 0);
+
 }
 
 void GameServer::updateGameState()
@@ -409,7 +440,8 @@ void GameServer::add_sun()
     sun["value"] = 25;
     sun["timestamp"] = QDateTime::currentMSecsSinceEpoch();
 
-    gameState.append(sun);
+    if (clientRoles[socket]=="plant")
+        gameState.append(sun);
 
     broadcastGameState();
 }
@@ -425,15 +457,19 @@ void GameServer::add_brain()
     brain["value"] = 25;
     brain["timestamp"] = QDateTime::currentMSecsSinceEpoch();
 
-    gameState.append(brain);
+    if (clientRoles[socket]=="zombie")
+        gameState.append(brain);
 
     broadcastGameState();
 }
 
 
+
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+    GameServer server;
     server.startGameServer();
 
     // Periodically update game state

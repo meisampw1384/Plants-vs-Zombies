@@ -40,9 +40,13 @@ private:
     QJsonArray gameState;
     QMap<qintptr, QTcpSocket *> clientMap;
     int game_field[22][6];
+    QTcpSocket *socket;
     QTimer *mainTimer;        // Main game update timer
     QTimer *sunTimer;         // Timer for generating suns
     QTimer *brainTimer;
+    QMap<QTcpSocket*, QString> clientRoles;
+    int clientRoleCounter;
+
 };
 
 const int FIELD_WIDTH = 22;
