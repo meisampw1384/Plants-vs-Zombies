@@ -53,7 +53,6 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
 
 void GameServer::readyRead()
 {
-    qDebug() << "data cathced";
     QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
     if (!socket) return;
 
@@ -66,10 +65,7 @@ void GameServer::readyRead()
 
 void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
 {
-    qDebug() << "processRequest called with socket:" << socket << "and request:" << request;
-
     QString action = request["action"].toString();
-    qDebug() << "Action parsed from request:" << action;
 
     if (action == "add")
     {
@@ -79,27 +75,24 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
         doubleValue = request["y"].toDouble();
         int y = static_cast<int>(doubleValue);
 
-        doubleValue = request["character"].toDouble();
-        int character = static_cast<int>(doubleValue);
+        QJsonObject entity = request["entity"].toObject();
+        doubleValue = entity["id"].toDouble();
+        int ID = static_cast<int>(doubleValue);
 
-        qDebug() << "The add action called";
         QJsonObject newEntity = request["entity"].toObject();
-        qDebug() << "New entity parsed from request:" << newEntity;
         gameState.append(newEntity);
-        qDebug() << "New entity added to game state, broadcasting updated game state";
         broadcastGameState();
 
-        qDebug() << "before change : " << game_field[x][y];
         if(game_field[request["x"].toInt()][request["y"].toInt()] == 0)
         {
-            game_field[x][y] = character;
+            game_field[x][y] = ID;
+            qDebug() << "ID in game field : " << game_field[x][y];
             QJsonObject gameStateUpdate;
             gameStateUpdate["action"] = "add_char";
             gameStateUpdate["character"] = request["character"];
             gameStateUpdate["x"] = request["x"];
             gameStateUpdate["y"] = request["y"];
             gameStateUpdate["game_state"]=gameState;
-            qDebug() << "send data";
             QJsonDocument responseDoc(gameStateUpdate);
             QByteArray responseData = responseDoc.toJson();
             socket->write(responseData);
@@ -148,7 +141,7 @@ void GameServer::sendGameStateToClient(QTcpSocket *socket)
     socket->write(responseData);
     socket->flush();
 }
-//broadcast of the  update of the map
+
 void GameServer::broadcastGameState()
 {
     QJsonObject gameStateUpdate;
@@ -182,17 +175,217 @@ void GameServer::updateGameState()
     for (int i = 0; i < gameState.size(); ++i) {
         QJsonObject entity = gameState[i].toObject();
 
-        if (entity["type"].toString() == "zombie") {
+        if (entity["type"].toString() == "zombie")
+        {
+            double doubleValue = entity["x"].toDouble();
+            int x = static_cast<int>(doubleValue);
+
+            doubleValue = entity["y"].toDouble();
+            int y = static_cast<int>(doubleValue);
+
+            if(entity["health"].toInt() < 0)
+            {
+                gameState.removeAt(i);
+                game_field[x][y] = 0;
+                continue;
+            }
+
             qint64 lastMove = entity["last_move"].toVariant().toLongLong();
             int moveDelay = entity["move_delay"].toInt();
 
-            if (currentTime - lastMove >= moveDelay) {
-                // Update zombie position
-                entity["x"] = entity["x"].toInt() - 1;
-                entity["last_move"] = currentTime;
+            if(entity["x"].toInt() - 1 != 1)
+            {
+                if(game_field[x - 1][y] == 0)
+                {
+                    if (currentTime - lastMove >= moveDelay){
+                        // Update zombie position
+                        entity["x"] = entity["x"].toInt() - 1;
+                        entity["last_move"] = currentTime;
 
-                // Update the game state array
-                gameState[i] = entity;
+                        doubleValue = entity["id"].toDouble();
+                        int ID = static_cast<int>(doubleValue);
+
+                        game_field[x][y] = 0;
+                        game_field[x - 1][y] = ID;
+
+                        // Update the game state array
+                        gameState[i] = entity;
+                    }
+                }
+                else
+                {
+                    if (currentTime - lastMove >= moveDelay)
+                    {
+                        for (int j = 0; j < gameState.size(); ++j)
+                        {
+                            QJsonObject find = gameState[j].toObject();
+
+                            double doubleValue = find["id"].toDouble();
+                            int check_id = static_cast<int>(doubleValue);
+
+                            if(check_id == game_field[x - 1][y] and find["type"] == "plant")
+                            {
+                                find["health"] = find["health"].toInt() - entity["damage"].toInt();
+                                gameState[j] = find;
+                                break;
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+        else if(entity["type"].toString() == "plant")
+        {
+            double doubleValue = entity["x"].toDouble();
+            int x = static_cast<int>(doubleValue);
+
+            doubleValue = entity["y"].toDouble();
+            int y = static_cast<int>(doubleValue);
+
+            doubleValue = entity["id"].toDouble();
+            int ID = static_cast<int>(doubleValue);
+
+            if(entity["health"].toInt() < 0)
+            {
+                gameState.removeAt(i);
+                game_field[x][y] = 0;
+                continue;
+            }
+
+            qint64 lastMove = entity["last_move"].toVariant().toLongLong();
+            int firing_rate = entity["firing_rate"].toInt();
+            if (currentTime - lastMove >= firing_rate){
+                if(entity["subtype"] == "boomerang")
+                {
+                    for(int z = 0; z < FIELD_WIDTH; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 15;
+                                    gameState[j] = find;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "jalpeno")
+                {
+                    for(int z = 0; z < FIELD_WIDTH; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 300;
+                                    gameState[j] = find;
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                    gameState.removeAt(i);
+                    game_field[x][y] = 0;
+                }
+                else if(entity["subtype"] == "peashooter")
+                {
+                    int flag = 1;
+                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 15;
+                                    gameState[j] = find;
+                                    flag = 0;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "twopeashooter")
+                {
+                    int flag = 1;
+                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    {
+                        if(game_field[z][y] != 0 and game_field[z][y] != ID)
+                        {
+                            for (int j = 0; j < gameState.size(); ++j)
+                            {
+                                QJsonObject find = gameState[j].toObject();
+
+                                double doubleValue = find["id"].toDouble();
+                                int check_id = static_cast<int>(doubleValue);
+
+                                if(check_id == game_field[z][y] and find["type"] == "zombie")
+                                {
+                                    find["health"] = find["health"].toInt() - 40;
+                                    gameState[j] = find;
+                                    flag = 0;
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                else if(entity["subtype"] == "plummine")
+                {
+                    qDebug() << "plummine : ";
+
+                    for (int j = 0; j < gameState.size(); ++j)
+                    {
+                        QJsonObject find = gameState[j].toObject();
+
+                        double doubleValue = find["x"].toDouble();
+                        int z_x = static_cast<int>(doubleValue);
+
+                        doubleValue = find["y"].toDouble();
+                        int z_y = static_cast<int>(doubleValue);
+
+                        if((z_y <= y + 1 and z_y >= y - 1) and (z_x <= x + 1 and z_x >= x - 1) and find["type"] == "zombie")
+                        {
+                            find["health"] = find["health"].toInt() - 200;
+                            gameState[j] = find;
+                        }
+                    }
+                    gameState.removeAt(i);
+                    game_field[x][y] = 0;
+                }
             }
         }
     }
@@ -216,7 +409,6 @@ void GameServer::add_sun()
     sun["value"] = 25;
     sun["timestamp"] = QDateTime::currentMSecsSinceEpoch();
 
-    // Add the sun entity to the game state
     gameState.append(sun);
 
     broadcastGameState();
@@ -232,7 +424,6 @@ void GameServer::add_brain()
     brain["y"] = y;
     brain["value"] = 25;
     brain["timestamp"] = QDateTime::currentMSecsSinceEpoch();
-
 
     gameState.append(brain);
 
