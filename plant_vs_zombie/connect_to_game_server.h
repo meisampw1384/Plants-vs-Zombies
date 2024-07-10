@@ -18,7 +18,7 @@ public:
     void set_userName(QString _UserName);
     QString get_userName();
 public slots:
-    void onConnected();
+    //void onConnected();
 private slots:
     void on_buttonBox_rejected();
     void on_buttonBox_accepted();

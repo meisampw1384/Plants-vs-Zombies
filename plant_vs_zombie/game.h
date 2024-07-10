@@ -29,10 +29,12 @@ public:
     explicit game(QWidget *parent = nullptr);
 
     void set_ip(QString _ip);
+    void get_role();
     void set_port(int _port);
     void set_userName(QString _user_name);
     void set_role(QString _role);
     void setSocket(QTcpSocket *sock);
+    void setupUI();
 
     QString get_userName();
     ~game();
@@ -95,7 +97,6 @@ private:
     CharacterType selectedCharacterType;
 
     void add_character(Characters *ch);
-    void setupUI();
     void addCharacterAtPosition(int x, int y);
 };
 

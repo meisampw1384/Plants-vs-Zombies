@@ -31,6 +31,7 @@ private slots:
     void clientDisconnected();
 
 private:
+    void update_count_down();
     void processRequest(QTcpSocket *socket, const QJsonObject &request);
     void sendGameStateToClient(QTcpSocket *client);
     void broadcastGameState();
@@ -46,6 +47,7 @@ private:
     QTimer *brainTimer;
     QMap<QTcpSocket*, QString> clientRoles;
     int clientRoleCounter;
+    int remainingTime;
 
 };
 

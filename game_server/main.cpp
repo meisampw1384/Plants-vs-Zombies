@@ -19,6 +19,7 @@ GameServer::GameServer(QObject *parent)
     connect(mainTimer, &QTimer::timeout, this, &GameServer::updateGameState);
     connect(sunTimer, &QTimer::timeout, this, &GameServer::add_sun);
     connect(brainTimer, &QTimer::timeout, this, &GameServer::add_brain);
+    remainingTime=0;
 }
 
 void GameServer::startGameServer()
@@ -117,6 +118,24 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     }
     }
 
+    else if (action == "time"){
+
+            remainingTime = (request["remaining"].toInt());
+            remainingTime--;
+            QJsonObject response;
+            response["remaining"]=remainingTime;
+            request["action"]="time";
+
+            QJsonDocument responseDoc(response);
+            QByteArray responseData = responseDoc.toJson();
+            for (QTcpSocket *client : clients) {
+                client->write(responseData);
+                client->flush();
+
+        }
+
+    }
+
     else if (action == "delete")
     {
         QString type = request["type"].toString();
@@ -143,20 +162,17 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     }
     else if (action=="get_role"){
         QString role;
-        if (clientRoles[socket]=="plant"){
-            role="plant";
-        }
-        else {
-            role="zombie";
-        }
+        role=clientRoles[socket];
         QJsonObject respond;
         respond["action"]="get_role";
         respond["role"]=role;
         qDebug()<<"get_role";
         QJsonDocument responseDoc(respond);
         QByteArray responseData = responseDoc.toJson();
-        socket->write(responseData);
-        socket->flush();
+        for (QTcpSocket *client : clients){
+            client->write(responseData);
+            client->flush();
+        }
     }
     else {
         qDebug() << "Unknown action received:" << action;
@@ -462,6 +478,7 @@ void GameServer::add_brain()
 
     broadcastGameState();
 }
+
 
 
 

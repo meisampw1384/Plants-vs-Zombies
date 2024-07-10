@@ -10,10 +10,16 @@ game::game(QWidget *parent) :
     ui(new Ui::game)
 {
     ui->setupUi(this);
+    socket = new QTcpSocket(this);
     timer = new QTimer(this);
     remainingTime = 210;
 
+    connect(timer, &QTimer::timeout, this, &game::updateCountdown);
+    connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
+    connect(socket, &QTcpSocket::connected, this, &game::onConnected);
+    connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
 
+    timer->start(1000);
 
 
 
@@ -54,26 +60,33 @@ void game::onDisconnected()
 
 void game::onConnected()
 {
-    connect(timer, &QTimer::timeout, this, &game::updateCountdown);
-    timer->start();
-    connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
-    connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
-    setupUI();
+    qDebug()<<ip<<port;
+    socket->connectToHost(ip,port);
+
+}
+void game::get_role(){
+    QJsonObject request;
+    request["action"] = "get_role";
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->write(data);
+    socket->flush();
+
 
 }
 
 // Update countdown timer
 void game::updateCountdown()
 {
-    if (remainingTime > 0) {
-        remainingTime--;
-        int minutes = remainingTime / 60;
-        int seconds = remainingTime % 60;
-        ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-    } else {
-        timer->stop();
-        QMessageBox::information(this, "Game Over", "The game has ended!");
-    }
+    QJsonObject request;
+    request["action"] ="time";
+    request["remaining"]=remainingTime;
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+    socket->write(data);
+    socket->flush();
 }
 
 // Slot for readyRead signal
@@ -95,6 +108,17 @@ void game::onReadyRead()
         qDebug() << "Received update action. Updating game state with:" << gameState;
         updateGameState(gameState);
 
+    }
+    else if (action == "time"){
+        remainingTime=obj_data["remaining"].toInt();
+        if (remainingTime<0){
+            QMessageBox::information(this,"End","the game is ended!");
+        }
+        else {
+            int minutes = remainingTime / 60;
+            int seconds = remainingTime % 60;
+            ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
+        }
     }
     else if (action=="get_role"){
         role=obj_data["role"].toString();
@@ -211,14 +235,7 @@ void game::setupUI()
     connect(ui->wallnut_Pushbutton, &QPushButton::clicked, this, &game::on_wallnut_Pushbutton_clicked);
     connect(ui->Plum_mine_pushbutton, &QPushButton::clicked, this, &game::on_Plum_mine_pushbutton_clicked);
 
-//    QJsonObject request;
-//    request["action"] = "get_role";
-
-//    QJsonDocument doc(request);
-//    QByteArray data = doc.toJson();
-//    socket->write(data);
-//    socket->flush();
-
+//    get_role();
 //    if (role=="plant"){
 //        ui->UserName_plant->setText(userName);
 //    }
@@ -324,7 +341,7 @@ void game::updateGameState(const QJsonArray &gameState)
 
 
         }
-        else if (type=="brain"){
+        else if ( type=="brain"){
             int x= entity["x"].toInt();
             int y= entity["y"].toInt();
             QPixmap brain ("../images/Brain.png");
@@ -450,7 +467,7 @@ void game::onBrainClicked(const QPointF &pos)
         }
     }
 
-    QString x=ui->amount_of_brain->text();
+
     QString currentText = ui->amount_of_brain->text();
     int currentAmount = currentText.toInt();
     currentAmount += 25;
