@@ -1,4 +1,5 @@
 #include "main.h"
+#include <windows.h>
 
 GameServer::GameServer(QObject *parent)
     : QTcpServer(parent)
@@ -211,7 +212,6 @@ void GameServer::broadcastGameState()
     while(bullets_COOR.count()) {
         bullets_COOR.pop_back();
     }
-
 }
 
 
@@ -552,6 +552,7 @@ void GameServer::add_brain()
 void GameServer::end_of_game_broadcast(){
     if (round_of_game == 2 && (remainingTime==0 || flag_zombie_reach))
     {
+
         // Determine winner and update win counters
         QJsonObject gameStateUpdate;
         if (flag_zombie_reach)
@@ -589,7 +590,17 @@ void GameServer::end_of_game_broadcast(){
             client->write(responseData);
             client->flush();
         }
-
+        clients.clear();
+        winner.clear();
+        for(int i = 0; i < gameState.size(); i++)
+        {
+            gameState.pop_back();
+        }
+        for(int i = 0; i < bullets_COOR.size(); i++)
+        {
+            bullets_COOR.pop_back();
+        }
+        clientMap.clear();
     }
 
     else if (round_of_game<2 && (remainingTime == 0 || flag_zombie_reach)){
@@ -646,9 +657,7 @@ void GameServer::end_of_game_broadcast(){
         brainTimer->stop();
         updateTimer->stop();
 
-        mtx.lock();
         send_rule();
-        mtx.unlock();
         broadcastGameState();
         TIME_broadcaster();
 
@@ -669,6 +678,8 @@ void GameServer::end_of_game_broadcast(){
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+
     GameServer server;
     server.startGameServer();
 

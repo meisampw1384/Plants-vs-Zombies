@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QJsonDocument>
+#include <menu.h>
 
 // Constructor
 game::game(QWidget *parent) :
@@ -47,6 +48,9 @@ game::~game()
 void game::onDisconnected()
 {
     QMessageBox::warning(this, "Disconnected", "Disconnected from server.");
+    this->close();
+    menu * w = new menu();
+    w->show();
 }
 
 void game::onConnected()
@@ -88,8 +92,9 @@ void game::onReadyRead()
     else if (action == "end_game"){
         QMessageBox::information(this,"End","End of the game!");
 
-
         this->close();
+        menu * w = new menu();
+        w->show();
     }
     else if (action=="get_role")
     {
