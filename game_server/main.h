@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QMap>
+#include <mutex>
 
 class GameServer : public QTcpServer
 {
@@ -41,6 +42,7 @@ private:
 
 
     QList<QTcpSocket *> clients;
+    QList<QTcpSocket *> winner;
     QJsonArray gameState;
     QJsonArray bullets_COOR;
     QMap<qintptr, QTcpSocket *> clientMap;
@@ -54,10 +56,8 @@ private:
     int clientRoleCounter;
     int remainingTime;
     int round_of_game;
-    int win_plant;
-    int win_zombie;
     int flag_zombie_reach;
-
+    std::mutex mtx;
 
 };
 

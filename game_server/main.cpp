@@ -15,8 +15,6 @@ GameServer::GameServer(QObject *parent)
         }
     }
     round_of_game=1;
-    win_plant=0;
-    win_zombie=0;
     mainTimer=new QTimer(this);
     sunTimer=new QTimer(this);
     brainTimer=new QTimer(this);
@@ -101,21 +99,14 @@ void GameServer::send_rule()
     QString role;
     for (QTcpSocket *client : clients)
     {
-        role=clientRoles[client];
+        role = clientRoles[client];
         QJsonObject respond;
         respond["action"]="get_role";
         respond["role"]=role;
-        if (role=="plant"){
-
-            respond["round"]=round_of_game;
-        }
-        else if (role=="zombie"){
-
-            respond["round"]=round_of_game;
-        }
+        respond["round"]=round_of_game;
         QJsonDocument responseDoc(respond);
         QByteArray responseData = responseDoc.toJson();
-
+        qDebug() << "change rules";
         client->write(responseData);
         client->flush();
     }
@@ -241,7 +232,6 @@ void GameServer::clientDisconnected()
     std::fill(&game_field[0][0], &game_field[0][0] + sizeof(game_field) / sizeof(int), 0);
     round_of_game = 1;
     remainingTime = 210;
-
 
 
     // Stop all timers
@@ -572,7 +562,8 @@ void GameServer::end_of_game_broadcast(){
             {
                 if (clientRoles[client] == "zombie")
                 {
-                    win_zombie++;
+                    winner.append(client);
+                    break;
                 }
             }
         }
@@ -583,7 +574,8 @@ void GameServer::end_of_game_broadcast(){
             {
                 if (clientRoles[client] == "plant")
                 {
-                    win_plant++;
+                    winner.append(client);
+                    break;
                 }
             }
         }
@@ -600,14 +592,28 @@ void GameServer::end_of_game_broadcast(){
 
     }
 
-    else if (round_of_game<2 && (remainingTime==0 || flag_zombie_reach)){
+    else if (round_of_game<2 && (remainingTime == 0 || flag_zombie_reach)){
 
         if (remainingTime==0){
-            win_plant+=1;
+            for (QTcpSocket *client : clients)
+            {
+                if (clientRoles[client] == "plant")
+                {
+                    winner.append(client);
+                    break;
+                }
+            }
             flag_zombie_reach=0;
         }
         else if (flag_zombie_reach){
-            win_zombie+=1;
+            for (QTcpSocket *client : clients)
+            {
+                if (clientRoles[client] == "zombie")
+                {
+                    winner.append(client);
+                    break;
+                }
+            }
             flag_zombie_reach=0;
         }
 
@@ -640,7 +646,9 @@ void GameServer::end_of_game_broadcast(){
         brainTimer->stop();
         updateTimer->stop();
 
+        mtx.lock();
         send_rule();
+        mtx.unlock();
         broadcastGameState();
         TIME_broadcaster();
 
@@ -653,7 +661,6 @@ void GameServer::end_of_game_broadcast(){
 
 
     }
-
 
 }
 

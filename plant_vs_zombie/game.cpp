@@ -96,17 +96,18 @@ void game::onReadyRead()
         role=obj_data["role"].toString();
 
 
-        if ((role=="plant" && round)){
-            ui->userName_plant->setText(userName);
+        if ((role=="plant")){
+            ui->userName_plant->setText("plant");
+            ui->UserName_zombie->setText("");
 
         }
-        else if ((role == "zombie" )){
-            ui->UserName_zombie->setText(userName);
+        else if ((role == "zombie")){
+            ui->UserName_zombie->setText("zombie");
+            ui->userName_plant->setText("");
 
         }
-
-
     }
+
     else if (action == "add_char") {
         Characters *ch = nullptr;
         gameState=obj_data["game_state"].toArray();
