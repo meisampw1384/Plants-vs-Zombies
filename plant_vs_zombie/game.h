@@ -8,7 +8,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
-
+#include <QGraphicsView>
+#include <QFile>
 #include "zombies.h"
 #include "plants.h"
 #include "characters.h"
@@ -16,6 +17,10 @@
 #include "zombies.h"
 #include "customgraphicscene.h"
 #include <QGraphicsPixmapItem>
+#include <QGraphicsEllipseItem>
+#include <QPropertyAnimation>
+#include <QVBoxLayout>
+
 
 namespace Ui {
 class game;
@@ -42,7 +47,7 @@ public slots:
     void onDisconnected();
     void onConnected();
     void updateCountdown();
-    void updateGameState(const QJsonArray &_game_state);
+    void updateGameState(const QJsonArray &gameState, const QJsonArray &bullets);
     void onReadyRead();
 
 private slots:
@@ -71,6 +76,7 @@ private:
     QTimer *timer;
     QTimer *moveTimer;
     QJsonArray gameState;
+    QJsonArray bullets;
     CustomGraphicsScene *scene;
     int remainingTime;
     QString ip;

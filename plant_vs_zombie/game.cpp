@@ -11,19 +11,10 @@ game::game(QWidget *parent) :
 {
     ui->setupUi(this);
     socket = new QTcpSocket(this);
-    timer = new QTimer(this);
-    remainingTime = 210;
 
-    connect(timer, &QTimer::timeout, this, &game::updateCountdown);
     connect(socket, &QTcpSocket::readyRead, this, &game::onReadyRead);
     connect(socket, &QTcpSocket::connected, this, &game::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &game::onDisconnected);
-
-    timer->start(1000);
-
-
-
-
 }
 
 void game::set_ip(QString _ip)
@@ -76,7 +67,6 @@ void game::get_role(){
 
 }
 
-// Update countdown timer
 void game::updateCountdown()
 {
     QJsonObject request;
@@ -95,6 +85,7 @@ void game::onReadyRead()
     QByteArray data = socket->readAll();
     QJsonDocument doc = QJsonDocument::fromJson(data);
 
+
     if (doc.isNull()) {
         qDebug() << "Failed to parse JSON document from data:" << data;
         return;
@@ -105,8 +96,8 @@ void game::onReadyRead()
 
     if (action == "update") {
         gameState = obj_data["game_state"].toArray();
-        qDebug() << "Received update action. Updating game state with:" << gameState;
-        updateGameState(gameState);
+        bullets = obj_data["bullets"].toArray();
+        updateGameState(gameState, bullets);
 
     }
     else if (action == "time"){
@@ -247,8 +238,28 @@ void game::setupUI()
 }
 
 //that is update zombies after movement
-void game::updateGameState(const QJsonArray &gameState)
+void game::updateGameState(const QJsonArray &gameState, const QJsonArray &bullets)
 {
+
+//    for (const QJsonValue &value : bullets)
+//    {
+//        QJsonObject obj = value.toObject();
+//        qreal startX = obj["s_x"].toDouble();
+//        qreal startY = obj["s_y"].toDouble();
+//        qreal endX = obj["e_x"].toDouble();
+//        qreal endY = obj["e_y"].toDouble();
+
+//        QGraphicsEllipseItem *bullet = new QGraphicsEllipseItem(0, 0, 10, 10);
+//        bullet->setBrush(Qt::red);
+//        bullet->setPos(startX, startY);
+//        scene->addItem(bullet);
+
+//        QPropertyAnimation *animation = new QPropertyAnimation(this);
+//        animation->setDuration(300);
+//        animation->setStartValue(QPointF(startX, startY));
+//        animation->setEndValue(QPointF(endX, endY));
+//        animation->start(QAbstractAnimation::DeleteWhenStopped);
+//    }
 
     QList<QGraphicsItem *> items = scene->items();
     for (QGraphicsItem *item : items) {

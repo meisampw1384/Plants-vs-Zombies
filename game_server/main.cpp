@@ -5,6 +5,7 @@ GameServer::GameServer(QObject *parent)
 {
     // Initialize game state with example entities
     gameState = QJsonArray();
+    bullets_COOR = QJsonArray();
     clientRoleCounter=0;
     for(int i = 0; i < 22; i++)
     {
@@ -16,10 +17,26 @@ GameServer::GameServer(QObject *parent)
     mainTimer=new QTimer(this);
     sunTimer=new QTimer(this);
     brainTimer=new QTimer(this);
-    connect(mainTimer, &QTimer::timeout, this, &GameServer::updateGameState);
+    connect(mainTimer, &QTimer::timeout, this, &GameServer::TIME_broadcaster);
     connect(sunTimer, &QTimer::timeout, this, &GameServer::add_sun);
     connect(brainTimer, &QTimer::timeout, this, &GameServer::add_brain);
-    remainingTime=0;
+    remainingTime = 210;
+}
+
+void GameServer::TIME_broadcaster()
+{
+    remainingTime --;
+    QJsonObject request;
+    request["action"] ="time";
+    request["remaining"]=remainingTime;
+
+    QJsonDocument doc(request);
+    QByteArray data = doc.toJson();
+
+    for (QTcpSocket *client : clients) {
+        client->write(data);
+        client->flush();
+    }
 }
 
 void GameServer::startGameServer()
@@ -118,24 +135,6 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
     }
     }
 
-    else if (action == "time"){
-
-            remainingTime = (request["remaining"].toInt());
-            remainingTime--;
-            QJsonObject response;
-            response["remaining"]=remainingTime;
-            request["action"]="time";
-
-            QJsonDocument responseDoc(response);
-            QByteArray responseData = responseDoc.toJson();
-            for (QTcpSocket *client : clients) {
-                client->write(responseData);
-                client->flush();
-
-        }
-
-    }
-
     else if (action == "delete")
     {
         QString type = request["type"].toString();
@@ -188,6 +187,7 @@ void GameServer::broadcastGameState()
     QJsonObject gameStateUpdate;
     gameStateUpdate["action"] = "update";
     gameStateUpdate["game_state"] = gameState;
+    gameStateUpdate["bullets"] = bullets_COOR;
 
     QJsonDocument responseDoc(gameStateUpdate);
     QByteArray responseData = responseDoc.toJson();
@@ -286,6 +286,8 @@ void GameServer::updateGameState()
 
         else if(entity["type"].toString() == "plant")
         {
+            QJsonObject bullet;
+
             double doubleValue = entity["x"].toDouble();
             int x = static_cast<int>(doubleValue);
 
@@ -307,7 +309,8 @@ void GameServer::updateGameState()
             if (currentTime - lastMove >= firing_rate){
                 if(entity["subtype"] == "boomerang")
                 {
-                    for(int z = 0; z < FIELD_WIDTH; z++)
+
+                    for(int z = x; z < FIELD_WIDTH; z++)
                     {
                         if(game_field[z][y] != 0 and game_field[z][y] != ID)
                         {
@@ -329,6 +332,12 @@ void GameServer::updateGameState()
 
                         }
                     }
+
+                    bullet["s_x"] = x;
+                    bullet["s_y"] = y;
+                    bullet["e_x"] = FIELD_WIDTH;
+                    bullet["e_y"] = FIELD_HEIGHT;
+                    bullets_COOR.append(bullet);
                 }
                 else if(entity["subtype"] == "jalpeno")
                 {
@@ -358,6 +367,10 @@ void GameServer::updateGameState()
                 }
                 else if(entity["subtype"] == "peashooter")
                 {
+                    QJsonObject bullet;
+                    bullet["s_x"] = x;
+                    bullet["s_y"] = y;
+
                     int flag = 1;
                     for(int z = 0; z < FIELD_WIDTH and flag; z++)
                     {
@@ -375,7 +388,19 @@ void GameServer::updateGameState()
                                     find["health"] = find["health"].toInt() - 15;
                                     gameState[j] = find;
                                     flag = 0;
+
+                                    double doubleValue = find["x"].toDouble();
+                                    int fx = static_cast<int>(doubleValue);
+
+                                    doubleValue = find["y"].toDouble();
+                                    int fy = static_cast<int>(doubleValue);
+
+                                    bullet["e_x"] = fx;
+                                    bullet["e_y"] = fy;
+                                    bullets_COOR.append(bullet);
+
                                     break;
+
                                 }
 
                             }
@@ -385,6 +410,8 @@ void GameServer::updateGameState()
                 }
                 else if(entity["subtype"] == "twopeashooter")
                 {
+                    bullet["s_x"] = x;
+                    bullet["s_y"] = y;
                     int flag = 1;
                     for(int z = 0; z < FIELD_WIDTH and flag; z++)
                     {
@@ -402,6 +429,17 @@ void GameServer::updateGameState()
                                     find["health"] = find["health"].toInt() - 40;
                                     gameState[j] = find;
                                     flag = 0;
+
+                                    double doubleValue = find["x"].toDouble();
+                                    int fx = static_cast<int>(doubleValue);
+
+                                    doubleValue = find["y"].toDouble();
+                                    int fy = static_cast<int>(doubleValue);
+
+                                    bullet["e_x"] = fx;
+                                    bullet["e_y"] = fy;
+                                    bullets_COOR.append(bullet);
+
                                     break;
                                 }
 

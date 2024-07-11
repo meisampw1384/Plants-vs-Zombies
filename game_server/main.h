@@ -22,6 +22,7 @@ public:
     void updateGameState();
     void add_sun();
     void add_brain();
+    void TIME_broadcaster();
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
@@ -39,6 +40,7 @@ private:
 
     QList<QTcpSocket *> clients;
     QJsonArray gameState;
+    QJsonArray bullets_COOR;
     QMap<qintptr, QTcpSocket *> clientMap;
     int game_field[22][6];
     QTcpSocket *socket;
@@ -48,6 +50,7 @@ private:
     QMap<QTcpSocket*, QString> clientRoles;
     int clientRoleCounter;
     int remainingTime;
+
 
 };
 
