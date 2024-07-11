@@ -17,9 +17,12 @@ GameServer::GameServer(QObject *parent)
     mainTimer=new QTimer(this);
     sunTimer=new QTimer(this);
     brainTimer=new QTimer(this);
+    updateTimer = new QTimer(this);
+
     connect(mainTimer, &QTimer::timeout, this, &GameServer::TIME_broadcaster);
     connect(sunTimer, &QTimer::timeout, this, &GameServer::add_sun);
     connect(brainTimer, &QTimer::timeout, this, &GameServer::add_brain);
+    connect(updateTimer, &QTimer::timeout, this, &GameServer::updateGameState);
     remainingTime = 210;
 }
 
@@ -72,6 +75,7 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
             mainTimer->start(1000); // Update every second
             sunTimer->start(5000);  // Add sun every 5 seconds
             brainTimer->start(5000); // Add brain every 5 seconds
+            updateTimer->start(1000);
         }
 
         connect(new_socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);

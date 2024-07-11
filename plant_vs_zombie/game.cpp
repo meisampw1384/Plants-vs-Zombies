@@ -241,25 +241,34 @@ void game::setupUI()
 void game::updateGameState(const QJsonArray &gameState, const QJsonArray &bullets)
 {
 
-//    for (const QJsonValue &value : bullets)
-//    {
-//        QJsonObject obj = value.toObject();
-//        qreal startX = obj["s_x"].toDouble();
-//        qreal startY = obj["s_y"].toDouble();
-//        qreal endX = obj["e_x"].toDouble();
-//        qreal endY = obj["e_y"].toDouble();
+    QList<QGraphicsItem *> Bitems = scene->items();
+    for (QGraphicsItem *item : Bitems) {
+        Bullet *bullet = dynamic_cast<Bullet *>(item);
+        if (bullet) {
+            scene->removeItem(bullet);
+            delete bullet;
+        }
+    }
+    // Create new bullets with animation
+    for (const QJsonValue &value : bullets)
+    {
+        QJsonObject obj = value.toObject();
+        qreal startX = obj["s_x"].toDouble() * 78;  // Adjusting the coordinates
+        qreal startY = obj["s_y"].toDouble() * 72;  // Adjusting the coordinates
+        qreal endX = obj["e_x"].toDouble() * 78;    // Adjusting the coordinates
+        qreal endY = obj["e_y"].toDouble() * 72;    // Adjusting the coordinates
 
-//        QGraphicsEllipseItem *bullet = new QGraphicsEllipseItem(0, 0, 10, 10);
-//        bullet->setBrush(Qt::red);
-//        bullet->setPos(startX, startY);
-//        scene->addItem(bullet);
+        QColor bulletColor = Qt::red; // Define the color you want for the bullet
+        Bullet *bullet = new Bullet(0, 0, 10, 10, bulletColor);
+        bullet->setPos(QPointF(startX,startY));
+        scene->addItem(bullet);
 
-//        QPropertyAnimation *animation = new QPropertyAnimation(this);
-//        animation->setDuration(300);
-//        animation->setStartValue(QPointF(startX, startY));
-//        animation->setEndValue(QPointF(endX, endY));
-//        animation->start(QAbstractAnimation::DeleteWhenStopped);
-//    }
+        QPropertyAnimation *animation = new QPropertyAnimation(bullet, "pos");
+        animation->setDuration(300);
+        animation->setStartValue(QPointF(startX, startY));
+        animation->setEndValue(QPointF(endX, endY));
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 
     QList<QGraphicsItem *> items = scene->items();
     for (QGraphicsItem *item : items) {

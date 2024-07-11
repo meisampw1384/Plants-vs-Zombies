@@ -47,6 +47,7 @@ private:
     QTimer *mainTimer;        // Main game update timer
     QTimer *sunTimer;         // Timer for generating suns
     QTimer *brainTimer;
+    QTimer *updateTimer;
     QMap<QTcpSocket*, QString> clientRoles;
     int clientRoleCounter;
     int remainingTime;

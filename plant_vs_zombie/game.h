@@ -15,6 +15,7 @@
 #include "characters.h"
 #include "plants.h"
 #include "zombies.h"
+#include "bullet.h"
 #include "customgraphicscene.h"
 #include <QGraphicsPixmapItem>
 #include <QGraphicsEllipseItem>

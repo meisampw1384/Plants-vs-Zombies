@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bullet.cpp \
     change_info.cpp \
     characters.cpp \
     connect_to_game_server.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     zombies.cpp
 
 HEADERS += \
+    bullet.h \
     change_info.h \
     characters.h \
     connect_to_game_server.h \
