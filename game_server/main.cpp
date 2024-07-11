@@ -72,10 +72,12 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
         clientRoleCounter++;
 
         if (clients.size() == 2) {
+            send_rule();
             mainTimer->start(1000); // Update every second
             sunTimer->start(5000);  // Add sun every 5 seconds
             brainTimer->start(5000); // Add brain every 5 seconds
             updateTimer->start(1000);
+
         }
 
         connect(new_socket, &QTcpSocket::readyRead, this, &GameServer::readyRead);
@@ -86,6 +88,23 @@ void GameServer::incomingConnection(qintptr socketDescriptor)
     } else {
         qDebug() << "Failed to set socket descriptor:" << new_socket->errorString();
         delete new_socket;
+    }
+}
+
+void GameServer::send_rule()
+{
+    QString role;
+    for (QTcpSocket *client : clients)
+    {
+        role=clientRoles[client];
+        QJsonObject respond;
+        respond["action"]="get_role";
+        respond["role"]=role;
+        QJsonDocument responseDoc(respond);
+        QByteArray responseData = responseDoc.toJson();
+
+        client->write(responseData);
+        client->flush();
     }
 }
 
@@ -161,20 +180,6 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
                     // Assuming only one entity per position
                 }
             }
-        }
-    }
-    else if (action=="get_role"){
-        QString role;
-        role=clientRoles[socket];
-        QJsonObject respond;
-        respond["action"]="get_role";
-        respond["role"]=role;
-        qDebug()<<"get_role";
-        QJsonDocument responseDoc(respond);
-        QByteArray responseData = responseDoc.toJson();
-        for (QTcpSocket *client : clients){
-            client->write(responseData);
-            client->flush();
         }
     }
     else {

@@ -47,7 +47,6 @@ public:
 public slots:
     void onDisconnected();
     void onConnected();
-    void updateCountdown();
     void updateGameState(const QJsonArray &gameState, const QJsonArray &bullets);
     void onReadyRead();
 

@@ -23,6 +23,7 @@ public:
     void add_sun();
     void add_brain();
     void TIME_broadcaster();
+    void send_rule();
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;

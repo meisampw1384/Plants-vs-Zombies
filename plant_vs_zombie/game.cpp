@@ -67,18 +67,6 @@ void game::get_role(){
 
 }
 
-void game::updateCountdown()
-{
-    QJsonObject request;
-    request["action"] ="time";
-    request["remaining"]=remainingTime;
-
-    QJsonDocument doc(request);
-    QByteArray data = doc.toJson();
-    socket->write(data);
-    socket->flush();
-}
-
 // Slot for readyRead signal
 void game::onReadyRead()
 {
@@ -111,8 +99,17 @@ void game::onReadyRead()
             ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
         }
     }
-    else if (action=="get_role"){
+    else if (action=="get_role")
+    {
         role=obj_data["role"].toString();
+        if (role=="plant"){
+            ui->UserName_plant->setText("plant");
+        }
+        else{
+            ui->userName_zombie->setText("zombie");
+        }
+
+
     }
     else if (action == "add_char") {
         Characters *ch = nullptr;
@@ -166,14 +163,6 @@ void game::onReadyRead()
     }
 }
 
-
-
-
-
-
-
-
-
 void game::set_userName(QString _user_name)
 {
     userName=_user_name;
@@ -226,13 +215,6 @@ void game::setupUI()
     connect(ui->wallnut_Pushbutton, &QPushButton::clicked, this, &game::on_wallnut_Pushbutton_clicked);
     connect(ui->Plum_mine_pushbutton, &QPushButton::clicked, this, &game::on_Plum_mine_pushbutton_clicked);
 
-//    get_role();
-//    if (role=="plant"){
-//        ui->UserName_plant->setText(userName);
-//    }
-//    else{
-//        ui->userName_zombie->setText(userName);
-//    }
 
     selectedCharacterType = None;
 }
