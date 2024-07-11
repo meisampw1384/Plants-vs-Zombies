@@ -14,11 +14,16 @@ GameServer::GameServer(QObject *parent)
             game_field[i][j] = 0;
         }
     }
+    round_of_game=1;
+    win_plant=0;
+    win_zombie=0;
     mainTimer=new QTimer(this);
     sunTimer=new QTimer(this);
     brainTimer=new QTimer(this);
     updateTimer = new QTimer(this);
+    flag_zombie_reach=0;
 
+    connect(mainTimer, &QTimer::timeout, this, &GameServer::end_of_game_broadcast);
     connect(mainTimer, &QTimer::timeout, this, &GameServer::TIME_broadcaster);
     connect(sunTimer, &QTimer::timeout, this, &GameServer::add_sun);
     connect(brainTimer, &QTimer::timeout, this, &GameServer::add_brain);
@@ -100,6 +105,12 @@ void GameServer::send_rule()
         QJsonObject respond;
         respond["action"]="get_role";
         respond["role"]=role;
+        if (role=="plant"){
+            respond["win_plant"]=win_plant;
+        }
+        else if (role=="zombie"){
+            respond["win_zombie"]=win_zombie;
+        }
         QJsonDocument responseDoc(respond);
         QByteArray responseData = responseDoc.toJson();
 
@@ -224,7 +235,18 @@ void GameServer::clientDisconnected()
 
 
     gameState = QJsonArray();
+    bullets_COOR = QJsonArray();
     std::fill(&game_field[0][0], &game_field[0][0] + sizeof(game_field) / sizeof(int), 0);
+    round_of_game = 1;
+    remainingTime = 210;
+
+
+
+    // Stop all timers
+    mainTimer->stop();
+    sunTimer->stop();
+    brainTimer->stop();
+    updateTimer->stop();
 
 }
 
@@ -294,6 +316,10 @@ void GameServer::updateGameState()
                     }
 
                 }
+            }
+            else {
+                qDebug()<<"the zombie reach to the end";
+                flag_zombie_reach=1;
             }
         }
 
@@ -528,6 +554,82 @@ void GameServer::add_brain()
         gameState.append(brain);
 
     broadcastGameState();
+}
+
+
+void GameServer::end_of_game_broadcast(){
+    if (round_of_game == 2 )
+    {
+        // Determine winner and update win counters
+        if (win_zombie > win_plant)
+        {
+            qDebug() << "Zombies win!";
+            for (QTcpSocket *client : clients)
+            {
+                if (clientRoles[client] == "zombie")
+                {
+                    win_zombie++;
+                }
+            }
+        }
+        else if (win_plant > win_zombie)
+        {
+            qDebug() << "Plants win!";
+            for (QTcpSocket *client : clients)
+            {
+                if (clientRoles[client] == "plant")
+                {
+                    win_plant++;
+                }
+            }
+        }
+    }
+
+    else if (round_of_game<2 && (remainingTime==0 || flag_zombie_reach)){
+
+        if (remainingTime==0){
+            win_plant+=1;
+        }
+        else if (flag_zombie_reach){
+            win_zombie+=1;
+            flag_zombie_reach=0;
+        }
+
+
+        for (QTcpSocket *client : clients)
+        {
+            if (clientRoles[client] == "zombie")
+            {
+                clientRoles[client] = "plant";
+            }
+            else if (clientRoles[client] == "plant")
+            {
+                clientRoles[client] = "zombie";
+            }
+        }
+
+        // Clear game state and reset round data
+        gameState = QJsonArray();
+        bullets_COOR = QJsonArray();
+        std::fill(&game_field[0][0], &game_field[0][0] + sizeof(game_field) / sizeof(int), 0);
+        round_of_game += 1;
+        remainingTime = 210;
+
+        // Send updated roles and game state to clients
+        send_rule();
+
+        // Stop all timers
+        mainTimer->stop();
+        sunTimer->stop();
+        brainTimer->stop();
+        updateTimer->stop();
+
+        broadcastGameState();
+        // Broadcast game state to all clients
+
+    }
+
+
 }
 
 

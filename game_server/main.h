@@ -23,6 +23,7 @@ public:
     void add_sun();
     void add_brain();
     void TIME_broadcaster();
+    void end_of_game_broadcast();
     void send_rule();
 
 protected:
@@ -52,6 +53,10 @@ private:
     QMap<QTcpSocket*, QString> clientRoles;
     int clientRoleCounter;
     int remainingTime;
+    int round_of_game;
+    int win_plant;
+    int win_zombie;
+    int flag_zombie_reach;
 
 
 };

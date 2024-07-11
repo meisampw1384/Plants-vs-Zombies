@@ -102,11 +102,16 @@ void game::onReadyRead()
     else if (action=="get_role")
     {
         role=obj_data["role"].toString();
+
         if (role=="plant"){
-            ui->UserName_plant->setText("plant");
+            ui->userName_plant->setText(userName);
+            int win_plant=obj_data["win_plant"].toInt();
+            ui->win_plant_label->setText(QString::number(win_plant));
         }
         else{
-            ui->userName_zombie->setText("zombie");
+            ui->UserName_zombie->setText(userName);
+            int win_zombie=obj_data["win_zombie"].toInt();
+            ui->win_zombie_label->setText(QString::number(win_zombie));
         }
 
 
@@ -222,6 +227,7 @@ void game::setupUI()
 //that is update zombies after movement
 void game::updateGameState(const QJsonArray &gameState, const QJsonArray &bullets)
 {
+
 
     QList<QGraphicsItem *> Bitems = scene->items();
     for (QGraphicsItem *item : Bitems) {

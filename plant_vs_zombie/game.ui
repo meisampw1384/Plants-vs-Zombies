@@ -611,12 +611,12 @@ color:rgb(255, 85, 0)</string>
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="UserName_plant">
+   <widget class="QLabel" name="UserName_zombie">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>760</x>
       <y>10</y>
-      <width>91</width>
+      <width>281</width>
       <height>41</height>
      </rect>
     </property>
@@ -633,10 +633,33 @@ color:rgb(255, 85, 0)</string>
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="userName_zombie">
+   <widget class="QLabel" name="userName_plant">
     <property name="geometry">
      <rect>
-      <x>880</x>
+      <x>20</x>
+      <y>10</y>
+      <width>321</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>27</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: rgb(255, 255, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="win_plant_label">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
       <y>10</y>
       <width>91</width>
       <height>41</height>
@@ -651,6 +674,28 @@ color:rgb(255, 85, 0)</string>
     <property name="styleSheet">
      <string notr="true">
 color: rgb(255, 255, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="win_zombie_label">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>10</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>27</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(184, 0, 184)</string>
     </property>
     <property name="text">
      <string/>
@@ -691,8 +736,10 @@ color: rgb(255, 255, 0);</string>
    <zorder>amount_of_brain</zorder>
    <zorder>amoun_of_sun</zorder>
    <zorder>field_view</zorder>
-   <zorder>UserName_plant</zorder>
-   <zorder>userName_zombie</zorder>
+   <zorder>UserName_zombie</zorder>
+   <zorder>userName_plant</zorder>
+   <zorder>win_plant_label</zorder>
+   <zorder>win_zombie_label</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
