@@ -199,6 +199,10 @@ void GameServer::broadcastGameState()
         client->write(responseData);
         client->flush();
     }
+    while(bullets_COOR.count()) {
+        bullets_COOR.pop_back();
+    }
+
 }
 
 
