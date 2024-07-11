@@ -55,17 +55,7 @@ void game::onConnected()
     socket->connectToHost(ip,port);
 
 }
-void game::get_role(){
-    QJsonObject request;
-    request["action"] = "get_role";
 
-    QJsonDocument doc(request);
-    QByteArray data = doc.toJson();
-    socket->write(data);
-    socket->flush();
-
-
-}
 
 // Slot for readyRead signal
 void game::onReadyRead()
@@ -90,28 +80,29 @@ void game::onReadyRead()
     }
     else if (action == "time"){
         remainingTime=obj_data["remaining"].toInt();
-        if (remainingTime<0){
-            QMessageBox::information(this,"End","the game is ended!");
-        }
-        else {
-            int minutes = remainingTime / 60;
-            int seconds = remainingTime % 60;
-            ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
-        }
+        int minutes = remainingTime / 60;
+        int seconds = remainingTime % 60;
+        ui->remaining_time_label->setText(QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0')));
+
+    }
+    else if (action == "end_game"){
+        QMessageBox::information(this,"End","End of the game!");
+
+
+        this->close();
     }
     else if (action=="get_role")
     {
         role=obj_data["role"].toString();
 
-        if (role=="plant"){
+
+        if ((role=="plant" && round)){
             ui->userName_plant->setText(userName);
-            int win_plant=obj_data["win_plant"].toInt();
-            ui->win_plant_label->setText(QString::number(win_plant));
+
         }
-        else{
+        else if ((role == "zombie" )){
             ui->UserName_zombie->setText(userName);
-            int win_zombie=obj_data["win_zombie"].toInt();
-            ui->win_zombie_label->setText(QString::number(win_zombie));
+
         }
 
 

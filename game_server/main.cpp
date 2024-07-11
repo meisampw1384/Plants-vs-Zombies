@@ -106,10 +106,12 @@ void GameServer::send_rule()
         respond["action"]="get_role";
         respond["role"]=role;
         if (role=="plant"){
-            respond["win_plant"]=win_plant;
+
+            respond["round"]=round_of_game;
         }
         else if (role=="zombie"){
-            respond["win_zombie"]=win_zombie;
+
+            respond["round"]=round_of_game;
         }
         QJsonDocument responseDoc(respond);
         QByteArray responseData = responseDoc.toJson();
@@ -146,7 +148,7 @@ void GameServer::processRequest(QTcpSocket *socket, const QJsonObject &request)
         QJsonObject entity = request["entity"].toObject();
         doubleValue = entity["id"].toDouble();
         int ID = static_cast<int>(doubleValue);
-    if ((entity["type"]=="plant"&&clientRoles[socket]=="plant") || (entity["type"]=="zombie"&&clientRoles[socket]=="zombie")){
+    if ((entity["type"]=="plant"&&clientRoles[socket]=="plant") || (entity["type"]=="zombie"&&clientRoles[socket]=="zombie" )){
         QJsonObject newEntity = request["entity"].toObject();
         gameState.append(newEntity);
         broadcastGameState();
@@ -558,11 +560,13 @@ void GameServer::add_brain()
 
 
 void GameServer::end_of_game_broadcast(){
-    if (round_of_game == 2 )
+    if (round_of_game == 2 && (remainingTime==0 || flag_zombie_reach))
     {
         // Determine winner and update win counters
-        if (win_zombie > win_plant)
+        QJsonObject gameStateUpdate;
+        if (flag_zombie_reach)
         {
+            gameStateUpdate["result"]="zombie";
             qDebug() << "Zombies win!";
             for (QTcpSocket *client : clients)
             {
@@ -572,9 +576,9 @@ void GameServer::end_of_game_broadcast(){
                 }
             }
         }
-        else if (win_plant > win_zombie)
+        else if (remainingTime==0)
         {
-            qDebug() << "Plants win!";
+
             for (QTcpSocket *client : clients)
             {
                 if (clientRoles[client] == "plant")
@@ -583,12 +587,24 @@ void GameServer::end_of_game_broadcast(){
                 }
             }
         }
+
+
+        gameStateUpdate["action"] = "end_game";
+
+        QJsonDocument responseDoc(gameStateUpdate);
+        QByteArray responseData = responseDoc.toJson();
+        for (QTcpSocket *client : clients) {
+            client->write(responseData);
+            client->flush();
+        }
+
     }
 
     else if (round_of_game<2 && (remainingTime==0 || flag_zombie_reach)){
 
         if (remainingTime==0){
             win_plant+=1;
+            flag_zombie_reach=0;
         }
         else if (flag_zombie_reach){
             win_zombie+=1;
@@ -616,7 +632,7 @@ void GameServer::end_of_game_broadcast(){
         remainingTime = 210;
 
         // Send updated roles and game state to clients
-        send_rule();
+
 
         // Stop all timers
         mainTimer->stop();
@@ -624,8 +640,17 @@ void GameServer::end_of_game_broadcast(){
         brainTimer->stop();
         updateTimer->stop();
 
+        send_rule();
         broadcastGameState();
-        // Broadcast game state to all clients
+        TIME_broadcaster();
+
+
+        mainTimer->start();
+        sunTimer->start();
+        updateTimer->start();
+        sunTimer->start();
+        mainTimer->start();
+
 
     }
 
