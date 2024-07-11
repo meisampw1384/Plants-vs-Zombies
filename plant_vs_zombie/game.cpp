@@ -328,7 +328,7 @@ void game::updateGameState(const QJsonArray &gameState, const QJsonArray &bullet
             }
 
         }
-        else if (type=="sun"){
+        else if (type=="sun" and role == "plant"){
             int x= entity["x"].toInt();
             int y= entity["y"].toInt();
             QPixmap sun ("../images/sun.png");
@@ -341,7 +341,7 @@ void game::updateGameState(const QJsonArray &gameState, const QJsonArray &bullet
 
 
         }
-        else if ( type=="brain"){
+        else if ( type=="brain" and role == "zombie"){
             int x= entity["x"].toInt();
             int y= entity["y"].toInt();
             QPixmap brain ("../images/Brain.png");

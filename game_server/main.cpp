@@ -403,7 +403,7 @@ void GameServer::updateGameState()
                     bullet["s_y"] = y;
 
                     int flag = 1;
-                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    for(int z = x; z < FIELD_WIDTH and flag; z++)
                     {
                         if(game_field[z][y] != 0 and game_field[z][y] != ID)
                         {
@@ -444,7 +444,7 @@ void GameServer::updateGameState()
                     bullet["s_x"] = x;
                     bullet["s_y"] = y;
                     int flag = 1;
-                    for(int z = 0; z < FIELD_WIDTH and flag; z++)
+                    for(int z = x; z < FIELD_WIDTH and flag; z++)
                     {
                         if(game_field[z][y] != 0 and game_field[z][y] != ID)
                         {
@@ -657,8 +657,6 @@ void GameServer::end_of_game_broadcast(){
         sunTimer->start();
         updateTimer->start();
         sunTimer->start();
-        mainTimer->start();
-
 
     }
 
